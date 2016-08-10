@@ -32,11 +32,7 @@ if isunix,
     hPlayFunScaled = @usoundsc;
 end
 
-if ~isempty(self.ClickTracks),
-    vSignal = self.vOriginalAnalysisSignal;
-else
-    vSignal = self.AnalysisSignal;
-end
+vSignal = self.vOriginalAnalysisSignal;
 
 scaleFactor = 10^(leveldB/20) / rms(vSignal);
 if ~leveldB,

@@ -1,10 +1,10 @@
 layoutdir     = "layouts"
 publishdir    = "public"
 baseurl       = "http://pub.tgm.io/AES2016_NoiseSynthesis"
-title         = "Test"
+title         = "Synthesis of Perceptively Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties"
 canonifyurls  = true
 theme         = "tgmsixteen"
 
 [params]
-  subtitle      = "Additional Material"
-  author        = "Leutz"
+  subtitle      = "Supplemental Material"
+  author        = "Adrian JA, Gerkmann T, van de Par S, Bitzer J"

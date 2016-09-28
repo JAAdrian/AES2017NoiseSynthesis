@@ -10,7 +10,7 @@ Clone the [Git repository](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis
     git clone https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis.git
 ```
 
- and refer to the `README.md` document for further information on usage. The code is licensed under BSD 3-Clause and, thus, be freely altered and used as stated in the license text.
+ and refer to the `README.md` document for further information on usage. The code is licensed under BSD 3-Clause and, thus, be freely altered and used as stated in detail in the license text.
 
 ## Audio Examples
 

@@ -93,3 +93,8 @@ In the following, exemplary audio samples of analyzed and synthesized noise sign
         </tr>
     </tbody>
 </table>
+
+
+## Figure Generation
+
+## Listening Test Results

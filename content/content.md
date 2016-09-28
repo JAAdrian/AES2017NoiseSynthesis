@@ -14,15 +14,23 @@ Clone the [Git repository](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis
 
 ## Audio Examples
 
-In the following, exemplary audio samples of analyzed and synthesized noise signals are presented. The audio samples include different types of noise which were considered in the associated paper. In the synthesis, a reduced parameter set was used as proposed in the paper.
+In the following table, exemplary audio samples of analyzed and synthesized noise signals are presented. The audio samples include different types of noise which were considered in the associated paper. In the synthesis, a reduced parameter set was used as proposed in the paper.
 
 
 <table class="audiotable">
+    <colgroup>
+        <col span="2">
+        <col span="1" class="narrow">
+        <col span="1">
+        <col span="1" class="narrow">
+    </colgroup>
     <thead>
         <tr>
             <th>Noise Type</th>
             <th>Original</th>
+            <th></th>
             <th>Synthesis</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -30,26 +38,46 @@ In the following, exemplary audio samples of analyzed and synthesized noise sign
             <td>Cinema Optical Noise</td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/CHACE.Smpl.1_Noise.wav" type="audio/wav">
+                    <source src="audio/CHACE.Smpl.1_Noise.wav" type="audio/wav">
                 </audio>
             </td>
             <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
+            </td>
+            <td class="tdaudio">
                 <audio controls>
-                <source src="audio/CHACE.Smpl.1_Noise_synth.wav" type="audio/wav">
+                    <source src="audio/CHACE.Smpl.1_Noise_synth.wav" type="audio/wav">
                 </audio>
+            </td>
+            <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
             </td>
         </tr>
         <tr>
             <td>Vinyl / Shellac</td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/68400__danielsoniii__vinyl-hiss.wav" type="audio/wav">
+                    <source src="audio/68400__danielsoniii__vinyl-hiss.wav" type="audio/wav">
                 </audio>
             </td>
             <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
+            </td>
+            <td class="tdaudio">
                 <audio controls>
-                <source src="audio/68400__danielsoniii__vinyl-hiss_synth.wav" type="audio/wav">
+                    <source src="audio/68400__danielsoniii__vinyl-hiss_synth.wav" type="audio/wav">
                 </audio>
+            </td>
+            <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
             </td>
         </tr>
         <tr>
@@ -60,9 +88,19 @@ In the following, exemplary audio samples of analyzed and synthesized noise sign
                 </audio>
             </td>
             <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
+            </td>
+            <td class="tdaudio">
                 <audio controls>
                 <source src="audio/Cassette 2 (OH828_018_02_S2_M)synth.wav" type="audio/wav">
                 </audio>
+            </td>
+            <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
             </td>
         </tr>
         <tr>
@@ -73,9 +111,19 @@ In the following, exemplary audio samples of analyzed and synthesized noise sign
                 </audio>
             </td>
             <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
+            </td>
+            <td class="tdaudio">
                 <audio controls>
                 <source src="audio/rain_03_13of34_synth.wav" type="audio/wav">
                 </audio>
+            </td>
+            <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
             </td>
         </tr>
         <tr>
@@ -86,9 +134,42 @@ In the following, exemplary audio samples of analyzed and synthesized noise sign
                 </audio>
             </td>
             <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
+            </td>
+            <td class="tdaudio">
                 <audio controls>
                 <source src="audio/238784__staikov__cathedral-applauses-stereo_synth.wav" type="audio/wav">
                 </audio>
+            </td>
+            <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td>Babble / Cafeteria Noise</td>
+            <td class="tdaudio">
+                <audio controls>
+                <source src="audio/babble_short.wav" type="audio/wav">
+                </audio>
+            </td>
+            <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
+            </td>
+            <td class="tdaudio">
+                <audio controls>
+                <source src="audio/babble_short_synth.wav" type="audio/wav">
+                </audio>
+            </td>
+            <td class="tdaudio">
+                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav" class="downloadlink">
+                    <img src="download-arrow.svg" class="download" alt="Download"></img>
+                </a>
             </td>
         </tr>
     </tbody>
@@ -98,3 +179,9 @@ In the following, exemplary audio samples of analyzed and synthesized noise sign
 ## Figure Generation
 
 ## Listening Test Results
+
+
+
+<div class="freepik">
+    Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a>
+</div>

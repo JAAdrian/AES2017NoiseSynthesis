@@ -4419,8 +4419,8 @@ figcaption h5 {
 ================================================================================
 */
 .audiotable {
-    width: 110%;
-    max-width: 120%;
+    width: 100%;
+    max-width: 100%;
     margin-bottom: 20px;
     margin-top: 30px;
 }
@@ -4435,4 +4435,20 @@ figcaption h5 {
 }
 .tdaudio {
     text-align: center
+}
+
+.freepik {
+    position: absolute;
+    bottom: 65px;
+    font-size: 10pt;
+}
+
+.download {
+    height: 16px;
+}
+.downloadlink {
+    vertical-align: middle;
+}
+.narrow {
+    width: 10px;
 }

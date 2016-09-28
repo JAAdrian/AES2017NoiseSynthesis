@@ -4,11 +4,12 @@ type = "index"
 
 ## MATLAB Code
 
-Clone the [Git repository](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis) by calling
+Obtain the code by cloning the [Git repository](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis) by calling
 
 ```
     git clone https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis.git
 ```
+or download the latest version from the `master` branch as a [zip file](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis/repository/archive.zip?ref=master).
 
  and refer to the `README.md` document for further information on usage. The code is licensed under BSD 3-Clause and, thus, be freely altered and used as stated in detail in the license text.
 

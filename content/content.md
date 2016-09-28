@@ -180,6 +180,11 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
 
 ## Listening Test Results
 
+<figure>
+    <img src="figs/ListeningResults.png" style="width:100%" alt="Results of the listening test"></img>
+    <figcaption>Opinion scores obtained for five noise types with five conditions each. 12 subjects participated in this test, rating six signals for each condition (box). Pairs for which the null hypothesis of equal medians could not be rejected are marked with brackets. For multiple mutual equality the brackets span multiple groups.</figcaption>
+</figure>
+
 
 
 <div class="freepik">

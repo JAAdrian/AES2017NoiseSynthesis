@@ -25,15 +25,15 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
         <col span="1">
         <col span="1" class="narrow">
     </colgroup>
+    
     <thead>
-        <tr>
-            <th>Noise Type</th>
-            <th>Original</th>
-            <th></th>
-            <th>Synthesis</th>
-            <th></th>
-        </tr>
+        <th>Noise Type</th>
+        <th>Original</th>
+        <th></th>
+        <th>Synthesis</th>
+        <th></th>
     </thead>
+    
     <tbody>
         <tr>
             <td>Cinema Optical Noise</td>
@@ -58,6 +58,8 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
                 </a>
             </td>
         </tr>
+        
+        
         <tr>
             <td>Vinyl / Shellac</td>
             <td class="tdaudio">
@@ -81,6 +83,8 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
                 </a>
             </td>
         </tr>
+        
+        
         <tr>
             <td>Cassette / Tape</td>
             <td class="tdaudio">
@@ -104,6 +108,8 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
                 </a>
             </td>
         </tr>
+        
+        
         <tr>
             <td>Rain</td>
             <td class="tdaudio">
@@ -127,6 +133,8 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
                 </a>
             </td>
         </tr>
+        
+        
         <tr>
             <td>Applause</td>
             <td class="tdaudio">
@@ -150,6 +158,8 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
                 </a>
             </td>
         </tr>
+        
+        
         <tr>
             <td>Babble / Cafeteria Noise</td>
             <td class="tdaudio">
@@ -178,6 +188,54 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
 
 
 ## Figure Generation
+
+The MATLAB and data files which were used to create the more important figures in the paper are packed in this [zip file](data_and_scripts.zip). The file contains two folders. The folder `ListeningTest` contains subject data and evaluation scripts. The folder `PlotScripts` contains the scripts which produce the following plots:
+
+<table class="scripttable">
+    <thead>
+        <th>Figure No.</th>
+        <th>Script Name</th>
+    </thead>
+    
+    <tbody>
+        <tr>
+            <td>
+                Fig. 4
+            </td>
+            <td class="scriptstyle">
+                <code>plotFDLS.m</code>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                Fig. 5
+            </td>
+            <td class="scriptstyle">
+                <code>plotParetos.m</code>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                Fig. 7
+            </td>
+            <td class="scriptstyle">
+                <code>plotErrorDistribution.m</code>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                Fig. 8
+            </td>
+            <td class="scriptstyle">
+                <code>plotListeningResults.m</code>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
 
 ## Listening Test Results
 

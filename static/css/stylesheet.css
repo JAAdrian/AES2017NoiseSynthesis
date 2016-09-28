@@ -4423,6 +4423,7 @@ figcaption h5 {
     max-width: 100%;
     margin-bottom: 20px;
     margin-top: 30px;
+    border-collapse: collapse;
 }
 .audiotable td {
     padding: 5px;
@@ -4451,4 +4452,24 @@ figcaption h5 {
 }
 .narrow {
     width: 10px;
+}
+
+.scripttable {
+    width: 40%;
+    margin-top: 30px;
+}
+.scripttable th {
+    border-bottom: 1px solid;
+    font-weight: bold;
+    font-family: fantasy;
+}
+.scripttable td {
+    padding: 5px;
+}
+
+.fignumstyle {
+    text-align: right;
+}
+.scriptstyle {
+    font-size: 16px;
 }

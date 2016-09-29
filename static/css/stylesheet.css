@@ -4419,7 +4419,6 @@ figcaption h5 {
 ================================================================================
 */
 .audiotable {
-    width: 100%;
     max-width: 100%;
     margin-bottom: 20px;
     margin-top: 30px;
@@ -4429,13 +4428,12 @@ figcaption h5 {
     padding: 5px;
 }
 .audiotable th {
-    padding: 10px;
     font-weight: bold;
     text-align: center;
-    font-family: fantasy;
+    border-bottom: 1px solid;
 }
 .tdaudio {
-    text-align: center
+    text-align: left;
 }
 
 .freepik {
@@ -4451,7 +4449,11 @@ figcaption h5 {
     vertical-align: middle;
 }
 .narrow {
-    width: 10px;
+    width: 60px;
+    text-align: left;
+}
+.tddownload {
+    text-align: left;
 }
 
 .scripttable {
@@ -4461,7 +4463,6 @@ figcaption h5 {
 .scripttable th {
     border-bottom: 1px solid;
     font-weight: bold;
-    font-family: fantasy;
 }
 .scripttable td {
     padding: 5px;

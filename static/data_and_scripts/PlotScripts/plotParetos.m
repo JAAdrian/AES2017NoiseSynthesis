@@ -1,4 +1,4 @@
-% <purpose of this file>
+% Script to plot the Pareto tail approximation in Fig. 5.
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
 % Date   :  22-Sep-2015 17:56:01

@@ -1,4 +1,5 @@
-% <purpose of this file>
+% Script to generate a MATLAB table from all subject's scoring results.
+% The table is then conveniently written to a csv file.
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
 % Date   :  10-Nov-2015 17:11:03

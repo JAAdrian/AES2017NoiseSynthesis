@@ -1,4 +1,5 @@
-% <purpose of this file>
+% Script to find significantly and NOT signficantly differing condition
+% groups in the listening test.
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
 % Date   :  29-Jan-2016 11:04:33

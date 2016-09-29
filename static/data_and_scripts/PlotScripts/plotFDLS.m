@@ -1,4 +1,4 @@
-% <purpose of this file>
+% Script to plot the FDLS approximation of the signal's PSD in Fig. 4.
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
 % Date   :  22-Sep-2015 17:55:54

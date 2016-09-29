@@ -1,4 +1,5 @@
-% <purpose of this file>
+% Script to plot the error distribution depending on the initial and
+% desired distribution in Fig. 7.
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
 % Date   :  10-Mar-2016 18:43:20

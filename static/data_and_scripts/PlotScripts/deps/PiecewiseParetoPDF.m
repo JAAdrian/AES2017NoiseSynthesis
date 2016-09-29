@@ -1,19 +1,16 @@
 function [vPDF, vQuantiles] = PiecewiseParetoPDF(self,numPoints)
-%PIECEWISEPARETOPDF <purpose in one line!>
+%PIECEWISEPARETOPDF function to compute a PDF of a piecewise Pareto distribution
 % -------------------------------------------------------------------------
 % <Detailed description of the function>
-% 
-% Usage: [y] = PiecewiseParetoPDF(input)
-% 
-%   Input:   ---------
-% 
-%  Output:   ---------
-% 
-% 
+%
+% Usage: [vPDF, vQuantiles] = PiecewiseParetoPDF(self,numPoints)
+%
+%
+%
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
 % Date   :  22-Sep-2015 18:43:54
 % Updated:  <>
-% 
+%
 
 
 

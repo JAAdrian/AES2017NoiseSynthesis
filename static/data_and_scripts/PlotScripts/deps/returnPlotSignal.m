@@ -1,19 +1,14 @@
 function [vSignal,fs] = returnPlotSignal()
-%RETURNPLOTSIGNAL <purpose in one line!>
+%RETURNPLOTSIGNAL function to return the signal for the plots as a vector
 % -------------------------------------------------------------------------
-% <Detailed description of the function>
-% 
-% Usage: [y] = returnPlotSignal(input)
-% 
-%   Input:   ---------
-% 
-%  Output:   ---------
-% 
-% 
+%
+% Usage: [vSignal,fs] = returnPlotSignal()
+%
+%
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
 % Date   :  22-Sep-2015 17:58:08
 % Updated:  <>
-% 
+%
 
 szFilename = fullfile('..','..','audio','noiseFilm11.wav');
 

@@ -1,4 +1,4 @@
-% <purpose of this file>
+% Script to generate the box plot of the listening test in Fig. 8.
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
 % Date   :  25-Jan-2016 17:51:33

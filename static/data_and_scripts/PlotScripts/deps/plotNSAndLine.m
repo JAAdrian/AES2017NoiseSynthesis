@@ -1,13 +1,8 @@
 function [] = plotNSAndLine(hBoxes,hAxes,yOffset,WingletLen,cLineParams,cAstParams)
-%PLOTNSANDLINE <purpose in one line!>
+%PLOTNSANDLINE function to plot annotations at groups with NO sign. location diff.
 % -------------------------------------------------------------------------
-% <Detailed description of the function>
 %
-% Usage: [] = plotNSAndLine(hBox1,hBox2,hAxes,yOffset,WingletLength,cLineParams,cAstParams)
-%
-%   Input:   ---------
-%
-%  Output:   ---------
+% Usage: [] = plotNSAndLine(hBoxes,hAxes,yOffset,WingletLen,cLineParams,cAstParams)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>

@@ -1,13 +1,8 @@
 function [h] = myannotation(annotationStyle, x, y, varargin)
-%MYANNOTATION <purpose in one line!>
+%MYANNOTATION function to include annotations at normalized coordinates
 % -------------------------------------------------------------------------
-% <Detailed description of the function>
 %
-% Usage: [y] = myannotation(input)
-%
-%   Input:   ---------
-%
-%  Output:   ---------
+% Usage: [h] = myannotation(annotationStyle, x, y, varargin)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>

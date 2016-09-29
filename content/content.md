@@ -4,7 +4,9 @@ type = "index"
 
 ## Introduction
 
+This website accompanies the JAES paper titled *Synthesis of Perceptively Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties* and provides supplemental material such as audio examples of analyzed and synthesized signals. Also, the MATLAB code which was used to generate the signals and the paper's figures is provided.
 
+The page is optimized to be viewed with modern web browsers such as *Mozilla Firefox* or *Google Chrome*. Users of *Microsoft Internet Explorer* **will not be able to listen to the audio examples**. However, the download links next to the audio players work seamlessly.
 
 
 ## MATLAB Code

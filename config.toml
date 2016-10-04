@@ -1,6 +1,6 @@
 layoutdir     = "layouts"
 publishdir    = "public"
-baseurl       = "http://pub.tgm.io/AES2016_NoiseSynthesis"
+baseurl       = "http://pub.tgm.io/AES2016NoiseSynthesis"
 title         = "Synthesis of Perceptively Plausible Multichannel Noise Signals"
 canonifyurls  = true
 theme         = "tgmsixteen"

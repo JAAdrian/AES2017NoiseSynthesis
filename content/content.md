@@ -11,12 +11,20 @@ The page is optimized to be viewed with modern web browsers such as *Mozilla Fir
 
 ## MATLAB Code
 
-Obtain the code by either cloning the [Git repository](https://tgm-git.jade-hs.de/pub/AES2016NoiseSynthesis)
+Obtain the code by cloning the [Git repository](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis) by calling
 
 ```
-    git clone https://tgm-git.jade-hs.de/pub/AES2016NoiseSynthesis.git
+git clone https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis.git
 ```
-or download the latest version from the `master` branch as a [zip file](https://tgm-git.jade-hs.de/pub/AES2016NoiseSynthesis/repository/archive.zip?ref=master) and refer to the `README.md` document for further information on usage. The code is licensed under BSD 3-Clause and, thus, be freely altered and used as stated in detail in the license text.
+or download the latest version from the `master` branch as a [zip file](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis/repository/archive.zip?ref=master).
+
+and refer to the `README.md` document for further information on usage. The code is licensed under BSD 3-Clause and, thus, be freely altered and used as stated in detail in the license text.
+ 
+##### Citation
+
+When you use the provided code in your own research, please be sure to cite the following publication linked with the tools
+
+    To be announced after final acceptance
 
 ## Audio Examples
 

@@ -4,19 +4,19 @@ type = "index"
 
 ## Introduction
 
-This website accompanies the JAES paper titled *Synthesis of Perceptively Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties* and provides supplemental material such as audio examples of analyzed and synthesized signals. Also, the MATLAB code which was used to generate the signals and the paper's figures is provided.
+This website accompanies the JAES paper titled *Synthesis of Perceptually Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties* and provides supplemental material such as audio examples of analyzed and synthesized signals. Also, the MATLAB code which was used to generate the signals and the paper's figures is provided.
 
 The page is optimized to be viewed with modern web browsers such as *Mozilla Firefox* or *Google Chrome*. Users of *Microsoft Internet Explorer* **will not be able to listen to the audio examples**. However, the download links next to the audio players work just fine.
 
 
 ## MATLAB Code
 
-Obtain the code by cloning the [Git repository](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis) by calling
+Obtain the code by cloning the [Git repository](https://jensalrikadrian@tgm-git.jade-hs.de/pub/AES2017NoiseSynthesis.git) by calling
 
 ```
-git clone https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis.git
+git clone https://jensalrikadrian@tgm-git.jade-hs.de/pub/AES2017NoiseSynthesis.git
 ```
-or download the latest version from the `master` branch as a [zip file](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis/repository/archive.zip?ref=master) and refer to the `README.md` document for further information on usage. The code is licensed under BSD 3-Clause and, thus, be freely altered and used as stated in detail in the license text.
+or download the latest version from the `master` branch as a [zip file]https://tgm-git.jade-hs.de/pub/AES2017NoiseSynthesis/repository/archive.zip?ref=master) and refer to the `README.md` document for further information on usage. The code is licensed under BSD 3-Clause and, thus, be freely altered and used as stated in detail in the license text.
  
 ## Citation
 

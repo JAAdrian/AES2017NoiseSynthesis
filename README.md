@@ -1,4 +1,4 @@
-# AES2016_NoiseSynthesis
+# AES2017NoiseSynthesis
 
 Status:
-[![build status](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis/badges/pages/build.svg)](https://tgm-git.jade-hs.de/pub/AES2016_NoiseSynthesis/commits/pages)
+[![build status](https://tgm-git.jade-hs.de/pub/AES2017NoiseSynthesis/badges/pages/build.svg)](https://tgm-git.jade-hs.de/pub/AES2017NoiseSynthesis/commits/pages)

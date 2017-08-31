@@ -8,7 +8,7 @@ classdef ErrorMeasures < handle
 % Usage: obj = ErrorMeasures(objNoise)
 %
 %   Input:   ---------------
-%           objNoise: The object ('self') provided by the
+%           objNoise: The object ('obj') provided by the
 %                     NoiseAnalysisSynthesis class.
 %
 %   Output:  ---------------
@@ -56,56 +56,58 @@ classdef ErrorMeasures < handle
     
     methods
         % Class constructor
-        function self = ErrorMeasures(objNoise)
-            if nargin,
-                self.Noise = objNoise;
+        function obj = ErrorMeasures(objNoise)
+            if ~nargin
+                return;
+            end
+            
+            obj.Noise = objNoise;
+        end
+        
+        function [error] = get.ColorationError(obj)
+            error = nan;
+            
+            if ~isempty(obj.Noise.SensorSignals) && ~isempty(obj.Noise.AnalysisSignal)
+                error = computePSDerror(obj);
             end
         end
         
-        function [error] = get.ColorationError(self)
+        function [error] = get.SpatialCoherenceError(obj)
             error = nan;
             
-            if ~isempty(self.Noise.SensorSignals) && ~isempty(self.Noise.AnalysisSignal),
-                error = computePSDerror(self);
-            end
-        end
-        
-        function [error] = get.SpatialCoherenceError(self)
-            error = nan;
-            
-            if ~isempty(self.Noise.SensorSignals) && ...
-                    ~isempty(self.Noise.AnalysisSignal) && ...
-                    self.Noise.bApplySpatialCoherence,
+            if ~isempty(obj.Noise.SensorSignals) && ...
+                    ~isempty(obj.Noise.AnalysisSignal) && ...
+                    obj.Noise.bApplySpatialCoherence
                 
-                error = computeCoherenceError(self);
+                error = computeCoherenceError(obj);
             end
         end
         
-        function [error] = get.AmplitudeDistributionError(self)
+        function [error] = get.AmplitudeDistributionError(obj)
             error = nan;
             
-            if ~isempty(self.Noise.SensorSignals) && ~isempty(self.Noise.AnalysisSignal),
-                error = computeDistributionError(self);
+            if ~isempty(obj.Noise.SensorSignals) && ~isempty(obj.Noise.AnalysisSignal)
+                error = computeDistributionError(obj);
             end
         end
         
-        function [error] = get.ComodulationsError(self)
+        function [error] = get.ComodulationsError(obj)
             error = nan;
             
-            if ~isempty(self.Noise.SensorSignals) && ...
-                    ~isempty(self.Noise.AnalysisSignal) && ...
-                    self.Noise.bApplyModulations && ...
-                    self.Noise.bApplyComodulation,
+            if ~isempty(obj.Noise.SensorSignals) && ...
+                    ~isempty(obj.Noise.AnalysisSignal) && ...
+                    obj.Noise.bApplyModulations && ...
+                    obj.Noise.bApplyComodulation
                 
-                error = computeComodulationError(self);
+                error = computeComodulationError(obj);
             end
         end
         
-        function [error] = get.ModulationSpecError(self)
+        function [error] = get.ModulationSpecError(obj)
             error = nan;
             
-            if ~isempty(self.Noise.SensorSignals) && ~isempty(self.Noise.AnalysisSignal),
-                error = computeModulationError(self);
+            if ~isempty(obj.Noise.SensorSignals) && ~isempty(obj.Noise.AnalysisSignal)
+                error = computeModulationError(obj);
             end
         end
         
@@ -113,112 +115,112 @@ classdef ErrorMeasures < handle
         
         
         
-        function [bl] = get.blocklen(self)
-            bl = round(self.blocklenSec * self.Noise.Fs);
+        function [bl] = get.blocklen(obj)
+            bl = round(obj.blocklenSec * obj.Noise.Fs);
         end
         
-        function [nfft] = get.nfft(self)
-            nfft = pow2(nextpow2(self.blocklen));
+        function [nfft] = get.nfft(obj)
+            nfft = pow2(nextpow2(obj.blocklen));
         end
         
-        function [ol] = get.overlap(self)
-            ol = round(self.blocklen * self.overlapRatio);
+        function [ol] = get.overlap(obj)
+            ol = round(obj.blocklen * obj.overlapRatio);
         end
         
-        function [frs] = get.frameshift(self)
-            frs = self.blocklen - self.overlap;
+        function [frs] = get.frameshift(obj)
+            frs = obj.blocklen - obj.overlap;
         end
         
-        function [vWin] = get.vWindow(self)
-            vWin = hann(self.blocklen,'periodic');
+        function [win] = get.vWindow(obj)
+            win = hann(obj.blocklen,'periodic');
         end
         
-        function [vIdx] = get.AnalysisIdx(self)
-            vIdx = ...
-                round(length(self.Noise.AnalysisSignal)*0.2) : ...
+        function [idx] = get.AnalysisIdx(obj)
+            idx = ...
+                round(length(obj.Noise.AnalysisSignal)*0.2) : ...
                 min(...
-                    round(length(self.Noise.AnalysisSignal)*0.8),...
-                    round(self.Noise.DesiredSignalLenSamples*0.8)...
+                    round(length(obj.Noise.AnalysisSignal)*0.8),...
+                    round(obj.Noise.DesiredSignalLenSamples*0.8)...
                     );
         end
     end
     
     
     methods (Access = private)
-        function [error] = computePSDerror(self)
+        function [error] = computePSDerror(obj)
             import NoiseSynthesis.spectralsmoothing.*
             
             method = validatestring(...
-                self.PsdErrorMethod, ...
+                obj.PsdErrorMethod, ...
                 {'cosh', 'logMSE'} ...
                 );
             
-            self.blocklenSec  = 50e-3;
-            self.overlapRatio = 0.5;
+            obj.blocklenSec  = 50e-3;
+            obj.overlapRatio = 0.5;
             
             vPSDReference = pwelch(...
-                self.Noise.AnalysisSignal,...
-                self.vWindow,...
-                self.overlap,...
-                self.nfft,...
-                self.Noise.Fs,...
+                obj.Noise.AnalysisSignal,...
+                obj.vWindow,...
+                obj.overlap,...
+                obj.nfft,...
+                obj.Noise.Fs,...
                 'power'...
                 );
             
             vPSDSynthesis = pwelch(...
-                self.Noise.SensorSignals(:, 1),...
-                self.vWindow,...
-                self.overlap,...
-                self.nfft,...
-                self.Noise.Fs,...
+                obj.Noise.SensorSignals(:, 1),...
+                obj.vWindow,...
+                obj.overlap,...
+                obj.nfft,...
+                obj.Noise.Fs,...
                 'power'...
                 );
 
-            switch method,
-                case 'cosh',
+            switch method
+                case 'cosh'
                     % from
                     % Gray and Markel, Distance Measures for Speech Processing
                     error = distchpf(vPSDReference(:).',vPSDSynthesis(:).');
-                case 'logMSE',
+                case 'logMSE'
                     error = mean( ...
                         (log10(abs(vPSDReference)) - log10(abs(vPSDSynthesis))).^2 ...
                         );
             end
         end
         
-        function [error] = computeCoherenceError(self)
+        function [error] = computeCoherenceError(obj)
             evalfun = @real;
             
-            self.blocklenSec  = 50e-3;
-            self.overlapRatio = 0.5;
+            obj.blocklenSec  = 50e-3;
+            obj.overlapRatio = 0.5;
             
             iSensor1 = 1;
-            iSensor2 = min(self.Noise.NumSensorSignals,2);
+            iSensor2 = min(obj.Noise.NumSensorSignals,2);
             
             
-            vPpp = cpsd(self.Noise.SensorSignals(:, iSensor1),...
-                self.Noise.SensorSignals(:, iSensor1),self.vWindow,self.overlap,self.nfft);
-            vPqq = cpsd(self.Noise.SensorSignals(:, iSensor2),...
-                self.Noise.SensorSignals(:, iSensor2),self.vWindow,self.overlap,self.nfft);
-            vPpq = cpsd(self.Noise.SensorSignals(:, iSensor1),...
-                self.Noise.SensorSignals(:, iSensor2),self.vWindow,self.overlap,self.nfft);
+            vPpp = cpsd(obj.Noise.SensorSignals(:, iSensor1),...
+                obj.Noise.SensorSignals(:, iSensor1),obj.vWindow,obj.overlap,obj.nfft);
+            vPqq = cpsd(obj.Noise.SensorSignals(:, iSensor2),...
+                obj.Noise.SensorSignals(:, iSensor2),obj.vWindow,obj.overlap,obj.nfft);
+            vPpq = cpsd(obj.Noise.SensorSignals(:, iSensor1),...
+                obj.Noise.SensorSignals(:, iSensor2),obj.vWindow,obj.overlap,obj.nfft);
             
-            vFreq     = linspace(0,self.Noise.Fs/2,self.nfft/2+1);
+            vFreq     = linspace(0,obj.Noise.Fs/2,obj.nfft/2+1);
             vGammaEst = vPpq ./ sqrt(vPpp .* vPqq);
             
             
             d = norm(...
-                self.Noise.ModelParameters.SensorPositions(:,iSensor1) - ...
-                self.Noise.ModelParameters.SensorPositions(:,iSensor2));
+                obj.Noise.ModelParameters.SensorPositions(:,iSensor1) - ...
+                obj.Noise.ModelParameters.SensorPositions(:,iSensor2));
             
             mPSD   = [1 1];
-            vGamma = self.Noise.hCohereFun(vFreq,d,self.Noise.mTheta(iSensor1,iSensor2,:),mPSD);
+            vGamma = obj.Noise.hCohereFun(vFreq,d,obj.Noise.mTheta(iSensor1,iSensor2,:),mPSD);
             
             error = mean( (evalfun(vGammaEst(:)) - evalfun(vGamma(:))).^2 );
         end
         
-        function [error] = computeDistributionError(self)
-            method = validatestring(self.AmplitudeErrorMethod, ...
+        function [error] = computeDistributionError(obj)
+            method = validatestring(obj.AmplitudeErrorMethod, ...
                 {...
                 'KullbackLeibler', ...
                 'ResistorAverage', ...
@@ -229,30 +231,30 @@ classdef ErrorMeasures < handle
             
             caNPoints = {'NumPoints', 1000};
             
-            [pdfP, quantilesP] = ksdensity(self.Noise.AnalysisSignal,caNPoints{:});
-            [pdfQ, quantilesQ] = ksdensity(self.Noise.SensorSignals(:, 1),caNPoints{:});
+            [pdfP, quantilesP] = ksdensity(obj.Noise.AnalysisSignal,caNPoints{:});
+            [pdfQ, quantilesQ] = ksdensity(obj.Noise.SensorSignals(:, 1),caNPoints{:});
             
             pdfQ = interp1(quantilesQ, pdfQ, quantilesP, 'linear', 'extrap').';
             pdfQ(pdfQ < 0) = 0;
             
             
-            switch method,
-                case 'KullbackLeibler',
+            switch method
+                case 'KullbackLeibler'
                     error = KullbackLeibler(quantilesP, pdfP, pdfQ);
                     
-                case 'Bhattacharyya',
+                case 'Bhattacharyya'
                     error = bhattacharyya(pdfP(:), pdfQ(:));
                     
-                case 'Hellinger',
+                case 'Hellinger'
                     error = sqrt(1 - bhattacharyya(pdfP, pdfQ));
                     
-                case 'ResistorAverage',
+                case 'ResistorAverage'
                     p = KullbackLeibler(quantilesP, pdfP, pdfQ);
                     q = KullbackLeibler(quantilesP, pdfQ, pdfP);
                     
                     error = (1/p + 1/q)^-1;
                     
-                case 'KullbackLeiblerSymmetric',
+                case 'KullbackLeiblerSymmetric'
                     p = KullbackLeibler(quantilesP, pdfP, pdfQ);
                     q = KullbackLeibler(quantilesP, pdfQ, pdfP);
                     
@@ -260,38 +262,31 @@ classdef ErrorMeasures < handle
             end
         end
         
-        function [error] = computeComodulationError(self)
-            corrAnalysis  = computeBandCoherence(self.Noise.mLevelCurves);
-            corrSynthesis = computeBandCoherence(self.Noise.mArtificialLevelCurves);
+        function [error] = computeComodulationError(obj)
+            corrAnalysis  = computeBandCoherence(obj.Noise.mLevelCurves);
+            corrSynthesis = computeBandCoherence(obj.Noise.mArtificialLevelCurves);
             
             error = MatrixMSE(corrAnalysis, corrSynthesis);
         end
         
-        function [error] = computeModulationError(self)
+        function [error] = computeModulationError(obj)
             import NoiseSynthesis.external.*
             
-            self.blocklenSec  = 15e-3;
-            self.overlapRatio = 0.8;
+            obj.blocklenSec  = 15e-3;
+            obj.overlapRatio = 0.8;
             
-            len = min(length(self.Noise.AnalysisSignal),self.Noise.DesiredSignalLenSamples);
+            len = min(length(obj.Noise.AnalysisSignal),obj.Noise.DesiredSignalLenSamples);
             
             mModSpecAnal = ...
-                ModulationSpectrogram(self.Noise.AnalysisSignal(1:len),...
-                self.vWindow,self.overlap,self.nfft,self.Noise.Fs);
+                ModulationSpectrogram(obj.Noise.AnalysisSignal(1:len),...
+                obj.vWindow,obj.overlap,obj.nfft,obj.Noise.Fs);
             mModSpecSynth = ...
-                ModulationSpectrogram(self.Noise.SensorSignals(1:len, 1),...
-                self.vWindow,self.overlap,self.nfft,self.Noise.Fs);
+                ModulationSpectrogram(obj.Noise.SensorSignals(1:len, 1),...
+                obj.vWindow,obj.overlap,obj.nfft,obj.Noise.Fs);
             
             error = MatrixMSE(abs(mModSpecAnal), abs(mModSpecSynth));
         end
     end
-    
-    
-    
-    
-    
-    
-    
 end
 
 
@@ -300,8 +295,8 @@ function [mGamma] = computeBandCoherence(mBands)
 numBands = size(mBands,2);
 
 mGamma = zeros(numBands);
-for ppBand = 1:numBands,
-    for qqBand = ppBand+1:numBands,
+for ppBand = 1:numBands
+    for qqBand = ppBand+1:numBands
         mTmp = corrcoef(mBands(:,ppBand),mBands(:,qqBand));
         mGamma(ppBand,qqBand) = mTmp(2,1);
     end

@@ -1,4 +1,4 @@
-classdef ModelParametersSet < handle & matlab.System
+classdef ModelParametersSet < matlab.System
 %MODELPARAMETERSSET Model parameter class for NoiseAnalysisSynthesis
 % -------------------------------------------------------------------------
 % This class holds the model parameters used by the synthesis of the
@@ -19,7 +19,7 @@ classdef ModelParametersSet < handle & matlab.System
 % Date   :  05-Jul-2015 00:29:19
 %
 
-properties ( Constant, Hidden )
+properties (Constant, Hidden)
     muLog      = 1.2811; % Location parameter for click distribution
     sigmaLog   = 0.9387; % Scale parameter for click distribution
     
@@ -29,7 +29,7 @@ properties ( Constant, Hidden )
     clickFilterOrder = 3; % Order of the HP filter of the click processor
 end
 
-properties ( Transient, Hidden )
+properties (Transient, Hidden)
     % Possible values for the desired amplitude modeling method
     AmplitudeModelSet = matlab.system.StringSet({'full','percentile','pareto'});
     
@@ -39,18 +39,19 @@ properties ( Transient, Hidden )
     
     % Possible values for the desired spatial coherence model
     CohereModelSet = matlab.system.StringSet({...
-        'cylindrical',...
-        'spherical',...
-        'anisotropic',...
-        'binaural2d',...
-        'binaural3d'});
+        'cylindrical', ...
+        'spherical', ...
+        'anisotropic', ...
+        'binaural2d', ...
+        'binaural3d' ...
+        });
 end
 
-properties ( Access = public )
+properties (Access = public)
     Model = 'manual'; % Noise type model of a preset if loaded
     
     ModulationFilterbank = 'mel'; % Modulation filterbank type
-    ModulationDepth = 0.2 * exp(-(0:15)/2)'; % Modulation depth for all freq. bands
+    ModulationDepth = 0.2 * exp(-(0:15)/2).'; % Modulation depth for all freq. bands
     ModulationSpeed = 'fast'; % Modulation speed. Use 'slow' for speech-like types
     MarkovTransition; % Transition matrix for the modulation modeling
     MarkovStateBoundaries; % Markov state boundaries in dB
@@ -70,98 +71,86 @@ properties ( Access = public )
     Quantiles; % Independent variable of ECDF or holds information for other models
     CDF; % Dependent variable of ECDF or holds information for other models
     
-    CohereModel     = 'cylindrical'; % Spatial coherence model
+    CohereModel = 'cylindrical'; % Spatial coherence model
     % Sensor position(s) in meters
     SensorPositions = [
-        0  0.17
-        0  0.00
-        0  0.00];
-    SourcePosition = [0.2 1 0]'; % Source position(s) in meters
+        0,  0.17
+        0,  0.00
+        0,  0.00
+        ];
+    SourcePosition = [0.2, 1, 0]'; % Source position(s) in meters
     
     bApplyClicks = false; % Bool whether to apply clicks in the synthesis [default: false]
 end
 
-properties ( Dependent )
+properties (Dependent)
     ModulationWinLen; % Window length of the modulation processor in STFT domain
 end
 
-properties ( SetAccess = ?NoiseSynthesis.NoiseAnalysisSynthesis, Hidden )
-    NumGaussModels = 4; % Number of Gaussian components when using GMM approach
+properties (Access = public, Hidden)
+    NumGaussModels    = 4; % Number of Gaussian components when using GMM approach
+    maxMarkovRMSlevel = 4; % Maximum Markov state boundary in dB
 end
 
-properties ( Access = public, Hidden )
+properties (Hidden, Logical)
     bReducePSD       = true; % Should the FDLS approach be used?
     bUseMarkovChains = true; % Should the modulation Markov chain approach be used?
 end
 
-properties ( Access = ?NoiseSynthesis.NoiseAnalysisSynthesis, Hidden )
-    maxMarkovRMSlevel = 4; % Maximum Markov state boundary in dB
-end
-
-
 
 
 methods
-    % Class constructor
-    function [self] = ModelParametersSet()
+    function [] = set.ModulationSpeed(obj,szVal)
+        assert(...
+            isa(szVal,'char'), ...
+            'Value must be a string containing one of {''slow'', ''fast''}' ...
+            );
         
+        obj.ModulationSpeed = szVal;
     end
     
-    function [] = set.ModulationSpeed(self,szVal)
-        assert(isa(szVal,'char'),['Value must be a string containing one of',...
-            '{''slow'', ''fast''}']);
+    function [] = set.ModulationFilterbank(obj,szFilterBank)
+        assert(...
+            isa(szFilterBank,'char'), ...
+            'Pass a string containing either ''gammatone'' or ''mel''' ...
+            );
         
-        self.ModulationSpeed = szVal;
+        obj.ModulationFilterbank = lower(szFilterBank);
     end
     
-    function [] = set.ModulationFilterbank(self,szFilterBank)
-        assert(isa(szFilterBank,'char'),['Pass a string containing either ',...
-            '''gammatone'' or ''mel''']);
-        
-        self.ModulationFilterbank = lower(szFilterBank);
-    end
-    
-    function [] = set.AmplitudeModel(self,szMode)
-        assert(isa(szMode,'char'),['Pass a string containing one of the ',...
+    function [] = set.AmplitudeModel(obj,szMode)
+        assert(...
+            isa(szMode,'char'), ...
+            ['Pass a string containing one of the ',...
             'supported amplitude models: ''full'', ''alpha'', ''gmm'', ',...
-            '''percentile'' or ''pareto''']);
+            '''percentile'' or ''pareto'''] ...
+            );
         
-        self.AmplitudeModel = lower(szMode);
+        obj.AmplitudeModel = lower(szMode);
     end
     
-    function [] = set.SensorPositions(self,val)
+    function [] = set.SensorPositions(obj,val)
         validateattributes(val, {'numeric'}, {'2d', 'nrows', 3});
         
-        self.SensorPositions = val;
+        obj.SensorPositions = val;
     end
     
-    function [] = set.SourcePosition(self,val)
+    function [] = set.SourcePosition(obj,val)
         validateattributes(val, {'numeric'}, {'2d', 'nrows', 3});
         
-        self.SourcePosition = val;
+        obj.SourcePosition = val;
     end
     
-    
-    
-    
-    
-    function winLen = get.ModulationWinLen(self)
-        switch lower(self.ModulationSpeed),
-            case 'slow',
+
+    function winLen = get.ModulationWinLen(obj)
+        switch lower(obj.ModulationSpeed)
+            case 'slow'
                 winLen = 50e-3;
-            case 'fast',
+            case 'fast'
                 winLen = 25e-3;
         end
     end
 end
-
-
-
-
-
-
-
-
 
 
 end

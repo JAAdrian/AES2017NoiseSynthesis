@@ -7,19 +7,19 @@ classdef STFTparams < handle
 % on the sampling frequency.
 %
 % Usage: obj = STFTparams(BlocklenSec,OverlapRatio,fs)
-%        obj = STFTparams(BlocklenSec,OverlapRatio,fs,szFBType)
+%        obj = STFTparams(BlocklenSec,OverlapRatio,fs,fbType)
 %
 %   Input:   ----------
 %           BlocklenSec: block length in seconds (e.g. 32e-3)
 %           OverlapRatio: overlap as a ratio (e.g. 0.5)
 %           fs: sampling rate in Hz
-%           szFBType: string stating the type of STFT paradigm. Either
-%                     'analysis' or 'synthesis. If 'analysis' is chosen,
-%                     the window function is by default a Hann window with
-%                     desired blocklength. If 'synthesis' is chosen the
-%                     window function is by default a square-root-Hann
-%                     window with desired blocklength.
-%                     [default: 'analysis']
+%           fbType: string stating the type of STFT paradigm. Either
+%                   'analysis' or 'synthesis. If 'analysis' is chosen,
+%                   the window function is by default a Hann window with
+%                   desired blocklength. If 'synthesis' is chosen the
+%                   window function is by default a square-root-Hann
+%                   window with desired blocklength.
+%                   [default: 'analysis']
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -47,89 +47,78 @@ end
 
 methods
     % Class constructor
-    function [self] = STFTparams(BlocklenSec,OverlapRatio,fs,szFBType)
-        if nargin,
-            self.Fs         = fs;
-            self.Blocklen   = round(BlocklenSec * self.Fs);
-            self.Overlap    = round(OverlapRatio * self.Blocklen);
-            self.Frameshift = self.Blocklen - self.Overlap;
-            self.NFFT       = pow2(nextpow2(self.Blocklen));
-            self.FrameRate  = round(self.Fs / self.Frameshift);
+    function [obj] = STFTparams(BlocklenSec,OverlapRatio,fs,fbType)
+        if nargin
+            obj.Fs         = fs;
+            obj.Blocklen   = round(BlocklenSec * obj.Fs);
+            obj.Overlap    = round(OverlapRatio * obj.Blocklen);
+            obj.Frameshift = obj.Blocklen - obj.Overlap;
+            obj.NFFT       = pow2(nextpow2(obj.Blocklen));
+            obj.FrameRate  = round(obj.Fs / obj.Frameshift);
             
             % If synthesis filterbank is desired choose a sqrt(hann()) window
             % and set the NFFT to be the block length since we are working
             % with synthesis windows.
-            if nargin > 3 && ~isempty(szFBType) && strcmpi(szFBType,'synthesis'),
-                self.WindowFunctionHandle = @(x) sqrt(hann(x,'periodic'));
+            if nargin > 3 && ~isempty(fbType) && strcmpi(fbType, 'synthesis')
+                obj.WindowFunctionHandle = @(x) sqrt(hann(x, 'periodic'));
                 
-                self.Blocklen = self.NFFT;
-                self.Overlap  = round(OverlapRatio * self.Blocklen);
+                obj.Blocklen = obj.NFFT;
+                obj.Overlap  = round(OverlapRatio * obj.Blocklen);
             else
-                self.WindowFunctionHandle = @(x) hann(x,'periodic');
+                obj.WindowFunctionHandle = @(x) hann(x, 'periodic');
             end
 
             % Compute the window function from the handle
-            self.Window = self.WindowFunctionHandle(self.Blocklen);
+            obj.Window = obj.WindowFunctionHandle(obj.Blocklen);
         end
     end
     
-    function [] = set.WindowFunctionHandle(self,Handle)
-        assert(isa(Handle,'function_handle'),'Pass a valid handle to a window function');
+    function [] = set.WindowFunctionHandle(obj, Handle)
+        assert(isa(Handle,'function_handle'), 'Pass a valid handle to a window function');
         
-        self.WindowFunctionHandle = Handle;
+        obj.WindowFunctionHandle = Handle;
         
-        self.Window = self.WindowFunctionHandle(self.Blocklen); %#ok<MCSUP>
+        obj.Window = obj.WindowFunctionHandle(obj.Blocklen); %#ok<MCSUP>
     end
     
-    function [] = set.NFFT(self,nfft)
+    function [] = set.NFFT(obj, nfft)
         validateattributes(nfft, {'numeric'}, {'scalar', 'positive'});
         
-        if log2(nfft) - round(log2(nfft)) > eps,
+        if log2(nfft) - round(log2(nfft)) > eps
             warning(['Consider using a DFT size of a power of 2 for ', ...
-                'computation speed puproses']);
+                'computation speed purposes']);
         end
         
-        self.NFFT = nfft;
+        obj.NFFT = nfft;
     end
     
-    function [] = set.OriginalSignalLength(self,len)
+    function [] = set.OriginalSignalLength(obj,len)
         validateattributes(len, {'numeric'}, {'scalar', 'positive'});
         
-        self.OriginalSignalLength = len;
+        obj.OriginalSignalLength = len;
     end
     
     
     
     
     
-    function [numBlocks] = computeNumberOfBlocks(self,lenSignal)
+    function [numBlocks] = computeNumberOfBlocks(obj,lenSignal)
         %COMPUTENUMBEROFBLOCKS Compute the ceiled number of blocks
         % -----------------------------------------------------------------
         % The ceiled number of blocks resulting from the desired parameters.
         % This means that the signal will be zero-padded by default.
         
-        if nargin < 2,
-            if ~isempty(self.OriginalSignalLength)
-                lenSignal = self.OriginalSignalLength;
+        if nargin < 2
+            if ~isempty(obj.OriginalSignalLength)
+                lenSignal = obj.OriginalSignalLength;
             else
                 error('Be sure to provide the original signal length as second parameter');
             end
         end
         
-        numBlocks = ceil((lenSignal - self.Overlap) / self.Frameshift);
+        numBlocks = ceil((lenSignal - obj.Overlap) / obj.Frameshift);
     end
 end
-
-
-methods (Access = private)
-
-end
-
-
-
-
-
-
 
 end
 

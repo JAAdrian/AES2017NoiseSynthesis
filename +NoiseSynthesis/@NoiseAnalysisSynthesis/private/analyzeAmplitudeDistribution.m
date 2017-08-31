@@ -12,10 +12,10 @@ function [] = analyzeAmplitudeDistribution(self)
 import NoiseSynthesis.external.*
 
 
-vAnalysisPrctile = [0.0 100];
+vAnalysisPrctile = [0.0, 100];
 
-switch self.ModelParameters.AmplitudeModel,
-    case 'alpha',
+switch self.ModelParameters.AmplitudeModel
+    case 'alpha'
         import NoiseSynthesis.stbl_matlab.*
         
         self.ModelParameters.Quantiles = ...
@@ -28,7 +28,7 @@ switch self.ModelParameters.AmplitudeModel,
         
         self.ModelParameters.CDF = stblfit(vAnalysisSig);
         
-    case 'gmm',
+    case 'gmm'
         import NoiseSynthesis.GMM_toolbox.*
         
         szCovarType = 'diag';
@@ -64,7 +64,7 @@ switch self.ModelParameters.AmplitudeModel,
         
         self.ModelParameters.NumGaussModels = length(stGMM.mCenters);
         
-    case 'full',
+    case 'full'
         [self.ModelParameters.CDF,self.ModelParameters.Quantiles] = ...
             ecdf(self.AnalysisSignal);
         
@@ -73,13 +73,14 @@ switch self.ModelParameters.AmplitudeModel,
         self.ModelParameters.Quantiles = ...
             self.ModelParameters.Quantiles(2:end);
         
-    case 'percentile',
+    case 'percentile'
         vCDF   = 0:100;
         vPrctl = prctile(self.AnalysisSignal,vCDF);
         
         self.ModelParameters.Quantiles = vPrctl;
         self.ModelParameters.CDF       = vCDF ./ 100;
-    case 'pareto',
+        
+    case 'pareto'
         % source for piecewise Pareto:
         % http://de.mathworks.com/help/stats/fit-a-nonparametric-distribution-with-pareto-tails.html
         
@@ -119,7 +120,7 @@ switch self.ModelParameters.AmplitudeModel,
         
         
         % if no intersections found: use defaults
-        if isempty(perclower),
+        if isempty(perclower)
             perclower = 0.05;
         else
             perclower  = perclower(...
@@ -127,7 +128,7 @@ switch self.ModelParameters.AmplitudeModel,
                 perclower <= percRangeLower(2));
             perclower = perclower(1);
         end
-        if isempty(percupper),
+        if isempty(percupper)
             percupper = 0.95;
         else
             percupper = percupper(...

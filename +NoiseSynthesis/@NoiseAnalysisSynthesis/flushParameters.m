@@ -26,7 +26,8 @@ updateMarkovParams(self,-12,12);
 
 % arbitrary default angles
 self.mTheta = pi/2 * ones(self.NumSensorSignals);
-        
+
+obj.DoAnalysis = true;
 
 
 

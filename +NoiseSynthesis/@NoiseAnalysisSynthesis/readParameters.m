@@ -1,13 +1,13 @@
-function [] = readParameters(self,szFilename)
+function [] = readParameters(obj, filename)
 %READPARAMETERS Read parameter set for signal synthesis
 % -------------------------------------------------------------------------
 % This class method reads model parameters from a mat-file and passes them
 % to the parameter object.
 %
-% Usage: [] = readParameters(self,szFilename)
+% Usage: [] = readParameters(obj, filename)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
 %           szFilename: Name of the desired parameter mat-file
 %
 %  Output:   ---------
@@ -18,23 +18,23 @@ function [] = readParameters(self,szFilename)
 % Date   :  02-Dec-2015 16:34:23
 %
 
-assert(isa(szFilename, 'char'), ['Pass a string corresponding to the ', ...
+assert(isa(filename, 'char'), ['Pass a string corresponding to the ', ...
     'name of parameter file!']);
 
-[szPath,szName,szExt] = fileparts(szFilename);
+[szPath, szName, szExt] = fileparts(filename);
 
-if isempty(szExt) || ~strcmpi(szExt,'.mat'),
-    szFilename = fullfile(szPath,[szName, '.mat']);
+if isempty(szExt) || ~strcmpi(szExt, '.mat')
+    filename = fullfile(szPath, [szName, '.mat']);
 end
 
 try
-    stData = load(szFilename);
+    stData = load(filename);
 catch
     error('File not found!');
 end
 
-self.ModelParameters = stData.objParameterSet;
-
+obj.ModelParameters = stData.objParameterSet;
+obj.DoAnalysis = false;
 
 
 

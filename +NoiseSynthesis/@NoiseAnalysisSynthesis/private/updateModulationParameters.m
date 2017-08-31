@@ -1,4 +1,4 @@
-function [] = updateModulationParameters(self)
+function [] = updateModulationParameters(obj)
 %UPDATEMODULATIONPARAMETERS Update the modulation parameters based on STFT params
 % -------------------------------------------------------------------------
 %
@@ -10,10 +10,10 @@ function [] = updateModulationParameters(self)
 %
 
 
-self.ModulationParams = NoiseSynthesis.STFTparams(...
-    self.ModelParameters.ModulationWinLen,...
+obj.ModulationParams = NoiseSynthesis.STFTparams(...
+    obj.ModelParameters.ModulationWinLen,...
     0,...
-    self.STFTParameters.FrameRate);
+    obj.StftParameters.FrameRate);
 
 
 

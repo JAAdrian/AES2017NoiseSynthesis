@@ -61,9 +61,9 @@ classdef ErrorMeasures < handle
                 return;
             end
             
-            %TODO: only copy desired properties and do not save all the
-            % data
-            obj.Noise = clone(objNoise);
+            %TODO: only copy desired properties and do not copy the object
+            % due to recursion
+            obj.Noise = objNoise;
         end
         
         function [error] = get.ColorationError(obj)

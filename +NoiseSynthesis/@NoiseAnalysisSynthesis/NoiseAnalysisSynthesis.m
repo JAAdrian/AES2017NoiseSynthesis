@@ -30,15 +30,15 @@ properties (Access = public)
 end
 
 properties (Logical)
-    bApplyColoration       = true; % Bool whether to apply coloration in the synthesis [default: true]
-    bApplyAmplitudeDistr   = true; % Bool whether to apply an amplitude distribution in the synthesis [default: true]
-    bApplyModulations      = true; % Bool whether to apply modulations in the synthesis [default: true]
-    bApplyComodulation     = true; % Bool whether to apply comodulation in the synthesis [default: true]
-    bApplySpatialCoherence = true; % Bool whether to apply spatial coeherence in the synthesis [default: true]
+    DoApplyColoration       = true; % Bool whether to apply coloration in the synthesis [default: true]
+    DoApplyAmplitudeDistr   = true; % Bool whether to apply an amplitude distribution in the synthesis [default: true]
+    DoApplyModulations      = true; % Bool whether to apply modulations in the synthesis [default: true]
+    DoApplyComodulation     = true; % Bool whether to apply comodulation in the synthesis [default: true]
+    DoApplySpatialCoherence = true; % Bool whether to apply spatial coeherence in the synthesis [default: true]
     
-    bEstimateClickSpec = true; % Bool whether to estimate the click cutoff frequency in the analysis. Dependent on bApplyClicks [default: true]
+    DoEstimateClickSpec = true; % Bool whether to estimate the click cutoff frequency in the analysis. Dependent on bApplyClicks [default: true]
     
-    bDeClick = true; % Bool whether to declick the analysis file [default: true]
+    DoDeClick = true; % Bool whether to declick the analysis file [default: true]
 end
 
 properties (SetAccess = private)
@@ -57,8 +57,8 @@ properties (SetAccess = private)
 end
 
 properties (Logical, Hidden)
-    bVerbose          = false; % Bool whether to plot verbose information during processing
-    bHPFilterAnalysis = true;  % Bool whether to apply the HP filter before analysis
+    Verbose            = false; % Bool whether to plot verbose information during processing
+    DoHpFilterAnalysis = true;  % Bool whether to apply the HP filter before analysis
 end
 
 properties (SetAccess = private, Dependent)
@@ -68,48 +68,51 @@ end
 
 properties (Access = private, Constant)
     SoundVelocity = 343; % Velocity of sound
-    overlapRatio  = 0.5; % Fixed overlap for analysis and synthesis
-    hModNormFun   = @(x) mad(x, 1, 1); % Normalization function for level fluctuations
-    soundLeveldB  = -35; % Default sound level for playback in dB FS
+    OverlapRatio  = 0.5; % Fixed overlap for analysis and synthesis
+    ModNormFun    = @(x) mad(x, 1, 1); % Normalization function for level fluctuations
+    SoundLeveldB  = -35; % Default sound level for playback in dB FS
 end
 
 properties (Access = private)
-    vOriginalAnalysisSignal;    % Raw analysis signal
-    vBeforeDeCrackling;
+    OriginalAnalysisSignal;    % Raw analysis signal
+    BeforeDeCrackling;
     
-    mBands; % Frequency bands
-    mLevelCurvesDecorr; % Decorrelated level fluctuations for all bands
+    FrequencyBands; % Frequency bands
+    LevelCurvesDecorr; % Decorrelated level fluctuations for all bands
     
-    blocklen = 1024; % Block length for STFT
-    STFTParameters;  % Parameter object for the STFT
+    Blocklen = 1024; % Block length for STFT
+    StftParameters;  % Parameter object for the STFT
     ModulationParams; % Parameter object for the modulations
-    
-    bDoNotChangeSampleRate = false;
 end
 
 properties (Access = private, Dependent)
-    vCenterFreqs; % Center frequencies of either the Mel or Gammatone FB
-    numBands; % Number of frequency bands
-    lenLevelCurve; % Length of the RMS level fluctuations curve
-    numBlocks; % Number of signal blocks with chosen STFT parameters
-    numBins; % Number of DFT bins with chosen STFT parameters
-    numStates; % Number of Markov states
-    lenLevelCurvePlot; % Length of the RMS level fluctuations curve for plotting purposes
-    lenSignalPlotAudio; % Length of the signal in samples for plotting and playback purposes
+    CenterFreqs; % Center frequencies of either the Mel or Gammatone FB
+    NumBands; % Number of frequency bands
+    LenLevelCurve; % Length of the RMS level fluctuations curve
+    NumBlocks; % Number of signal blocks with chosen STFT parameters
+    NumBins; % Number of DFT bins with chosen STFT parameters
+    NumStates; % Number of Markov states
+    LenLevelCurvePlot; % Length of the RMS level fluctuations curve for plotting purposes
+    LenSignalPlotAudio; % Length of the signal in samples for plotting and playback purposes
+end
+
+properties (Access = private, Logical)
+    DoAnalysis = true;
+    DoChangeSampleRate = true;
 end
 
 properties (Access = private, Transient)
-    mDistances; % Distances between sensors
+    SensorDistances; % Distances between sensors
 end
 
 properties (Access = ?NoiseSynthesis.ErrorMeasures)
-    mTheta; % Angles between sources and sensors
-    mLevelCurves; % Level curves of all bands
-    mArtificialLevelCurves; % Generated level curves for all bands
+    Theta; % Angles between sources and sensors
+    LevelCurves; % Level curves of all bands
+    ArtificialLevelCurves; % Generated level curves for all bands
 end
 
 properties (Access = ?NoiseSynthesis.ErrorMeasures, Dependent)
-    hCohereFun; % Function handle to the desired coherence model
+    CohereFun; % Function handle to the desired coherence model
 end
 
 
@@ -118,14 +121,14 @@ end
 methods
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % CLASS CONSTRUCTOR
-    function obj = NoiseAnalysisSynthesis(signal, samplingRate)
+    function obj = NoiseAnalysisSynthesis(signal, sampleRate)
         % Create auxiliary objects
-        obj.STFTParameters = NoiseSynthesis.STFTparams(...
-            obj.blocklen/obj.SampleRate,...
-            obj.overlapRatio,...
+        obj.StftParameters = NoiseSynthesis.STFTparams(...
+            obj.Blocklen/obj.SampleRate,...
+            obj.OverlapRatio,...
             obj.SampleRate,...
             'synthesis');
-        obj.STFTParameters.OriginalSignalLength = obj.DesiredSignalLenSamples;
+        obj.StftParameters.OriginalSignalLength = obj.DesiredSignalLenSamples;
         
         % If input arguments are passed -> deal them to the properties
         if nargin
@@ -138,7 +141,7 @@ methods
                 1 ...
                 );
             validateattributes(...
-                samplingRate, ...
+                sampleRate, ...
                 {'numeric'}, ...
                 {'scalar', 'positive'}, ...
                 'NoiseAnalysisSynthesis', ...
@@ -150,14 +153,14 @@ methods
             signal = shiftdim(signal);
             
             obj.AnalysisSignal = signal - mean(signal);
-            obj.SampleRate     = samplingRate;
+            obj.SampleRate     = sampleRate;
             
             obj.DesiredSignalLenSamples = length(signal);
             
             % Check if FFT size is OK based on sample rate
             checkFFTlength(obj);
             
-            obj.bDoNotChangeSampleRate = true;
+            obj.DoNotChangeSampleRate = true;
         end
         
         obj.ModelParameters = NoiseSynthesis.ModelParametersSet();
@@ -168,10 +171,10 @@ methods
         updateModulationParameters(obj);
         
         % Initialize angles between source(s) and sensor(s)
-        obj.mTheta = pi/2 * ones(obj.NumSensorSignals);
+        obj.Theta = pi/2 * ones(obj.NumSensorSignals);
         
         % Initialize Markov modulation states
-        updateMarkovParams(obj, -12,12);
+        updateMarkovParams(obj, -12, 12);
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
@@ -180,7 +183,7 @@ methods
     [] = analyze(obj);
     [SensorSignalsOut] = synthesize(obj);
     
-    [] = saveSignals(obj,szSaveFilename,bStereo,bRandPhase,szExt);
+    [] = saveSignals(obj, szSaveFilename, bStereo, bRandPhase, szExt);
     
     [] = sound(obj,leveldB,bStereo);
     [] = soundsc(obj,bStereo);
@@ -201,20 +204,20 @@ methods
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%% setter/getter methods %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    function [vFreqs] = get.vCenterFreqs(obj)
-        numBands = obj.NumModulationBands; %#ok<PROP>
+    function [freqs] = get.CenterFreqs(obj)
+        numBands = obj.NumModulationBands;
         
-        vFreqs = erbscale2freq(...
+        freqs = erbscale2freq(...
             linspace(...
             freq2erbscale(obj.GammatoneLowestBand),...
             freq2erbscale(obj.GammatoneHighestBand),...
             numBands)...
-            ); %#ok<PROP>
+            );
     end
     
     function [numSens] = get.NumSensorSignals(obj)
-        if obj.bApplySpatialCoherence
-            numSens = size(obj.ModelParameters.SensorPositions,2);
+        if obj.DoApplySpatialCoherence
+            numSens = size(obj.ModelParameters.SensorPositions, 2);
         else
             numSens = 1;
         end
@@ -224,55 +227,55 @@ methods
         numSources = size(obj.ModelParameters.SourcePosition,2);
     end
     
-    function hCohereFun = get.hCohereFun(obj)
+    function CohereFun = get.CohereFun(obj)
         switch lower(obj.ModelParameters.CohereModel)
             case 'cylindrical'
                 % zeroth order bessel of first kind
-                hCohereFun = @(freq, dist, theta, vPSD) besselj(0, 2*pi * freq * dist / obj.SoundVelocity);
+                CohereFun = @(freq, dist, theta, vPSD) besselj(0, 2*pi * freq * dist / obj.SoundVelocity);
             case 'spherical'
-                hCohereFun = @(freq, dist, theta, vPSD) sinc(2 * freq * dist / obj.SoundVelocity);
+                CohereFun = @(freq, dist, theta, vPSD) sinc(2 * freq * dist / obj.SoundVelocity);
             case 'anisotropic'
-                hCohereFun = @(freq, dist, theta, vPSD) anisotropicCoherence(obj, freq, dist, theta, vPSD);
+                CohereFun = @(freq, dist, theta, vPSD) anisotropicCoherence(obj, freq, dist, theta, vPSD);
             case 'binaural2d'
-                hCohereFun = @(freq, dist, theta, vPSD) binaural2d(obj, dist, freq);
+                CohereFun = @(freq, dist, theta, vPSD) binaural2d(obj, dist, freq);
             case 'binaural3d'
-                hCohereFun = @(freq, dist, theta, vPSD) binaural3d(obj, dist, freq);
+                CohereFun = @(freq, dist, theta, vPSD) binaural3d(obj, dist, freq);
             otherwise
                 warning(sprintf('Coherence model not recognized. Switched to default (''%s'')...',...
                     obj.ModelParameters.CohereModel)); %#ok<SPWRN>
         end
     end
     
-    function [nBands] = get.numBands(obj)
-        nBands = length(obj.vCenterFreqs);
+    function [nBands] = get.NumBands(obj)
+        nBands = length(obj.CenterFreqs);
     end
     
-    function [nb] = get.numBins(obj)
-        nb = obj.STFTParameters.NFFT/2+1;
+    function [nb] = get.NumBins(obj)
+        nb = obj.StftParameters.Nfft/2+1;
     end
     
-    function [nb] = get.numBlocks(obj)
-        nb = computeNumberOfBlocks(obj.STFTParameters,obj.DesiredSignalLenSamples);
+    function [nb] = get.NumBlocks(obj)
+        nb = computeNumberOfBlocks(obj.StftParameters, obj.DesiredSignalLenSamples);
     end
     
-    function [ns] = get.numStates(obj)
-        ns = size(obj.ModelParameters.MarkovStateBoundaries,1);
+    function [ns] = get.NumStates(obj)
+        ns = size(obj.ModelParameters.MarkovStateBoundaries, 1);
     end
     
-    function nb = get.lenLevelCurve(obj)
-        nb = ceil((obj.numBlocks - obj.ModulationParams.Overlap)...
+    function [nb] = get.LenLevelCurve(obj)
+        nb = ceil((obj.NumBlocks - obj.ModulationParams.Overlap)...
             / obj.ModulationParams.Frameshift);
     end
     
-    function len = get.lenLevelCurvePlot(obj)
-        len = min(obj.lenLevelCurve,size(obj.mLevelCurves,1));
+    function [len] = get.LenLevelCurvePlot(obj)
+        len = min(obj.LenLevelCurve, size(obj.LevelCurves, 1));
     end
     
-    function len = get.lenSignalPlotAudio(obj)
+    function [len] = get.LenSignalPlotAudio(obj)
         if ~isempty(obj.AnalysisSignal)
             len = min(...
                 obj.DesiredSignalLenSamples, ...
-                min(length(obj.AnalysisSignal),obj.DesiredSignalLenSamples) ...
+                min(length(obj.AnalysisSignal), obj.DesiredSignalLenSamples) ...
                 );
         else
             len = obj.DesiredSignalLenSamples;
@@ -287,22 +290,22 @@ methods
         
         obj.DesiredSignalLenSamples = lenSamples;
         
-        obj.STFTParameters.OriginalSignalLength = lenSamples; %#ok<MCSUP>
+        obj.StftParameters.OriginalSignalLength = lenSamples;
     end
     
-    function [] = set.SampleRate(obj,SampleRate)
-        if obj.bDoNotChangeSampleRate %#ok<MCSUP>
+    function [] = set.SampleRate(obj, sampleRate)
+        if obj.DoNotChangeSampleRate
             error(['At the moment, you cannot change the sampling rate ', ...
                 'when an analysis signal has been used!']);
         else
             validateattributes(...
-                SampleRate, ...
+                sampleRate, ...
                 {'numeric'}, ...
                 {'scalar', 'integer', 'positive', 'nonnan', 'real', ...
                  '>=', 16e3, '<=', 48e3}...
                 );
             
-            obj.SampleRate = SampleRate;
+            obj.SampleRate = sampleRate;
         end
     end
 end
@@ -324,10 +327,10 @@ methods (Access = protected)
     end
     
     function [] = resetImpl(obj)
-        
+        obj.flushParameters();
     end
     
-    function [] = stepImpl(obj)
+    function [block] = stepImpl(obj)
         
     end
 end

@@ -45,7 +45,7 @@ classdef ErrorMeasures < handle
         ModulationSpecError; % Modulation spectrum matrix-MSE
     end
     
-    
+    %TODO: use StringSet and remove validatestring
     properties (Access = public)
         AmplitudeErrorMethod = 'Bhattacharyya';
         PsdErrorMethod = 'Cosh';
@@ -61,7 +61,7 @@ classdef ErrorMeasures < handle
                 return;
             end
             
-            % TODO: only copy desired properties and do not save all the
+            %TODO: only copy desired properties and do not save all the
             % data
             obj.Noise = clone(objNoise);
         end

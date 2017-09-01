@@ -1,8 +1,8 @@
-function [] = computeSensorDistances(self)
+function [] = computeSensorDistances(obj)
 %COMPUTESENSORDISTANCES Compute the inter-sensor distances
 % -------------------------------------------------------------------------
 %
-% Usage: [] = computeSensorDistances(self)
+% Usage: [] = computeSensorDistances(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -11,11 +11,11 @@ function [] = computeSensorDistances(self)
 
 
 % compute euclidean distances
-for ppSensor = 1:self.NumSensorSignals,
-    for qqSensor = 1:self.NumSensorSignals,
-        self.mDistances(ppSensor,qqSensor) = ...
-            norm( self.ModelParameters.SensorPositions(:,ppSensor) -...
-            self.ModelParameters.SensorPositions(:,qqSensor) );
+for ppSensor = 1:obj.NumSensorSignals
+    for qqSensor = 1:obj.NumSensorSignals
+        obj.mDistances(ppSensor,qqSensor) = ...
+            norm( obj.ModelParameters.SensorPositions(:,ppSensor) -...
+            obj.ModelParameters.SensorPositions(:,qqSensor) );
     end
 end
 

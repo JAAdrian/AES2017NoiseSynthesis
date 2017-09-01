@@ -1,8 +1,8 @@
-function [] = generateIncoherentNoise(self)
+function [] = generateIncoherentNoise(obj)
 %GENERATEINCOHERENTNOISE Generate noise signals without spatial coherence
 % -------------------------------------------------------------------------
 %
-% Usage: [] = generateIncoherentNoise(self)
+% Usage: [] = generateIncoherentNoise(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,16 +10,16 @@ function [] = generateIncoherentNoise(self)
 %
 
 
-self.SensorSignals{1} = generateNoise(self,self.bApplyColoration);
+obj.SensorSignals{1} = generateNoise(obj,obj.bApplyColoration);
 
 % apply modulations if desired
-if self.bApplyModulations,
-    applyModulations(self);
+if obj.bApplyModulations
+    applyModulations(obj);
 end
 
-self.mBands = self.SensorSignals{1};
-self.SensorSignals = [];
-self.SensorSignals = SynthesisFilterbank(self);
+obj.mBands = obj.SensorSignals{1};
+obj.SensorSignals = [];
+obj.SensorSignals = SynthesisFilterbank(obj);
 
 
 % End of file: generateIncoherentNoise.m

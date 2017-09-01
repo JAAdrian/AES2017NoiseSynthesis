@@ -1,8 +1,8 @@
-function [] = DeClickAnalysisSignal(self)
+function [] = DeClickAnalysisSignal(obj)
 %DECLICKANALYSISSIGNAL DeClick analysis signal and est. click parameters if desired
 % -------------------------------------------------------------------------
 %
-% Usage: [] = DeClickAnalysisSignal(self)
+% Usage: [] = DeClickAnalysisSignal(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -14,23 +14,23 @@ import NoiseSynthesis.external.*
 threshDeClick = 0.15;
 
 % save the raw analysis signal in private property and declick
-% self.AnalysisSignal
-self.vOriginalAnalysisSignal = self.AnalysisSignal;
-[self.AnalysisSignal, vClickPositions] = ...
-    DeClickNoise(self.AnalysisSignal,self.Fs,threshDeClick);
+% obj.AnalysisSignal
+obj.vOriginalAnalysisSignal = obj.AnalysisSignal;
+[obj.AnalysisSignal, vClickPositions] = ...
+    DeClickNoise(obj.AnalysisSignal,obj.Fs,threshDeClick);
 
-vClicks = self.AnalysisSignal - self.vOriginalAnalysisSignal;
+vClicks = obj.AnalysisSignal - obj.vOriginalAnalysisSignal;
 
-if self.ModelParameters.bApplyClicks && any(vClicks) && self.bEstimateClickSpec,
-    estimateClickBandwidth(self,vClicks);
+if obj.ModelParameters.bApplyClicks && any(vClicks) && obj.bEstimateClickSpec,
+    estimateClickBandwidth(obj,vClicks);
 end
 
-self.ModelParameters.SNRclick  = SNR(self.AnalysisSignal,vClicks);
+obj.ModelParameters.SNRclick  = SNR(obj.AnalysisSignal,vClicks);
 
-learnMarkovClickParams(self,vClickPositions);
+learnMarkovClickParams(obj,vClickPositions);
 
-showMsg(self, sprintf('Error signal energy of (Clicked-DeClicked): %g\n', ...
-    norm(self.vOriginalAnalysisSignal - self.AnalysisSignal)^2));
+showMsg(obj, sprintf('Error signal energy of (Clicked-DeClicked): %g\n', ...
+    norm(obj.vOriginalAnalysisSignal - obj.AnalysisSignal)^2));
 
 end
 

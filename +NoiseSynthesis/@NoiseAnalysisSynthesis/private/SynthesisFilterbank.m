@@ -1,8 +1,8 @@
-function [vTimeSignal] = SynthesisFilterbank(self)
+function [timeSignal] = SynthesisFilterbank(obj)
 %SYNTHESISFILTERBANK Transform the time-freq. repr. to time domain
 % -------------------------------------------------------------------------
 %
-% Usage: [vTimeSignal] = SynthesisFilterbank(self)
+% Usage: [vTimeSignal] = SynthesisFilterbank(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -12,12 +12,12 @@ function [vTimeSignal] = SynthesisFilterbank(self)
 import NoiseSynthesis.external.*
 
 
-vTimeSignal = ISTFT(...
-    self.mBands,...
-    self.STFTParameters...
+timeSignal = ISTFT(...
+    obj.mBands, ...
+    obj.STFTParameters ...
     );
 
-vTimeSignal = vTimeSignal - mean(vTimeSignal);
+timeSignal = timeSignal - mean(timeSignal);
 
 
 

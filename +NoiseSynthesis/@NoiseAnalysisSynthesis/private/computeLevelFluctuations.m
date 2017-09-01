@@ -1,8 +1,8 @@
-function [] = computeLevelFluctuations(self)
+function [] = computeLevelFluctuations(obj)
 %COMPUTELEVELFLUCTUATIONS <purpose in one line!>
 % -------------------------------------------------------------------------
 %
-% Usage: [] = computeLevelFluctuations(self)
+% Usage: [] = computeLevelFluctuations(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -12,19 +12,19 @@ function [] = computeLevelFluctuations(self)
 import NoiseSynthesis.external.*
 
 
-modFrameShift = self.ModulationParams.Frameshift;
+modFrameShift = obj.ModulationParams.Frameshift;
 
-numBlocksPadded = self.lenLevelCurve * modFrameShift + self.ModulationParams.Overlap;
+numBlocksPadded = obj.lenLevelCurve * modFrameShift + obj.ModulationParams.Overlap;
 
-remBlocks = numBlocksPadded - self.numBlocks;
+remBlocks = numBlocksPadded - obj.numBlocks;
 
 vIdxNormalize = ...
-    round(0.05 * self.numBlocks) : ...
-    round(0.95 * self.numBlocks);
+    round(0.05 * obj.numBlocks) : ...
+    round(0.95 * obj.numBlocks);
 
-self.mLevelCurves = zeros(self.lenLevelCurve,self.numBands);
-for aaBand = 1:self.numBands,
-    vCurrBandSignal = self.mBands(aaBand,:).';
+obj.mLevelCurves = zeros(obj.lenLevelCurve,obj.numBands);
+for aaBand = 1:obj.numBands
+    vCurrBandSignal = obj.mBands(aaBand,:).';
     vCurrBandSignal = vCurrBandSignal / ...
         rmsvec(vCurrBandSignal(vIdxNormalize));
     
@@ -33,10 +33,10 @@ for aaBand = 1:self.numBands,
         vCurrBandSignal(end-remBlocks+1:end)...
         ]; %#ok<AGROW>
     
-    vIdxBlock = 1:self.ModulationParams.Blocklen;
-    for bbBlock = 1:self.lenLevelCurve,
+    vIdxBlock = 1:obj.ModulationParams.Blocklen;
+    for bbBlock = 1:obj.lenLevelCurve
         % get RMS
-        self.mLevelCurves(bbBlock,aaBand) = rmsvec(vCurrBandSignal(vIdxBlock));
+        obj.mLevelCurves(bbBlock,aaBand) = rmsvec(vCurrBandSignal(vIdxBlock));
         
         % update block index
         vIdxBlock = vIdxBlock + modFrameShift;

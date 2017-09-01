@@ -1,14 +1,14 @@
-function [] = playAnalyzed(self,leveldB)
+function [] = playAnalyzed(obj, leveldB)
 %PLAYANALYZED Audio playback of the analysis signal
 % -------------------------------------------------------------------------
 % This class method chooses, depending on the platform, the right playback
 % function and plays back the analysis signal at the desired level.
 %
-% Usage: [] = playAnalyzed(self,leveldB)
+% Usage: [] = playAnalyzed(obj, leveldB)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
-%           leveldB: Playback level in dBFS [default: self.soundLeveldB]
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           leveldB: Playback level in dBFS [default: obj.soundLeveldB]
 %
 %  Output:   ---------
 %           none
@@ -21,24 +21,24 @@ function [] = playAnalyzed(self,leveldB)
 import NoiseSynthesis.external.*
 
 
-if nargin < 2 || isempty(leveldB),
-    leveldB = self.soundLeveldB;
+if nargin < 2 || isempty(leveldB)
+    leveldB = obj.soundLeveldB;
 end
 
 hPlayFun       = @sound;
 hPlayFunScaled = @soundsc;
-if isunix,
+if isunix()
     hPlayFun       = @usound;
     hPlayFunScaled = @usoundsc;
 end
 
-vSignal = self.vOriginalAnalysisSignal;
+signal = obj.OriginalAnalysisSignal;
 
-scaleFactor = 10^(leveldB/20) / rms(vSignal);
-if ~leveldB,
-    hPlayFunScaled(vSignal, self.Fs);
+scaleFactor = 10^(leveldB/20) / rms(signal);
+if ~leveldB
+    hPlayFunScaled(signal, obj.SampleRate);
 else
-    hPlayFun(scaleFactor * vSignal, self.Fs);
+    hPlayFun(scaleFactor * signal, obj.SampleRate);
 end
 
 

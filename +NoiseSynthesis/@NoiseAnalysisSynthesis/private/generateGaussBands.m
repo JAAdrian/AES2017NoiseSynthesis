@@ -1,8 +1,8 @@
-function [] = generateGaussBands(self)
+function [] = generateGaussBands(obj)
 %GENERATEGAUSSBANDS Alternative to Markov chain, generate normally distr. level fluctuations
 % -------------------------------------------------------------------------
 %
-% Usage: [] = generateGaussBands(self)
+% Usage: [] = generateGaussBands(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,7 +10,7 @@ function [] = generateGaussBands(self)
 %
 
 
-self.mArtificialLevelCurves = randn(self.lenLevelCurve,self.numBands);
+obj.mArtificialLevelCurves = randn(obj.lenLevelCurve,obj.numBands);
 
 
 

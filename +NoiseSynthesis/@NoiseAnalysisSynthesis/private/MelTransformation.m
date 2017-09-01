@@ -1,8 +1,8 @@
-function [] = MelTransformation(self)
+function [] = MelTransformation(obj)
 %MELTRANSFORMATION Transform linear frequency bands into Mel bands
 % -------------------------------------------------------------------------
 %
-% Usage: [] = MelTransformation(self)
+% Usage: [] = MelTransformation(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,7 +10,7 @@ function [] = MelTransformation(self)
 %
 
 
-self.mBands = MelMatrix(self) * self.mBands;
+obj.Bands = MelMatrix(obj) * obj.Bands;
 
 
 % End of file: MelTransformation.m

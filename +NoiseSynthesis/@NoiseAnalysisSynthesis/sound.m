@@ -1,18 +1,18 @@
-function [] = sound(self,leveldB,bStereo)
+function [] = sound(obj,leveldB,bStereo)
 %SOUND Audio playback of both analysis and synthesis signal without scaling
 % -------------------------------------------------------------------------
 % This class method overloads MATLAB's standard sound() function to provide
 % an easy way to playback both analyzed and synthesized signals from the
 % current object. Playback level is not scaled to maximum amplitude.
-% It wraps playAnalyzed(self) and playSynthesized(self).
+% It wraps playAnalyzed(obj) and playSynthesized(obj).
 %
-% Usage: [] = sound(self)
-%        [] = sound(self,leveldB)
-%        [] = sound(self,leveldB,bStereo)
+% Usage: [] = sound(obj)
+%        [] = sound(obj,leveldB)
+%        [] = sound(obj,leveldB,bStereo)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
-%           leveldB: Playback level in dBFS [default: self.soundLeveldB]
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           leveldB: Playback level in dBFS [default: obj.soundLeveldB]
 %           bStereo: Boolean whether to use multichannel playback [default: false]
 %
 %  Output:   ---------
@@ -24,20 +24,20 @@ function [] = sound(self,leveldB,bStereo)
 %
 
 
-if nargin < 3 || isempty(bStereo),
+if nargin < 3 || isempty(bStereo)
     bStereo = false;
 end
-if nargin < 2 || isempty(leveldB),
-    leveldB = self.soundLeveldB;
+if nargin < 2 || isempty(leveldB)
+    leveldB = obj.soundLeveldB;
 end
 
-if ~isempty(self.AnalysisSignal),
+if ~isempty(obj.AnalysisSignal)
     fprintf('*** Playing Analysis  Signal ***\n');
-    playAnalyzed(self,leveldB);
-    pause(self.lenSignalPlotAudio/self.Fs + 0.5);
+    playAnalyzed(obj,leveldB);
+    pause(obj.lenSignalPlotAudio/obj.Fs + 0.5);
 end
 fprintf('*** Playing Synthesis Signal ***\n');
-playSynthesized(self,leveldB,bStereo);
+playSynthesized(obj,leveldB,bStereo);
 
 
 

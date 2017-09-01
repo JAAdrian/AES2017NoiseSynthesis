@@ -1,4 +1,4 @@
-function [mTransform] = STFTGammatone(self)
+function [mTransform] = STFTGammatone(obj)
 %STFTGAMMATONE Return transformation matrix for the Gammatone approximation
 % -------------------------------------------------------------------------
 % Source:
@@ -8,7 +8,7 @@ function [mTransform] = STFTGammatone(self)
 % pp. 1292–1304, 2005.
 
 %
-% Usage: [mTransform] = STFTGammatone(self)
+% Usage: [mTransform] = STFTGammatone(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -16,55 +16,53 @@ function [mTransform] = STFTGammatone(self)
 %
 
 
-vERBCenterFreqs = self.vCenterFreqs;
-vERB            = ERB(vERBCenterFreqs);
+erbCenterFreqs = obj.vCenterFreqs;
+erbFreqs       = erb(erbCenterFreqs);
 
-numChannels    = length(vERBCenterFreqs);
+numChannels    = length(erbCenterFreqs);
 gammatoneOrder = 4;
 
 k = 2^(gammatoneOrder - 1) * factorial(gammatoneOrder-1) / ...
     (pi * doublefactorial(2*gammatoneOrder - 3));
 
-vFreq = linspace(0,self.Fs/2,self.numBins);
+freq = linspace(0, obj.SampleRate/2, obj.NumBins);
 
-mTransform = zeros(numChannels,self.numBins);
-for aaChannel = 1:numChannels,
-    mTransform(aaChannel,:) = ...
+mTransform = zeros(numChannels, obj.NumBins);
+for iChannel = 1:numChannels
+    mTransform(iChannel,:) = ...
         (1 + (...
-        (vFreq - vERBCenterFreqs(aaChannel)) ./ ...
-        (k .* vERB(aaChannel)) ) .^2 ...
+            (freq - erbCenterFreqs(iChannel)) ./ ...
+            (k .* erbFreqs(iChannel)) ) .^2 ...
         ) .^ (-gammatoneOrder/2);
 end
-
-%         figure;
-%         semilogx(vFreq, 20*log10(mTransform + eps));
-%         axis tight;
-%         axis([self.GammatoneLowestBand, self.GammatoneHighestBand,...
-%             -70, 0]);
-
-
-    function dpf = doublefactorial(in)
-        if iseven(in),
-            dpf = prod(2:2:in);
-        else
-            dpf = prod(1:2:in);
-        end
-    end
-
-
-    function istrue = iseven(in)
-        divideByTwo = mod(in,2);
-        
-        istrue = false(size(in));
-        
-        istrue(divideByTwo == 0) = true;
-    end
-
+% 
+% figure;
+% semilogx(vFreq, 20*log10(mTransform + eps));
+% axis tight;
+% axis([obj.GammatoneLowestBand, obj.GammatoneHighestBand,...
+%     -70, 0]);
 end
 
 
-function vERB = ERB(vFreq)
-vERB = 24.7 .* (4.37 * vFreq/1000 + 1);
+function erbFreqs = erb(freq)
+erbFreqs = 24.7 .* (4.37 * freq/1000 + 1);
+end
+
+function dpf = doublefactorial(in)
+if iseven(in)
+    dpf = prod(2:2:in);
+else
+    dpf = prod(1:2:in);
+end
+end
+
+
+function istrue = iseven(in)
+divideByTwo = mod(in, 2);
+
+istrue = false(size(in));
+
+istrue(divideByTwo == 0) = true;
 end
 
 

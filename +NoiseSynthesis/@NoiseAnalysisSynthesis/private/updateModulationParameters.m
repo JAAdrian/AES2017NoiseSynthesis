@@ -2,7 +2,7 @@ function [] = updateModulationParameters(obj)
 %UPDATEMODULATIONPARAMETERS Update the modulation parameters based on STFT params
 % -------------------------------------------------------------------------
 %
-% Usage: [] = updateModulationParameters(self)
+% Usage: [] = updateModulationParameters(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>

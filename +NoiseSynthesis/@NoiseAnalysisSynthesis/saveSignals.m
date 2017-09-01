@@ -1,16 +1,16 @@
-function [] = saveSignals(self,szSaveFilename,bStereo,szExt)
+function [] = saveSignals(obj,szSaveFilename,bStereo,szExt)
 %SAVESIGNALS Save the analysis and synthesis signal to file
 % -------------------------------------------------------------------------
 % This class method provides means to save the analysis and synthesis
 % signal to file. The analysis signal will have the szSaveFilename as file
 % name, the synthesis signal will have szSaveFilename_synth.ext as filename.
 %
-% Usage: [] = saveSignals(self,szSaveFilename)
-%        [] = saveSignals(self,szSaveFilename,bStereo)
-%        [] = saveSignals(self,szSaveFilename,bStereo,szExt)
+% Usage: [] = saveSignals(obj,szSaveFilename)
+%        [] = saveSignals(obj,szSaveFilename,bStereo)
+%        [] = saveSignals(obj,szSaveFilename,bStereo,szExt)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
 %           szSaveFilename: Name stem of the created audio files
 %           bStereo: Bool whether to save multichannel files [default: false]
 %           szExt: Desired file type/extension [default: 'wav']
@@ -29,10 +29,10 @@ assert(isa(szExt, 'char'), ['Pass a string corresponding to the name of ', ...
     'the desired audio file extesion / type!']);
 validateattributes(bStereo, {'logical', 'double'}, {'scalar', 'binary'})
 
-if nargin < 4 || isempty(szExt),
+if nargin < 4 || isempty(szExt)
     szExt = 'wav';
 end
-if nargin < 3 || isempty(bStereo),
+if nargin < 3 || isempty(bStereo)
     bStereo = false;
 end
 
@@ -43,44 +43,44 @@ end
 szName = [szName szTmpExt];
 
 szNewPath = fullfile(szPath,szName);
-if ~exist(szNewPath,'dir'),
+if ~exist(szNewPath,'dir')
     mkdir(szNewPath);
 end
 
 szFilename      = [fullfile(szNewPath,szName), '.', szExt];
 szFilenameSynth = [fullfile(szNewPath,szName), '_synth', '.', szExt];
 
-len = self.lenSignalPlotAudio;
+len = obj.lenSignalPlotAudio;
 
-if ~isempty(self.ClickTracks),
-    vSaveSignal = nrmlz(self.vOriginalAnalysisSignal,self.soundLeveldB);
+if ~isempty(obj.ClickTracks)
+    vSaveSignal = nrmlz(obj.vOriginalAnalysisSignal,obj.soundLeveldB);
 else
-    vSaveSignal = nrmlz(self.AnalysisSignal(1:len),self.soundLeveldB);
+    vSaveSignal = nrmlz(obj.AnalysisSignal(1:len),obj.soundLeveldB);
 end
 
 
-if bStereo,
+if bStereo
     vSaveSignal      = vSaveSignal(:,ones(1,2));
     vSaveSignalSynth = nrmlz(...
         [...
-        self.SensorSignals(:, 1), self.SensorSignals(:, 2)...
-        ],self.soundLeveldB);
+        obj.SensorSignals(:, 1), obj.SensorSignals(:, 2)...
+        ],obj.soundLeveldB);
 else
-    vSaveSignalSynth = nrmlz(self.SensorSignals(:, 1),self.soundLeveldB);
+    vSaveSignalSynth = nrmlz(obj.SensorSignals(:, 1),obj.soundLeveldB);
 end
 
 
 % check to not clip the signal
-if any(abs(vSaveSignal) > 1),
+if any(abs(vSaveSignal) > 1)
     vSaveSignal = vSaveSignal ./ max(abs(vSaveSignal)) * 0.99;
 end
-if any(abs(vSaveSignalSynth) > 1),
+if any(abs(vSaveSignalSynth) > 1)
     vSaveSignalSynth = vSaveSignalSynth ./ max(abs(vSaveSignalSynth)) * 0.99;
 end
 
 
-audiowrite(szFilename,vSaveSignal,self.Fs);
-audiowrite(szFilenameSynth,vSaveSignalSynth,self.Fs);
+audiowrite(szFilename,vSaveSignal,obj.Fs);
+audiowrite(szFilenameSynth,vSaveSignalSynth,obj.Fs);
 
 end
 

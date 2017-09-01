@@ -1,13 +1,13 @@
-function [] = flushParameters(self)
+function [] = flushParameters(obj)
 %FLUSHPARAMETERS Flush current parameter set
 % -------------------------------------------------------------------------
 % This class method flushes all parameters for the noise model and resets
 % to default values.
 %
-% Usage: [] = flushParameters(self)
+% Usage: [] = flushParameters(obj)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
 %
 %  Output:   ---------
 %           none
@@ -18,14 +18,14 @@ function [] = flushParameters(self)
 %
 
 % overwrite the parameter object with a new default one
-self.ModelParameters = NoiseSynthesis.ModelParametersSet();
+obj.ModelParameters = NoiseSynthesis.ModelParametersSet();
 
 % update modulation and Markov parameters
-updateModulationParameters(self);
-updateMarkovParams(self,-12,12);
+updateModulationParameters(obj);
+updateMarkovParams(obj, -12, 12);
 
 % arbitrary default angles
-self.mTheta = pi/2 * ones(self.NumSensorSignals);
+obj.mTheta = pi/2 * ones(obj.NumSensorSignals);
 
 obj.DoAnalysis = true;
 

@@ -1,14 +1,14 @@
-function [] = saveParameters(self,szFilename)
+function [] = saveParameters(obj,szFilename)
 %SAVEPARAMETERS Save model parameters to mat-file
 % -------------------------------------------------------------------------
 % This class method saves the model parameters to a mat-file for later use
 % to load desired parameters for signal synthesis by the class method
 % readParameters()
 %
-% Usage: [] = saveParameters(self,szFilename)
+% Usage: [] = saveParameters(obj,szFilename)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
 %           szFilename: Name of the mat-file to save the parameters in
 %
 %  Output:   ---------
@@ -24,15 +24,15 @@ assert(isa(szFilename, 'char'), ['Pass a string corresponding to the ', ...
 
 [szPath,szName,szExt] = fileparts(szFilename);
 
-if ~exist(szPath,'dir') && ~isempty(szPath),
+if ~exist(szPath,'dir') && ~isempty(szPath)
     mkdir(szPath);
 end
 
-if isempty(szExt) || ~strcmpi(szExt,'.mat'),
+if isempty(szExt) || ~strcmpi(szExt,'.mat')
     szFilename = fullfile(szPath,[szName, '.mat']);
 end
 
-objParameterSet = self.ModelParameters; %#ok<NASGU>
+objParameterSet = obj.ModelParameters; %#ok<NASGU>
 
 save(szFilename,'objParameterSet');
 

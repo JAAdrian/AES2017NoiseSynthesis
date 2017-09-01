@@ -1,8 +1,8 @@
-function [] = learnMarkovClickParams(self,vClicks)
+function [] = learnMarkovClickParams(obj,vClicks)
 %LEARNMARKOVCLICKPARAMS Learn the transition matrix for the click model
 % -------------------------------------------------------------------------
 %
-% Usage: [] = learnMarkovClickParams(self,vClicks)
+% Usage: [] = learnMarkovClickParams(obj,vClicks)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,7 +10,7 @@ function [] = learnMarkovClickParams(self,vClicks)
 %
 
 
-vClicksTmp = zeros(size(self.AnalysisSignal));
+vClicksTmp = zeros(size(obj.AnalysisSignal));
 vClicksTmp(vClicks) = 1;
 vClicks = vClicksTmp;
 
@@ -20,7 +20,7 @@ lenClicks = length(vClicks);
 % 1...no click
 % 2... a click
 vStates = [0 1];
-for aaState = 1:2,
+for aaState = 1:2
     vIdxCurrEmission = find(vClicks == vStates(aaState));
     vIdxNextEmission = vIdxCurrEmission + 1;
     vIdxNextEmission(vIdxNextEmission > lenClicks) = [];
@@ -28,16 +28,16 @@ for aaState = 1:2,
     numToNoClicks = sum(vClicks(vIdxNextEmission) == vStates(1));
     numToClicks   = sum(vClicks(vIdxNextEmission) == vStates(2));
     
-    self.ModelParameters.ClickTransition(aaState,:) = ...
+    obj.ModelParameters.ClickTransition(aaState,:) = ...
         [numToNoClicks numToClicks] / length(vIdxNextEmission);
 end
 
 % just to be sure that every row sums up to exactly one
-self.ModelParameters.ClickTransition = ...
+obj.ModelParameters.ClickTransition = ...
     bsxfun(...
         @rdivide, ...
-        self.ModelParameters.ClickTransition, ...
-        sum(self.ModelParameters.ClickTransition, 2) ...
+        obj.ModelParameters.ClickTransition, ...
+        sum(obj.ModelParameters.ClickTransition, 2) ...
         );
 
 

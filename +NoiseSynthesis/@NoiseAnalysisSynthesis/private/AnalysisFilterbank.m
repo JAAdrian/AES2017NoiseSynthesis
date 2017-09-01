@@ -1,8 +1,8 @@
-function [] = AnalysisFilterbank(self,vSigIn)
+function [] = AnalysisFilterbank(obj, signalIn)
 %ANALYSISFILTERBANK Transform signals into STFT domain
 % -------------------------------------------------------------------------
 %
-% Usage: [] = AnalysisFilterbank(self,vSigIn)
+% Usage: [] = AnalysisFilterbank(obj,vSigIn)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -12,13 +12,13 @@ function [] = AnalysisFilterbank(self,vSigIn)
 import NoiseSynthesis.external.*
 
 
-self.mBands = STFT(...
-    vSigIn,...
-    self.STFTParameters...
+obj.Bands = STFT(...
+    signalIn,...
+    obj.STFTParameters...
     );
 
 % STFT returns a single sided spectrum by default
-self.mBands = abs(self.mBands);
+obj.mBands = abs(obj.Bands);
 
 
 

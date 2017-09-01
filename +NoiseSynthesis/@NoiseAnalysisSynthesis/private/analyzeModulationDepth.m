@@ -1,8 +1,8 @@
-function [] = analyzeModulationDepth(self)
+function [] = analyzeModulationDepth(obj)
 %ANALYZEMODULATIONDEPTH Compute analysis file's modulation depth in bands
 % -------------------------------------------------------------------------
 %
-% Usage: [] = analyzeModulationDepth(self)
+% Usage: [] = analyzeModulationDepth(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,7 +10,7 @@ function [] = analyzeModulationDepth(self)
 %
 
 
-self.ModelParameters.ModulationDepth = self.hModNormFun(self.mLevelCurves).';
+obj.ModelParameters.ModulationDepth = obj.ModNormFun(obj.mLevelCurves).';
 
 
 

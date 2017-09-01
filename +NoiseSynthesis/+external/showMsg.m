@@ -1,14 +1,14 @@
-function [] = showMsg(self,szMessage)
+function [] = showMsg(obj, message)
 %SHOWMSG Print verbos message in command line
 % -------------------------------------------------------------------------
 % Checks whether in verbose or not so can be included in the code no matter
-% what self.bVerbose is true or false.
+% what obj.bVerbose is true or false.
 %
-% Usage: [] = showMsg(self,szMessage)
+% Usage: [] = showMsg(obj,szMessage)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
-%           szMessage: Message to be printed
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           message: Message to be printed
 %
 %  Output:   ---------
 %           none
@@ -19,8 +19,8 @@ function [] = showMsg(self,szMessage)
 %
 
 
-if self.bVerbose,
-fprintf('*** %s ***\n',szMessage);
+if obj.verbose
+fprintf('*** %s ***\n', message);
 end
 
 

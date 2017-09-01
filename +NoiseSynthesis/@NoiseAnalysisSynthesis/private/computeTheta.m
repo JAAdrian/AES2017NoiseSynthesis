@@ -1,8 +1,8 @@
-function [] = computeTheta(self)
+function [] = computeTheta(obj)
 %COMPUTETHETA Compute the incident angles theta between sources and sensors
 % -------------------------------------------------------------------------
 %
-% Usage: [] = computeTheta(self)
+% Usage: [] = computeTheta(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,16 +10,16 @@ function [] = computeTheta(self)
 %
 
 
-for aaSource = 1:self.NumSources,
-    for ppSensor = 1:self.NumSensorSignals,
-        for qqSensor = 1:self.NumSensorSignals,
+for aaSource = 1:obj.NumSources
+    for ppSensor = 1:obj.NumSensorSignals
+        for qqSensor = 1:obj.NumSensorSignals
             
-            if ppSensor ~= qqSensor,
+            if ppSensor ~= qqSensor
                 % central point between both sensors
                 vCenterBetweenSensors = ...
                     0.5*(...
-                    self.ModelParameters.SensorPositions(:,ppSensor)...
-                    + self.ModelParameters.SensorPositions(:,qqSensor)...
+                    obj.ModelParameters.SensorPositions(:,ppSensor)...
+                    + obj.ModelParameters.SensorPositions(:,qqSensor)...
                     );
                 
                 %{
@@ -47,17 +47,17 @@ for aaSource = 1:self.NumSources,
                                 b = vec(Mm ->  S)
                     %}
                     
-                    a = self.ModelParameters.SourcePosition(:,aaSource) - ...
+                    a = obj.ModelParameters.SourcePosition(:,aaSource) - ...
                         vCenterBetweenSensors;
-                    b = abs(self.ModelParameters.SensorPositions(:,ppSensor) ...
-                        - self.ModelParameters.SensorPositions(:,qqSensor));
+                    b = abs(obj.ModelParameters.SensorPositions(:,ppSensor) ...
+                        - obj.ModelParameters.SensorPositions(:,qqSensor));
                     
                     % angle between (vCenter to 2nd sensor)
                     % and (vCenter to Source) in 2D plane via
                     % dot product
                     angle = acos( dot(a,b) / (norm(a) * norm(b)) );
                     
-                    self.mTheta(ppSensor,qqSensor,aaSource) = angle;
+                    obj.mTheta(ppSensor,qqSensor,aaSource) = angle;
             end
         end % ppSensor
     end % qqSensor

@@ -1,8 +1,8 @@
-function [] = GammatoneApprox(self)
+function [] = GammatoneApprox(obj)
 %GAMMATONEAPPROX Transform into time-frequency representation using Gammatone approx.
 % -------------------------------------------------------------------------
 %
-% Usage: [] = GammatoneApprox(self)
+% Usage: [] = GammatoneApprox(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,7 +10,7 @@ function [] = GammatoneApprox(self)
 %
 
 
-self.mBands = STFTGammatone(self) * self.mBands;
+obj.mBands = STFTGammatone(obj) * obj.mBands;
 
 
 

@@ -1,8 +1,8 @@
-function [] = checkFFTlength(self)
+function [] = checkFFTlength(obj)
 %CHECKFFTLENGTH Adjust DFT and block size size if sampling rate is not 44.1 kHz
 % -------------------------------------------------------------------------
 %
-% Usage: [] = checkFFTlength(self)
+% Usage: [] = checkFFTlength(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,17 +10,17 @@ function [] = checkFFTlength(self)
 %
 
 
-if self.Fs < 16e3 & self.Fs >= 8e3, %#ok<AND2>
-    self.STFTParameters = NoiseSynthesis.STFTparams(256/self.Fs,self.overlapRatio,self.Fs,'synthesis');
-    self.STFTParameters.OriginalSignalLength = self.DesiredSignalLenSamples;
+if obj.SampleRate < 16e3 & obj.SampleRate >= 8e3 %#ok<AND2>
+    obj.STFTParameters = NoiseSynthesis.STFTparams(256/obj.SampleRate, obj.overlapRatio, obj.Fs, 'synthesis');
+    obj.STFTParameters.OriginalSignalLength = obj.DesiredSignalLenSamples;
 end
-if self.Fs < 44.1e3 & self.Fs >= 16e3, %#ok<AND2>
-    self.STFTParameters = NoiseSynthesis.STFTparams(512/self.Fs,self.overlapRatio,self.Fs,'synthesis');
-    self.STFTParameters.OriginalSignalLength = self.DesiredSignalLenSamples;
+if obj.SampleRate < 44.1e3 & obj.SampleRate >= 16e3 %#ok<AND2>
+    obj.STFTParameters = NoiseSynthesis.STFTparams(512/objSampleRate, obj.overlapRatio, obj.Fs, 'synthesis');
+    obj.STFTParameters.OriginalSignalLength = obj.DesiredSignalLenSamples;
 end
-if self.Fs > 48e3,
-    self.STFTParameters = NoiseSynthesis.STFTparams(2048/self.Fs,self.overlapRatio,self.Fs,'synthesis');
-    self.STFTParameters.OriginalSignalLength = self.DesiredSignalLenSamples;
+if obj.SampleRate > 48e3
+    obj.STFTParameters = NoiseSynthesis.STFTparams(2048/obj.SampleRate, obj.overlapRatio, obj.Fs, 'synthesis');
+    obj.STFTParameters.OriginalSignalLength = obj.DesiredSignalLenSamples;
 end
 
 

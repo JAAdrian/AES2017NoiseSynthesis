@@ -1,8 +1,8 @@
-function [] = generateCoherentClicks(self)
+function [] = generateCoherentClicks(obj)
 %GENERATECOHERENTCLICKS Generate click signals with desired spatial coherence
 % -------------------------------------------------------------------------
 %
-% Usage: [] = generateCoherentClicks(self)
+% Usage: [] = generateCoherentClicks(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,17 +10,17 @@ function [] = generateCoherentClicks(self)
 %
 
 
-caClickTracks = cellfun(@(x) genArtificialClicks(self),...
-    cell(self.NumSensorSignals,1),...
+caClickTracks = cellfun(@(x) genArtificialClicks(obj),...
+    cell(obj.NumSensorSignals,1),...
     'uni',false);
 
 % apply coherence
 bComputePSD = true;
-mCoherentClicks = mixSignals(self, caClickTracks, bComputePSD);
+mCoherentClicks = mixSignals(obj, caClickTracks, bComputePSD);
 
 % change format for further processing
-for aaSignal = 1:self.NumSensorSignals,
-    self.ClickTracks{aaSignal} = squeeze(mCoherentClicks(aaSignal,:,:)).';
+for aaSignal = 1:obj.NumSensorSignals
+    obj.ClickTracks{aaSignal} = squeeze(mCoherentClicks(aaSignal,:,:)).';
 end
 
 

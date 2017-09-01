@@ -1,14 +1,14 @@
-function [SensorSignalsOut] = synthesize(self)
+function [SensorSignalsOut] = synthesize(obj)
 %SYNTHESIZE Synthesize a noise signal from desired parameters
 % -------------------------------------------------------------------------
 % This class method generates (single or multichannel) noise signals with
 % desired length and parameters.
 %
-% Usage: [] = synthesize(self)
-%        [SensorSignalsOut] = synthesize(self)
+% Usage: [] = synthesize(obj)
+%        [SensorSignalsOut] = synthesize(obj)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
 %
 %  Output:   ---------
 %           SensorSignalsOut: cell array containing a sensor signal in each
@@ -25,11 +25,11 @@ import NoiseSynthesis.external.*
 
 
 if ...
-        isempty(self.ModelParameters.MarkovTransition) && ...
-        isempty(self.ModelParameters.MarkovStateBoundaries) && ...
-        isempty(self.ModelParameters.MeanPSD) && ...
-        isempty(self.ModelParameters.Quantiles) && ...
-        isempty(self.ModelParameters.CDF),
+        isempty(obj.ModelParameters.MarkovTransition) && ...
+        isempty(obj.ModelParameters.MarkovStateBoundaries) && ...
+        isempty(obj.ModelParameters.MeanPSD) && ...
+        isempty(obj.ModelParameters.Quantiles) && ...
+        isempty(obj.ModelParameters.CDF)
     
     error(['The model parameters seem to be unset (flushed?)! ',...
         'Make sure to provide parameters either by analyzing, ',...
@@ -37,11 +37,11 @@ if ...
 end
 
 % make sure to use the desired parameters for the modulations
-updateModulationParameters(self);
+updateModulationParameters(obj);
 
 % shuffle the random generator by default. If in verbose mode reset the
 % generator
-if self.bVerbose,
+if obj.Verbose
     rng(1);
 else
     rng('shuffle');
@@ -51,30 +51,30 @@ end
 % Gaussian noise signals in STFT domain and introduce coherence by
 % instantaneous mixing, else generate one Gaussian in STFT domain.
 % In both cases, apply coloration if desired
-if self.bApplySpatialCoherence
-    showMsg(self,'Applying Spatial Coherence');
+if obj.bApplySpatialCoherence
+    showMsg(obj,'Applying Spatial Coherence');
     
-    generateCoherentNoise(self);
+    generateCoherentNoise(obj);
     
-    if self.ModelParameters.bApplyClicks,
-        generateCoherentClicks(self);
+    if obj.ModelParameters.bApplyClicks
+        generateCoherentClicks(obj);
     end
 else
-    generateIncoherentNoise(self);
+    generateIncoherentNoise(obj);
     
-    if self.ModelParameters.bApplyClicks,
-        generateIncoherentClicks(self);
+    if obj.ModelParameters.bApplyClicks
+        generateIncoherentClicks(obj);
     end
 end
 
 % apply amplitude distribution if desired
-applyAmplitudeDistribution(self);
+applyAmplitudeDistribution(obj);
 
 % mix noise and clicks if desired
-mixNoiseAndClicks(self);
+mixNoiseAndClicks(obj);
 
-if nargout,
-    SensorSignalsOut = self.SensorSignals;
+if nargout
+    SensorSignalsOut = obj.SensorSignals;
 end
 
 

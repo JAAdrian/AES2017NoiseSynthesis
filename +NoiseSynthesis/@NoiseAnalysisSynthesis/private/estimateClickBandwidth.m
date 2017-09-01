@@ -1,8 +1,8 @@
-function [] = estimateClickBandwidth(self,vClicks)
+function [] = estimateClickBandwidth(obj, clicks)
 %ESTIMATECLICKBANDWIDTH Estimate the range of upper cutoff freq. in the extracted click signal
 % -------------------------------------------------------------------------
 %
-% Usage: [] = estimateClickBandwidth(self,vClicks)
+% Usage: [] = estimateClickBandwidth(obj,vClicks)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -11,12 +11,12 @@ function [] = estimateClickBandwidth(self,vClicks)
 
 blocklenSec  = 32e-3;
 overlapRatio = 0.5;
-params       = STFTparams(blocklenSec,overlapRatio,self.Fs);
-mSTFT        = STFT(vClicks,params);
+params       = STFTparams(blocklenSec,overlapRatio,obj.Fs);
+mSTFT        = STFT(clicks,params);
 
-vFreq = linspace(0,self.Fs/2,params.NFFT/2+1);
+vFreq = linspace(0,obj.Fs/2,params.NFFT/2+1);
 
-stAlgo.fs   = self.Fs;              % sampling rate
+stAlgo.fs   = obj.Fs;              % sampling rate
 stAlgo.type = 'fractional-octave';  % type of spectral smoothing
                                     % . 'fractional-octave' or
                                     % . 'fixed-bandwidth'
@@ -38,15 +38,15 @@ idxStart     = 1;
 idxStop      = 1;
 iGroupShift  = 1;
 counterClick = 1;
-while idxStart + idxStop < size(mSTFT,2),
+while idxStart + idxStop < size(mSTFT,2)
     % click start found
-    if mean(abs(mSTFT(:,idxStart)).^2) > thresh,
+    if mean(abs(mSTFT(:,idxStart)).^2) > thresh
         idxStop = 1;
         
         vClickGroup(1) = idxStart;
         while ...
                 idxStart + idxStop < size(mSTFT,2) && ...
-                mean(abs(mSTFT(:,idxStart+idxStop)).^2) > thresh,
+                mean(abs(mSTFT(:,idxStart+idxStop)).^2) > thresh
             
             vClickGroup(idxStop+1) = idxStart + idxStop;
             
@@ -56,8 +56,8 @@ while idxStart + idxStop < size(mSTFT,2),
         
         % if the click group is a vector compute the smoothed mean spectrum
         % and estimate the upper cutoff frequency
-        if ~isscalar(vClickGroup),
-            for aaBlock = 1:length(vClickGroup),
+        if ~isscalar(vClickGroup)
+            for aaBlock = 1:length(vClickGroup)
                 vSmoothPSD(:,aaBlock) = ...
                     NoiseSynthesis.spectralsmoothing.spectralsmoothing_process(...
                     abs(mSTFT(:,vClickGroup(aaBlock))).^2, ...
@@ -79,8 +79,8 @@ while idxStart + idxStop < size(mSTFT,2),
     iGroupShift = 1;
 end
 
-self.ModelParameters.fLowerClick = min(vCuttOff);
-self.ModelParameters.fUpperClick = max(vCuttOff);
+obj.ModelParameters.fLowerClick = min(vCuttOff);
+obj.ModelParameters.fUpperClick = max(vCuttOff);
 
 
 % End of file: estimateClickBandwidth.m

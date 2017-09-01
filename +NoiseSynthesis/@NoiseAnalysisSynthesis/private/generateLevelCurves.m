@@ -1,8 +1,8 @@
-function [] = generateLevelCurves(self)
+function [] = generateLevelCurves(obj)
 %GENERATELEVELCURVES Generate level fluctuation curves for the synthesis
 % -------------------------------------------------------------------------
 %
-% Usage: [] = generateLevelCurves(self)
+% Usage: [] = generateLevelCurves(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,16 +10,16 @@ function [] = generateLevelCurves(self)
 %
 
 
-if self.bVerbose,
+if obj.bVerbose
     rng(1);
 else
     rng('shuffle');
 end
 
-if self.ModelParameters.bUseMarkovChains,
-    generateMarkovBands(self);
+if obj.ModelParameters.bUseMarkovChains
+    generateMarkovBands(obj);
 else
-    generateGaussBands(self);
+    generateGaussBands(obj);
 end
 
 

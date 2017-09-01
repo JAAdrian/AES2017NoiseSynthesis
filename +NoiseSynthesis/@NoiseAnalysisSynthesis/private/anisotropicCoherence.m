@@ -1,8 +1,8 @@
-function [vCohere] = anisotropicCoherence(self,vFreq,dist,theta,mPSD)
+function [cohere] = anisotropicCoherence(obj, freq, dist, theta, psd)
 %ANISOTROPICCOHERENCE Compute anisotropic spatial coherence for n sources
 % -------------------------------------------------------------------------
 %
-% Usage: [vCohere] = anisotropicCoherence(self,vFreq,dist,theta,mPSD)
+% Usage: [cohere] = anisotropicCoherence(obj, freq, dist, theta, psd)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,18 +10,18 @@ function [vCohere] = anisotropicCoherence(self,vFreq,dist,theta,mPSD)
 %
 
 
-vFreq = vFreq(:);
+freq = freq(:);
 theta = squeeze(theta);
 
-[Re, Im] = deal(zeros(length(vFreq),1));
-for aaSource = 1:self.NumSources,
-    vArgument = (2*pi * vFreq * dist * cos(theta(aaSource))) / self.SoundVelocity;
+[re, im] = deal(zeros(length(freq), 1));
+for iSource = 1:obj.NumSources
+    argument = (2*pi * freq * dist * cos(theta(iSource))) / obj.SOUND_VELOCITY;
     
-    Re = Re + mPSD(:,aaSource) .* cos(vArgument);
-    Im = Im + mPSD(:,aaSource) .* sin(vArgument);
+    re = re + psd(:,iSource) .* cos(argument);
+    im = im + psd(:,iSource) .* sin(argument);
 end
 
-vCohere = (Re - 1j*Im) ./ sum(mPSD,2);
+cohere = (re - 1j*im) ./ sum(psd, 2);
 
 
 

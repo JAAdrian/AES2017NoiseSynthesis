@@ -1,8 +1,8 @@
-function [] = normalizeBands(self)
+function [] = normalizeBands(obj)
 %NORMALIZEBANDS Apply modulation depth
 % -------------------------------------------------------------------------
 %
-% Usage: [] = normalizeBands(self)
+% Usage: [] = normalizeBands(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -11,26 +11,26 @@ function [] = normalizeBands(self)
 
 
 % centralize
-self.mArtificialLevelCurves = bsxfun(@minus,...
-    self.mArtificialLevelCurves,...
-    median(self.mArtificialLevelCurves,1));
+obj.mArtificialLevelCurves = bsxfun(@minus,...
+    obj.mArtificialLevelCurves,...
+    median(obj.mArtificialLevelCurves,1));
 
 % apply unit modulation depth
-self.mArtificialLevelCurves = bsxfun(@rdivide,self.mArtificialLevelCurves,...
-    self.hModNormFun(self.mArtificialLevelCurves));
+obj.mArtificialLevelCurves = bsxfun(@rdivide,obj.mArtificialLevelCurves,...
+    obj.hModNormFun(obj.mArtificialLevelCurves));
 
 % apply pseudo modulation Depth
-self.mArtificialLevelCurves = ...
-    bsxfun(@times,self.mArtificialLevelCurves,self.ModelParameters.ModulationDepth.');
+obj.mArtificialLevelCurves = ...
+    bsxfun(@times,obj.mArtificialLevelCurves,obj.ModelParameters.ModulationDepth.');
 
 % apply mean
-self.mArtificialLevelCurves = self.mArtificialLevelCurves + 1;
+obj.mArtificialLevelCurves = obj.mArtificialLevelCurves + 1;
 
 % make sure the level fluctuation is non-negative
 vIdxOutOfRange = ...
-    find(self.mArtificialLevelCurves < 10^(self.ModelParameters.MarkovStateBoundaries(1)/20));
-self.mArtificialLevelCurves(vIdxOutOfRange) = ...
-    abs(self.mArtificialLevelCurves(vIdxOutOfRange)) + 1;
+    find(obj.mArtificialLevelCurves < 10^(obj.ModelParameters.MarkovStateBoundaries(1)/20));
+obj.mArtificialLevelCurves(vIdxOutOfRange) = ...
+    abs(obj.mArtificialLevelCurves(vIdxOutOfRange)) + 1;
 
 
 

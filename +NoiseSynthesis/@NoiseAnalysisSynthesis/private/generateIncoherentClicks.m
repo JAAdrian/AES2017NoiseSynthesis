@@ -1,8 +1,8 @@
-function [] = generateIncoherentClicks(self)
+function [] = generateIncoherentClicks(obj)
 %GENERATEINCOHERENTCLICKS Generate click signals without spatial coherence
 % -------------------------------------------------------------------------
 %
-% Usage: [] = generateIncoherentClicks(self)
+% Usage: [] = generateIncoherentClicks(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,7 +10,7 @@ function [] = generateIncoherentClicks(self)
 %
 
 
-self.ClickTracks{1} = genArtificialClicks(self);
+obj.ClickTracks{1} = genArtificialClicks(obj);
 
 
 

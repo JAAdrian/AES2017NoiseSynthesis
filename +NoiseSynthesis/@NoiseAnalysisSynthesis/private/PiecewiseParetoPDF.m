@@ -1,8 +1,8 @@
-function [vPDF, vQuantiles] = PiecewiseParetoPDF(self,numPoints)
+function [vPDF, vQuantiles] = PiecewiseParetoPDF(obj,numPoints)
 %PIECEWISEPARETOPDF Create piecewise Pareto PDF
 % -------------------------------------------------------------------------
 %
-% Usage: [vPDF, vQuantiles] = PiecewiseParetoPDF(self,numPoints)
+% Usage: [vPDF, vQuantiles] = PiecewiseParetoPDF(obj,numPoints)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -13,22 +13,22 @@ import NoiseSynthesis.external.*
 
 
 vQuantiles = linspace(...
-    self.ModelParameters.Quantiles(1),...
-    self.ModelParameters.Quantiles(4),...
+    obj.ModelParameters.Quantiles(1),...
+    obj.ModelParameters.Quantiles(4),...
     numPoints);
 
-vLowerParams = self.ModelParameters.CDF(1,:);
-vMidParams   = self.ModelParameters.CDF(2,:);
-vUpperParams = self.ModelParameters.CDF(3,:);
+vLowerParams = obj.ModelParameters.CDF(1,:);
+vMidParams   = obj.ModelParameters.CDF(2,:);
+vUpperParams = obj.ModelParameters.CDF(3,:);
 
-QL  = self.ModelParameters.Quantiles(2);
-QU  = self.ModelParameters.Quantiles(3);
+QL  = obj.ModelParameters.Quantiles(2);
+QU  = obj.ModelParameters.Quantiles(3);
 
 [vLowerPDF,vUpperPDF] = computeParetoTailPDF(...
     vQuantiles,...
     vLowerParams,...
     vUpperParams,...
-    [self.ModelParameters.Quantiles(5),self.ModelParameters.Quantiles(6)],...
+    [obj.ModelParameters.Quantiles(5),obj.ModelParameters.Quantiles(6)],...
     [QL,QU]);
 
 QL2 = find(vQuantiles >= QL, 1, 'first');

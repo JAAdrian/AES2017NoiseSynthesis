@@ -1,8 +1,8 @@
-function [] = analyzeMeanBandPower(self)
+function [] = analyzeMeanBandPower(obj)
 %ANALYZEMEANBANDPOWER Compute the analysis file's PSD
 % -------------------------------------------------------------------------
 %
-% Usage: [] = analyzeMeanBandPower(self)
+% Usage: [] = analyzeMeanBandPower(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -15,22 +15,22 @@ import NoiseSynthesis.external.*
 % compute the MS (mean square), i.e. the average power in the
 % current band
 
-if self.ModelParameters.bReducePSD
+if obj.ModelParameters.bReducePSD
     blocklenSec = 50e-3;
     overlap     = 0.5;
-    params      = NoiseSynthesis.STFTparams(blocklenSec, overlap, self.Fs);
+    params      = NoiseSynthesis.STFTparams(blocklenSec, overlap, obj.Fs);
     
-    mSTFT = STFT(...
-        self.AnalysisSignal, ...
+    spec = STFT(...
+        obj.AnalysisSignal, ...
         params ...
         );
     
-    vPowers = mean(mSTFT .* conj(mSTFT), 2);
-    vPowers([1, end]) = 2*vPowers([1,end]);
+    powers = mean(spec .* conj(spec), 2);
+    powers([1, end]) = 2*powers([1,end]);
     
-    vFreq = linspace(0, self.Fs/2, params.NFFT/2+1);
+    freq = linspace(0, obj.SampleRate/2, params.Nfft/2+1);
     
-    stAlgo.fs   = self.Fs;              % sampling rate
+    stAlgo.fs   = obj.SampleRate;              % sampling rate
     stAlgo.type = 'fractional-octave';  % type of spectral smoothing
                                         % . 'fractional-octave' or
                                         % . 'fixed-bandwidth'
@@ -39,29 +39,30 @@ if self.ModelParameters.bReducePSD
                                     % . in octaves for 'fractional-octave'
                                     % . in Hz for 'fixed-bandwidth'
     
-    stAlgo.L_FFT = params.NFFT;            % length of the DFT
+    stAlgo.L_FFT = params.Nfft;            % length of the DFT
     
     % initialize the smoothing algorithm
     stAlgo = NoiseSynthesis.spectralsmoothing.spectralsmoothing_init(stAlgo);
     
     % perform the smoothing
-    vPowersSmooth = NoiseSynthesis.spectralsmoothing.spectralsmoothing_process(vPowers, stAlgo);
+    powersSmooth = NoiseSynthesis.spectralsmoothing.spectralsmoothing_process(powers, stAlgo);
     
-    vWeights = ones(length(vPowersSmooth),1);
+    weights = ones(length(powersSmooth), 1);
     
-    [b,a] = FDLSDesign(...
-        self.ModelParameters.ColorNumOrd, ...
-        self.ModelParameters.ColorDenumOrd, ...
-        vFreq, ...
-        vPowersSmooth, ...
-        self.Fs, ...
-        vWeights);
+    [b, a] = FDLSDesign(...
+        obj.ModelParameters.ColorNumOrd, ...
+        obj.ModelParameters.ColorDenumOrd, ...
+        freq, ...
+        powersSmooth, ...
+        obj.SampleRate, ...
+        weights ...
+        );
     
-    self.ModelParameters.MeanPSD = {b, a};
+    obj.ModelParameters.MeanPSD = {b, a};
 else
     % times two due to single sided spectrum
-    self.ModelParameters.MeanPSD = mean(self.mBands .^ 2, 2);
-    self.ModelParameters.MeanPSD(2:end-1) = 2 * self.ModelParameters.MeanPSD(2:end-1) ;
+    obj.ModelParameters.MeanPSD = mean(obj.mBands .^ 2, 2);
+    obj.ModelParameters.MeanPSD(2:end-1) = 2 * obj.ModelParameters.MeanPSD(2:end-1) ;
 end
 
 

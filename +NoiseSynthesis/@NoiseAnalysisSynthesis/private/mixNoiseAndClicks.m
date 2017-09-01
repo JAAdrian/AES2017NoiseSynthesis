@@ -1,8 +1,8 @@
-function [] = mixNoiseAndClicks(self)
+function [] = mixNoiseAndClicks(obj)
 %MIXNOISEANDCLICKS Mix base noise and clicks with correct noise-click-ratio
 % -------------------------------------------------------------------------
 %
-% Usage: [] = mixNoiseAndClicks(self)
+% Usage: [] = mixNoiseAndClicks(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -12,33 +12,33 @@ function [] = mixNoiseAndClicks(self)
 import NoiseSynthesis.external.*
 
 
-if self.ModelParameters.bApplyClicks,
-    if self.ModelParameters.bReducePSD,
-        b = self.ModelParameters.MeanPSD{1};
-        a = self.ModelParameters.MeanPSD{2};
+if obj.ModelParameters.bApplyClicks,
+    if obj.ModelParameters.bReducePSD,
+        b = obj.ModelParameters.MeanPSD{1};
+        a = obj.ModelParameters.MeanPSD{2};
         
-        vTF = freqz(b,a,self.STFTParameters.NFFT/2+1);
+        vTF = freqz(b,a,obj.STFTParameters.NFFT/2+1);
         % don't square it because the coefficients describe already
         % a power spectrum
-        powSignal = mean(abs(vTF) / (2 * norm(self.STFTParameters.Window)^2));
+        powSignal = mean(abs(vTF) / (2 * norm(obj.STFTParameters.Window)^2));
     else
-        powSignal = mean(self.ModelParameters.MeanPSD / (2 * norm(self.STFTParameters.Window)^2));
+        powSignal = mean(obj.ModelParameters.MeanPSD / (2 * norm(obj.STFTParameters.Window)^2));
     end
     
-    for aaSignal = 1:self.NumSensorSignals,
-        self.ClickTracks{aaSignal} = ISTFT(...
-            self.ClickTracks{aaSignal},...
-            self.STFTParameters...
+    for aaSignal = 1:obj.NumSensorSignals,
+        obj.ClickTracks{aaSignal} = ISTFT(...
+            obj.ClickTracks{aaSignal},...
+            obj.STFTParameters...
             );
         
-        if ~all(self.ClickTracks{aaSignal} == 0),
-            self.ClickTracks{aaSignal} = self.ClickTracks{aaSignal} * ...
-                sqrt(powSignal) / std(self.ClickTracks{aaSignal}) * ...
-                10^(-self.ModelParameters.SNRclick/20);
+        if ~all(obj.ClickTracks{aaSignal} == 0),
+            obj.ClickTracks{aaSignal} = obj.ClickTracks{aaSignal} * ...
+                sqrt(powSignal) / std(obj.ClickTracks{aaSignal}) * ...
+                10^(-obj.ModelParameters.SNRclick/20);
         end
         
-        self.SensorSignals(:, aaSignal) = ...
-            self.SensorSignals(:, aaSignal) + self.ClickTracks{aaSignal};
+        obj.SensorSignals(:, aaSignal) = ...
+            obj.SensorSignals(:, aaSignal) + obj.ClickTracks{aaSignal};
     end
 end
 

@@ -1,8 +1,8 @@
-function [vCDF, vQuantiles] = PiecewiseParetoCDF(self,numPoints)
+function [cdf, quantiles] = PiecewiseParetoCDF(obj, numPoints)
 %PIECEWISEPARETOCDF Create piecewise Pareto CDF
 % -------------------------------------------------------------------------
 %
-% Usage: [vCDF, vQuantiles] = PiecewiseParetoCDF(self,numPoints)
+% Usage: [vCDF, vQuantiles] = PiecewiseParetoCDF(obj,numPoints)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -12,47 +12,49 @@ function [vCDF, vQuantiles] = PiecewiseParetoCDF(self,numPoints)
 import NoiseSynthesis.external.*
 
 
-vQuantiles = linspace(...
-    self.ModelParameters.Quantiles(1),...
-    self.ModelParameters.Quantiles(4),...
-    numPoints);
+quantiles = linspace(...
+    obj.ModelParameters.Quantiles(1), ...
+    obj.ModelParameters.Quantiles(4), ...
+    numPoints ...
+    );
 
-vLowerParams = self.ModelParameters.CDF(1,:);
-vMidParams   = self.ModelParameters.CDF(2,:);
-vUpperParams = self.ModelParameters.CDF(3,:);
+lowerParams = obj.ModelParameters.CDF(1, :);
+midParams   = obj.ModelParameters.CDF(2, :);
+upperParams = obj.ModelParameters.CDF(3, :);
 
-QL  = self.ModelParameters.Quantiles(2);
-QU  = self.ModelParameters.Quantiles(3);
+ql  = obj.ModelParameters.Quantiles(2);
+qu  = obj.ModelParameters.Quantiles(3);
 
-[vLowerCDF,vUpperCDF] = computeParetoTailCDF(...
-    vQuantiles,...
-    vLowerParams,...
-    vUpperParams,...
-    [self.ModelParameters.Quantiles(5),self.ModelParameters.Quantiles(6)],...
-    [QL,QU]);
+[lowerCDF, upperCDF] = computeParetoTailCDF(...
+    quantiles, ...
+    lowerParams, ...
+    upperParams, ...
+    [obj.ModelParameters.Quantiles(5), obj.ModelParameters.Quantiles(6)],...
+    [ql, qu] ...
+    );
 
-vMidCDF = normcdf(vQuantiles,vMidParams(1),vMidParams(2));
+midCDF = normcdf(quantiles,midParams(1), midParams(2));
 
 % source for joining the curves:
 % http://matlab.cheme.cmu.edu/2011/10/30/smooth-transitions-between-discontinuous-functions/
 % or
 % http://www.j-raedler.de/2010/10/smooth-transition-between-functions-with-tanh/
 
-% to get in the correct range of magnitude I use the sigmas of the
+% to get in the correct range of magnitude we use the sigmas of the
 % Pareto distributions.
-alphaLow  = vLowerParams(2)/20;
-alphaHigh = vUpperParams(2)/20;
+alphaLow  = lowerParams(2)/20;
+alphaHigh = upperParams(2)/20;
 
 % compute the smoothing sigmoids
-vSigmoidLow  = sigmoidfun(vQuantiles,QL,alphaLow);
-vSigmoidHigh = sigmoidfun(vQuantiles,QU,alphaHigh);
+vSigmoidLow  = sigmoidfun(quantiles, ql, alphaLow);
+vSigmoidHigh = sigmoidfun(quantiles, qu, alphaHigh);
 
 % smooth the CDFs
-vLowerSmoothed = (1 - vSigmoidLow) .* vLowerCDF + vSigmoidLow .* vMidCDF;
-vCDF = (1 - vSigmoidHigh) .* vLowerSmoothed + vSigmoidHigh .* vUpperCDF;
+vLowerSmoothed = (1 - vSigmoidLow) .* lowerCDF + vSigmoidLow .* midCDF;
+cdf = (1 - vSigmoidHigh) .* vLowerSmoothed + vSigmoidHigh .* upperCDF;
 
 % scale to ensure a max of 1
-vCDF = vCDF.' / max(vCDF);
+cdf = cdf.' / max(cdf);
 
 %         figure(1);
 %         plot([vLowerCDF', vMidCDF', vUpperCDF']);
@@ -68,10 +70,10 @@ vCDF = vCDF.' / max(vCDF);
 %         keyboard;
 end
 
-function [vLowerCDF,vUpperCDF] = computeParetoTailCDF(vQuantiles,vLowerParams,vUpperParams,vP,vQ)
+function [lowerCDF, upperCDF] = computeParetoTailCDF(quantiles, lowerParams, upperParams, p, q)
 
-vLowerCDF = vP(1) * (1 - gpcdf(vQ(1)-vQuantiles, vLowerParams(1), vLowerParams(2)));
-vUpperCDF = vP(2) + (1-vP(2)) * gpcdf(vQuantiles-vQ(2), vUpperParams(1), vUpperParams(2));
+lowerCDF = p(1) * (1 - gpcdf(q(1)-quantiles, lowerParams(1), lowerParams(2)));
+upperCDF = p(2) + (1-p(2)) * gpcdf(quantiles-q(2), upperParams(1), upperParams(2));
 
 end
 

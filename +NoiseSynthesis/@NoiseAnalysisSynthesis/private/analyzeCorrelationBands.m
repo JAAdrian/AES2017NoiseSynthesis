@@ -1,8 +1,8 @@
-function [] = analyzeCorrelationBands(self)
+function [] = analyzeCorrelationBands(obj)
 %ANALYZECORRELATIONBANDS Analyze the inter-band correlaion, i.e. comodulations
 % -------------------------------------------------------------------------
 %
-% Usage: [] = analyzeCorrelationBands(self)
+% Usage: [] = analyzeCorrelationBands(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -12,7 +12,7 @@ function [] = analyzeCorrelationBands(self)
 import NoiseSynthesis.external.*
 
 
-self.ModelParameters.GammaBands = computeBandCorrelation(self.mLevelCurves);
+obj.ModelParameters.GammaBands = computeBandCorrelation(obj.mLevelCurves);
 
 
 

@@ -67,10 +67,10 @@ properties (SetAccess = private, Dependent)
 end
 
 properties (Access = private, Constant)
-    SoundVelocity = 343; % Velocity of sound
-    OverlapRatio  = 0.5; % Fixed overlap for analysis and synthesis
-    ModNormFun    = @(x) mad(x, 1, 1); % Normalization function for level fluctuations
-    SoundLeveldB  = -35; % Default sound level for playback in dB FS
+    SOUND_VELOCITY = 343; % Velocity of sound
+    OVERLAP_RATIO  = 0.5; % Fixed overlap for analysis and synthesis
+    MOD_NORM_FUN   = @(x) mad(x, 1, 1); % Normalization function for level fluctuations
+    SOUND_LEVEL_DB = -35; % Default sound level for playback in dB FS
 end
 
 properties (Access = private)
@@ -125,7 +125,7 @@ methods
         % Create auxiliary objects
         obj.StftParameters = NoiseSynthesis.STFTparams(...
             obj.Blocklen/obj.SampleRate,...
-            obj.OverlapRatio,...
+            obj.OVERLAP_RATIO,...
             obj.SampleRate,...
             'synthesis');
         obj.StftParameters.OriginalSignalLength = obj.DesiredSignalLenSamples;
@@ -179,7 +179,6 @@ methods
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     %%%%% Public methods %%%%%%%%%%%%%%%%%%%
-    
     [] = analyze(obj);
     [SensorSignalsOut] = synthesize(obj);
     
@@ -224,7 +223,7 @@ methods
     end
     
     function [numSources] = get.NumSources(obj)
-        numSources = size(obj.ModelParameters.SourcePosition,2);
+        numSources = size(obj.ModelParameters.SourcePosition, 2);
     end
     
     function CohereFun = get.CohereFun(obj)
@@ -330,8 +329,12 @@ methods (Access = protected)
         obj.flushParameters();
     end
     
-    function [block] = stepImpl(obj)
-        
+    function [sensorSignalsOut] = stepImpl(obj)
+        if nargout
+            sensorSignalsOut = obj.synthesize();
+        else
+            obj.synthesize();
+        end
     end
 end
     

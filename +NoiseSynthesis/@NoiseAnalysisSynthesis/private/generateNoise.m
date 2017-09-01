@@ -1,8 +1,8 @@
-function [vNoise] = generateNoise(self,iNoiseMode)
+function [vNoise] = generateNoise(obj, iNoiseMode)
 %GENERATENOISE Generate a noise signal based on desired PSD
 % -------------------------------------------------------------------------
 %
-% Usage: [vNoise] = generateNoise(self,iNoiseMode)
+% Usage: [vNoise] = generateNoise(obj,iNoiseMode)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,28 +10,28 @@ function [vNoise] = generateNoise(self,iNoiseMode)
 %
 
 
-if nargin < 2 || isempty(iNoiseMode),
+if nargin < 2 || isempty(iNoiseMode)
     iNoiseMode = 0;
 end
 
-mUniformPhaseNoise = 2*pi * rand(self.numBins,self.numBlocks) - pi;
+mUniformPhaseNoise = 2*pi * rand(obj.numBins,obj.numBlocks) - pi;
 mUniformPhaseNoise([1,end],:) = 0;
 
-switch iNoiseMode,
-    case 0,
+switch iNoiseMode
+    case 0
         vNoise = exp(1j * mUniformPhaseNoise);
-    case 1,
-        if iscell(self.ModelParameters.MeanPSD),
+    case 1
+        if iscell(obj.ModelParameters.MeanPSD)
             MeanPSD = freqz(...
-                self.ModelParameters.MeanPSD{1},...
-                self.ModelParameters.MeanPSD{2},...
-                self.STFTParameters.NFFT/2+1,...
-                self.Fs...
+                obj.ModelParameters.MeanPSD{1},...
+                obj.ModelParameters.MeanPSD{2},...
+                obj.STFTParameters.NFFT/2+1,...
+                obj.Fs...
                 );
             
             MeanPSD = abs(MeanPSD);
         else
-            MeanPSD = self.ModelParameters.MeanPSD;
+            MeanPSD = obj.ModelParameters.MeanPSD;
         end
         
         vNoise = bsxfun(...

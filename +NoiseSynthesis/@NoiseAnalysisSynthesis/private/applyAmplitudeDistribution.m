@@ -1,8 +1,8 @@
-function [] = applyAmplitudeDistribution(self)
+function [] = applyAmplitudeDistribution(obj)
 %APPLYAMPLITUDEDISTRIBUTION Shape the synthesis signal's amplitude distribution
 % -------------------------------------------------------------------------
 %
-% Usage: [] = applyAmplitudeDistribution(self)
+% Usage: [] = applyAmplitudeDistribution(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -11,12 +11,12 @@ function [] = applyAmplitudeDistribution(self)
 
 import NoiseSynthesis.external.*
 
-if self.bApplyAmplitudeDistr,
-    showMsg(self,'Applying desired Amplitude Distribution');
+if obj.bApplyAmplitudeDistr
+    showMsg(obj, 'Applying desired Amplitude Distribution');
     
-    for iSignal = 1:self.NumSensorSignals,
-        self.SensorSignals(:, iSignal) = ...
-            shapeAmplitudeDistr(self, self.SensorSignals(:, iSignal));
+    for iSignal = 1:obj.NumSensorSignals
+        obj.SensorSignals(:, iSignal) = ...
+            shapeAmplitudeDistr(obj, obj.SensorSignals(:, iSignal));
     end
 end
 

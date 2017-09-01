@@ -1,8 +1,8 @@
-function [] = analyzeModulations(self)
+function [] = analyzeModulations(obj)
 %ANALYZEMODULATIONS Retrieve the analysis signal's modulation parameters
 % -------------------------------------------------------------------------
 %
-% Usage: [] = analyzeModulations(self)
+% Usage: [] = analyzeModulations(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -11,17 +11,17 @@ function [] = analyzeModulations(self)
 
 
 % apply Mel or Gammatone weighting for modulation analysis
-if strcmp(self.ModelParameters.ModulationFilterbank,'gammatone'),
-    GammatoneApprox(self);
+if strcmp(obj.ModelParameters.ModulationFilterbank, 'gammatone')
+    GammatoneApprox(obj);
 else
-    MelTransformation(self);
+    MelTransformation(obj);
 end
 
-computeLevelFluctuations(self);
+computeLevelFluctuations(obj);
 
-analyzeModulationDepth(self);
-analyzeCorrelationBands(self);
-learnMarkovModulationParams(self);
+analyzeModulationDepth(obj);
+analyzeCorrelationBands(obj);
+learnMarkovModulationParams(obj);
 
 
 

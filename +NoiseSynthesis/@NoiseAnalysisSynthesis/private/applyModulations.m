@@ -1,4 +1,4 @@
-function [] = applyModulations(self)
+function [] = applyModulations(obj)
 %APPLYMODULATIONS Apply the modulation parameter to the sythesis signals
 % -------------------------------------------------------------------------
 %
@@ -12,24 +12,24 @@ function [] = applyModulations(self)
 import NoiseSynthesis.external.*
 
 
-for aaSignal = 1:self.NumSensorSignals,
-    self.mArtificialLevelCurves = [];
+for aaSignal = 1:obj.NumSensorSignals
+    obj.mArtificialLevelCurves = [];
     
     % generate the artificial modulation curves
-    showMsg(self,'Generating Modulations');
-    computeArtificialModulations(self);
+    showMsg(obj,'Generating Modulations');
+    computeArtificialModulations(obj);
     
     % setup the time vectors for interpolation
-    vTimeSub = (0:self.lenLevelCurve-1).' / self.ModulationParams.FrameRate;
-    vTime    = (0:self.numBlocks-1).'     / self.STFTParameters.FrameRate;
+    vTimeSub = (0:obj.lenLevelCurve-1).' / obj.ModulationParams.FrameRate;
+    vTime    = (0:obj.numBlocks-1).'     / obj.STFTParameters.FrameRate;
     
     % interpolate along time dimension
-    mInterpEnvelope = interp1(vTimeSub,self.mArtificialLevelCurves,vTime,...
+    mInterpEnvelope = interp1(vTimeSub,obj.mArtificialLevelCurves,vTime,...
         'linear','extrap');
     
     % setup the freq. vectors for interpolation
-    vFreqSub = self.vCenterFreqs;
-    vFreq    = linspace(0,self.Fs/2,self.numBins);
+    vFreqSub = obj.vCenterFreqs;
+    vFreq    = linspace(0,obj.Fs/2,obj.numBins);
     
     % interpolate along frequency dimension
     mInterpEnvelope = interp1(vFreqSub,mInterpEnvelope.',vFreq,...
@@ -41,11 +41,11 @@ for aaSignal = 1:self.NumSensorSignals,
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     
     % extract the phase and, weight the magnitudes and apply again
-    mPhase = angle(self.SensorSignals{aaSignal});
+    mPhase = angle(obj.SensorSignals{aaSignal});
     
-    self.SensorSignals{aaSignal} = abs(self.SensorSignals{aaSignal}) .* mInterpEnvelope;
+    obj.SensorSignals{aaSignal} = abs(obj.SensorSignals{aaSignal}) .* mInterpEnvelope;
     
-    self.SensorSignals{aaSignal} = self.SensorSignals{aaSignal} .* exp(1j * mPhase);
+    obj.SensorSignals{aaSignal} = obj.SensorSignals{aaSignal} .* exp(1j * mPhase);
 end
 
 

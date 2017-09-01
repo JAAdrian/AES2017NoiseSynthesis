@@ -1,4 +1,4 @@
-function [vCohere] = binaural3d(self,dist,vFreqDesired)
+function [cohere] = binaural3d(obj, dist, freqDesired)
 %BINAURAL3D Get binaural coherence function for spherical noise field
 % -------------------------------------------------------------------------
 % Based on Marco Jeub's MATLAB FEX package from
@@ -6,7 +6,7 @@ function [vCohere] = binaural3d(self,dist,vFreqDesired)
 %
 % Only for the following sampling rates of fs = (16, 44.1, 48) kHz
 %
-% Usage: [vCohere] = binaural3d(self,dist,vFreqDesired)
+% Usage: [vCohere] = binaural3d(obj,dist,vFreqDesired)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -14,26 +14,26 @@ function [vCohere] = binaural3d(self,dist,vFreqDesired)
 %
 
 
-if self.NumSensorSignals > 2,
+if obj.NumSensorSignals > 2
     error('This coherence model only works with 2 sensors!');
 end
 
-if ~dist,
-    vCohere = ones(size(vFreqDesired));
+if ~dist
+    cohere = ones(size(freqDesired));
 else
     try
-        stData = load(sprintf('BinauralCoherence_%gkHz.mat',self.Fs/1000));
+        data = load(sprintf('BinauralCoherence_%gkHz.mat', obj.SampleRate/1000));
     catch
         error('The file containing pre computed coherence data is missing or cannot be found!');
     end
     
-    if norm(self.ModelParameters.SensorPositions(:,2) - self.ModelParameters.SensorPositions(:,1)) > stData.d_mic,
-        error('The distance of the two(!) sensors must not be greater than %gm!',stData.d_mic);
+    if norm(obj.ModelParameters.SensorPositions(:,2) - obj.ModelParameters.SensorPositions(:,1)) > data.d_mic
+        error('The distance of the two(!) sensors must not be greater than %gm!',data.d_mic);
     end
     
-    vFreq   = linspace(0,stData.fs,stData.nfft/2+1);
-    vCohere = interp1(vFreq,stData.bin_coh_3d,vFreqDesired,'linear','extrap');
-    vCohere = vCohere(:);
+    freq    = linspace(0, data.fs, data.nfft/2+1);
+    cohere = interp1(freq, data.bin_coh_3d, freqDesired, 'linear', 'extrap');
+    cohere = cohere(:);
 end
 
 

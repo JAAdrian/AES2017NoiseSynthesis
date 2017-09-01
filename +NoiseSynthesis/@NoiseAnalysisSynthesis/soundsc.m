@@ -1,17 +1,17 @@
-function [] = soundsc(self,bStereo)
+function [] = soundsc(obj,bStereo)
 %SOUNDSC Audio playback of both analysis and synthesis signal with scaling
 % -------------------------------------------------------------------------
 % This class method overloads MATLAB's standard soundsc() function to
 % provide an easy way to playback both analyzed and synthesized signals
 % from the current object. Playback level is scaled to maximum amplitude
 % without clipping.
-% It wraps playAnalyzed(self) and playSynthesized(self).
+% It wraps playAnalyzed(obj) and playSynthesized(obj).
 %
-% Usage: [] = soundsc(self)
-%        [] = soundsc(self,bStereo)
+% Usage: [] = soundsc(obj)
+%        [] = soundsc(obj,bStereo)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
 %           bStereo: Boolean whether to use multichannel playback [default: false]
 %
 %  Output:   ---------
@@ -23,17 +23,17 @@ function [] = soundsc(self,bStereo)
 %
 
 
-if nargin < 2 || isempty(bStereo),
+if nargin < 2 || isempty(bStereo)
     bStereo = false;
 end
 
-if ~isempty(self.AnalysisSignal),
+if ~isempty(obj.AnalysisSignal)
     fprintf('*** Playing Analysis  Signal ***\n');
-    playAnalyzed(self,0);
-    pause(self.lenSignalPlotAudio/self.Fs + 0.5);
+    playAnalyzed(obj,0);
+    pause(obj.lenSignalPlotAudio/obj.Fs + 0.5);
 end
 fprintf('*** Playing Synthesis Signal ***\n');
-playSynthesized(self,0,bStereo);
+playSynthesized(obj,0,bStereo);
 
 
 

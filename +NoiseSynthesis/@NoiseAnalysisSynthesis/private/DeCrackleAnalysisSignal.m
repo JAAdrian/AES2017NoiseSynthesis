@@ -1,8 +1,8 @@
-function [] = DeCrackleAnalysisSignal(self)
+function [] = DeCrackleAnalysisSignal(obj)
 %DECLICKANALYSISSIGNAL DeCrackle analysis signal
 % -------------------------------------------------------------------------
 %
-% Usage: [] = DeCrackleAnalysisSignal(self)
+% Usage: [] = DeCrackleAnalysisSignal(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -13,11 +13,15 @@ import NoiseSynthesis.external.*
 
 threshold = 90;
 
-self.vBeforeDeCrackling = self.AnalysisSignal;
-self.AnalysisSignal = DeCrackleNoise(self.AnalysisSignal, self.Fs, threshold);
+obj.BeforeDeCrackling = obj.AnalysisSignal;
+obj.AnalysisSignal = DeCrackleNoise(...
+    obj.AnalysisSignal, ...
+    obj.SampleRate, ...
+    threshold ...
+    );
 
-self.AnalysisSignal = self.AnalysisSignal / std(self.AnalysisSignal) ...
-    * std(self.vBeforeDeCrackling);
+obj.AnalysisSignal = ...
+    obj.AnalysisSignal / std(obj.AnalysisSignal) * std(obj.vBeforeDeCrackling);
 
 
 % End of file: DeCrackleAnalysisSignal.m

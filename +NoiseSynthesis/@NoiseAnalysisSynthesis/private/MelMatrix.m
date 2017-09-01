@@ -1,10 +1,10 @@
-function [mTransformation] = MelMatrix(self)
+function [mTransformation] = MelMatrix(obj)
 %MELMATRIX Return the mel transformation matrix
 % -------------------------------------------------------------------------
 % Calls the FEX function melfilter() from
 % http://www.mathworks.com/matlabcentral/fileexchange/23179-melfilter/
 %
-% Usage: [mTransformation] = MelMatrix(self)
+% Usage: [mTransformation] = MelMatrix(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -14,9 +14,9 @@ function [mTransformation] = MelMatrix(self)
 import NoiseSynthesis.external.*
 
 
-vFreq = linspace(0,self.Fs/2,self.numBins);
+freq = linspace(0, obj.SampleRate/2, obj.NumBins);
 
-mTransformation = melfilter(self.NumModulationBands,vFreq);
+mTransformation = melfilter(obj.NumModulationBands, freq);
 
 
 

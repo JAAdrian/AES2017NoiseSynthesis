@@ -1,8 +1,8 @@
-function [mClickSTFT] = genArtificialClicks(self)
+function [mClickSTFT] = genArtificialClicks(obj)
 %GENARTIFICIALCLICKS Generate clicks in STFT domain using the Markov model
 % -------------------------------------------------------------------------
 %
-% Usage: [mClickSTFT] = genArtificialClicks(self)
+% Usage: [mClickSTFT] = genArtificialClicks(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -12,8 +12,8 @@ function [mClickSTFT] = genArtificialClicks(self)
 import NoiseSynthesis.external.*
 
 mClickSTFT = STFT(...
-    genclickmarkov(self),...
-    self.STFTParameters...
+    genclickmarkov(obj),...
+    obj.STFTParameters...
     );
 
 

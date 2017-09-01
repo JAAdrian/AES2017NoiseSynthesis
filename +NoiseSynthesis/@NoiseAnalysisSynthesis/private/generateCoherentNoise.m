@@ -1,8 +1,8 @@
-function [] = generateCoherentNoise(self)
+function [] = generateCoherentNoise(obj)
 %GENERATECOHERENTNOISE Generate noise signals with desired spatial coherence
 % -------------------------------------------------------------------------
 %
-% Usage: [] = generateCoherentNoise(self)
+% Usage: [] = generateCoherentNoise(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -12,28 +12,28 @@ function [] = generateCoherentNoise(self)
 import NoiseSynthesis.external.*
 
 
-showMsg(self,'Synthesizing Sensor Signals');
+showMsg(obj,'Synthesizing Sensor Signals');
 
 % generate G incoherent noise signals
-self.SensorSignals = cellfun(...
-    @(x) generateNoise(self,self.bApplyColoration),...
-    cell(self.NumSensorSignals,1),...
+obj.SensorSignals = cellfun(...
+    @(x) generateNoise(obj,obj.bApplyColoration),...
+    cell(obj.NumSensorSignals,1),...
     'uni',false);
 
 % apply modulations if desired
-if self.bApplyModulations,
-    applyModulations(self);
+if obj.bApplyModulations
+    applyModulations(obj);
 end
 
 % apply coherence by mixing
 bComputePSD = false;
-mCoherentSignals = mixSignals(self, self.SensorSignals, bComputePSD);
+mCoherentSignals = mixSignals(obj, obj.SensorSignals, bComputePSD);
 
 % transform into time domain
-self.SensorSignals = zeros(self.DesiredSignalLenSamples, self.NumSensorSignals);
-for aaSignal = 1:self.NumSensorSignals,
-    self.mBands = squeeze(mCoherentSignals(aaSignal,:,:)).';
-    self.SensorSignals(:, aaSignal) = SynthesisFilterbank(self);
+obj.SensorSignals = zeros(obj.DesiredSignalLenSamples, obj.NumSensorSignals);
+for aaSignal = 1:obj.NumSensorSignals
+    obj.mBands = squeeze(mCoherentSignals(aaSignal,:,:)).';
+    obj.SensorSignals(:, aaSignal) = SynthesisFilterbank(obj);
 end
 
 

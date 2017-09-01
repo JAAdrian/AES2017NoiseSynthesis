@@ -1,8 +1,8 @@
-function [] = computeArtificialModulations(self)
+function [] = computeArtificialModulations(obj)
 %COMPUTEARTIFICIALMODULATIONS Generate level fluctuation curves from Markov model
 % -------------------------------------------------------------------------
 %
-% Usage: [] = computeArtificialModulations(self)
+% Usage: [] = computeArtificialModulations(obj)
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -10,13 +10,13 @@ function [] = computeArtificialModulations(self)
 %
 
 
-generateLevelCurves(self);
+generateLevelCurves(obj);
 
-if self.bApplyComodulation,
-    mixBands(self);
+if obj.bApplyComodulation
+    mixBands(obj);
 end
 
-normalizeBands(self);
+normalizeBands(obj);
 
 
 

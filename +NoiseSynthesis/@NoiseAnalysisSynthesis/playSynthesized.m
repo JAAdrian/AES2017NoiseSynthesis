@@ -1,4 +1,4 @@
-function [] = playSynthesized(self,leveldB,bStereo)
+function [] = playSynthesized(obj, leveldB, isStereo)
 %PLAYSYNTHESIZED Audio playback of the synthesized signal
 % -------------------------------------------------------------------------
 % This class method chooses, depending on the platform, the right playback
@@ -6,14 +6,14 @@ function [] = playSynthesized(self,leveldB,bStereo)
 % bStereo == true the function plays the first two channels. If false it
 % plays the first channel.
 %
-% Usage: [] = playSynthesized(self)
-%        [] = playSynthesized(self,leveldB)
-%        [] = playSynthesized(self,leveldB,bStereo)
+% Usage: [] = playSynthesized(obj)
+%        [] = playSynthesized(obj, leveldB)
+%        [] = playSynthesized(obj, leveldB, isStereo)
 %
 %   Input:   ---------
-%           self: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
-%           leveldB: Playback level in dBFS [default: self.soundLeveldB]
-%           bStereo: Boolean whether to use multichannel playback [default: false]
+%           obj: Object of type NoiseSynthesis.NoiseAnalysisSynthesis
+%           leveldB: Playback level in dBFS [default: obj.soundLeveldB]
+%           isStereo: Boolean whether to use multichannel playback [default: false]
 %
 %  Output:   ---------
 %           none
@@ -26,32 +26,32 @@ function [] = playSynthesized(self,leveldB,bStereo)
 import NoiseSynthesis.external.*
 
 
-if nargin < 3 || isempty(leveldB),
-    bStereo = false;
+if nargin < 3 || isempty(leveldB)
+    isStereo = false;
 end
-if nargin < 2 || isempty(leveldB),
-    leveldB = self.soundLeveldB;
+if nargin < 2 || isempty(leveldB)
+    leveldB = obj.soundLeveldB;
 end
 
 hPlayFun       = @sound;
 hPlayFunScaled = @soundsc;
-if isunix,
+if isunix()
     hPlayFun       = @usound;
     hPlayFunScaled = @usoundsc;
 end
 
-scaleFactor = 10^(leveldB/20) / rms(self.SensorSignals(:, 1));
+scaleFactor = 10^(leveldB/20) / rms(obj.SensorSignals(:, 1));
 
-if bStereo,
-    vSignal = [self.SensorSignals(:, 1), self.SensorSignals(:, 2)];
+if isStereo
+    vSignal = [obj.SensorSignals(:, 1), obj.SensorSignals(:, 2)];
 else
-    vSignal =  self.SensorSignals(:, 1);
+    vSignal =  obj.SensorSignals(:, 1);
 end
 
-if ~leveldB,
-    hPlayFunScaled(vSignal, self.Fs);
+if ~leveldB
+    hPlayFunScaled(vSignal, obj.Fs);
 else
-    hPlayFun(scaleFactor*vSignal, self.Fs);
+    hPlayFun(scaleFactor*vSignal, obj.Fs);
 end
 
 

@@ -23,13 +23,13 @@ classdef NoiseAnalysisSynthesis < matlab.System
 %
 
 
-properties (Access = public)
+properties (Nontunable)
     SampleRate = 44.1e3; % Sampling rate in Hz [default: 44.1kHz]
     
     DesiredSignalLenSamples = 44100; % Desired synthesis length in samples [default: 1sec -> 44100]
 end
 
-properties (Logical)
+properties (Logical, Nontunable)
     DoApplyColoration       = true; % Bool whether to apply coloration in the synthesis [default: true]
     DoApplyAmplitudeDistr   = true; % Bool whether to apply an amplitude distribution in the synthesis [default: true]
     DoApplyModulations      = true; % Bool whether to apply modulations in the synthesis [default: true]
@@ -41,28 +41,16 @@ properties (Logical)
     DoDeClick = true; % Bool whether to declick the analysis file [default: true]
 end
 
-properties (SetAccess = private)
-    AnalysisSignal; % Analysis signal (HP filtered and zero-mean)
-    SensorSignals = []; % Final sensor signals after synthesis
-    ClickTracks   = {}; % Click track if desired (which is also already added to SensorSignals)
-    
+properties (SetAccess = protected)
     ModelParameters; % Parameter object for the noise model
     ErrorMeasures;   % Error measures object
-    
-    GammatoneLowestBand  = 64; % Lowest center freq. if Gammatone FB is desired [default: 64Hz]
-    GammatoneHighestBand = 16e3; % Highestapply center freq. if Gammatone FB is desired [default: 16kHz]
-    NumModulationBands   = 16; % Number of modulation bands [default: 16]
-    
-    CutOffHP = 100; % Cutoff frequency of the HP filter applied to the analysis signal
 end
 
-properties (Logical, Hidden)
-    Verbose            = false; % Bool whether to plot verbose information during processing
-    DoHpFilterAnalysis = true;  % Bool whether to apply the HP filter before analysis
+properties (Logical, Hidden, Nontunable)
+    Verbose = false; % Bool whether to plot verbose information during processing
 end
 
-properties (SetAccess = private, Dependent)
-    NumSensorSignals; % Number of desired sensor signals (dependent on size of the sensor position matrix)
+properties (Dependent)
     NumSources; % Number of acoustic sources in the noise field ((dependent on size of the sources position matrix))
 end
 
@@ -73,10 +61,7 @@ properties (Access = private, Constant)
     SOUND_LEVEL_DB = -35; % Default sound level for playback in dB FS
 end
 
-properties (Access = private)
-    OriginalAnalysisSignal;    % Raw analysis signal
-    BeforeDeCrackling;
-    
+properties (Access = protected)
     FrequencyBands; % Frequency bands
     LevelCurvesDecorr; % Decorrelated level fluctuations for all bands
     
@@ -85,35 +70,22 @@ properties (Access = private)
     ModulationParams; % Parameter object for the modulations
 end
 
-properties (Access = private, Dependent)
-    CenterFreqs; % Center frequencies of either the Mel or Gammatone FB
+properties (Access = protected, Dependent)
     NumBands; % Number of frequency bands
     LenLevelCurve; % Length of the RMS level fluctuations curve
     NumBlocks; % Number of signal blocks with chosen STFT parameters
     NumBins; % Number of DFT bins with chosen STFT parameters
-    NumStates; % Number of Markov states
+    
     LenLevelCurvePlot; % Length of the RMS level fluctuations curve for plotting purposes
     LenSignalPlotAudio; % Length of the signal in samples for plotting and playback purposes
 end
 
-properties (Access = private, Logical)
+properties (Access = protected, Logical)
     DoAnalysis = true;
     DoChangeSampleRate = true;
 end
 
-properties (Access = private, Transient)
-    SensorDistances; % Distances between sensors
-end
 
-properties (Access = ?NoiseSynthesis.ErrorMeasures)
-    Theta; % Angles between sources and sensors
-    LevelCurves; % Level curves of all bands
-    ArtificialLevelCurves; % Generated level curves for all bands
-end
-
-properties (Access = ?NoiseSynthesis.ErrorMeasures, Dependent)
-    CohereFun; % Function handle to the desired coherence model
-end
 
 
 
@@ -160,10 +132,10 @@ methods
             % Check if FFT size is OK based on sample rate
             checkFFTlength(obj);
             
-            obj.DoNotChangeSampleRate = true;
+            obj.DoChangeSampleRate = false;
         end
         
-        obj.ModelParameters = NoiseSynthesis.ModelParametersSet();
+        obj.ModelParameters = NoiseSynthesis.ModelProperties();
         obj.ErrorMeasures   = NoiseSynthesis.ErrorMeasures(obj);
         
         % Based on current parameters create the modulation parameter
@@ -203,46 +175,12 @@ methods
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%% setter/getter methods %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    function [freqs] = get.CenterFreqs(obj)
-        numBands = obj.NumModulationBands;
-        
-        freqs = erbscale2freq(...
-            linspace(...
-            freq2erbscale(obj.GammatoneLowestBand),...
-            freq2erbscale(obj.GammatoneHighestBand),...
-            numBands)...
-            );
-    end
     
-    function [numSens] = get.NumSensorSignals(obj)
-        if obj.DoApplySpatialCoherence
-            numSens = size(obj.ModelParameters.SensorPositions, 2);
-        else
-            numSens = 1;
-        end
-    end
+    
+    
     
     function [numSources] = get.NumSources(obj)
         numSources = size(obj.ModelParameters.SourcePosition, 2);
-    end
-    
-    function CohereFun = get.CohereFun(obj)
-        switch lower(obj.ModelParameters.CohereModel)
-            case 'cylindrical'
-                % zeroth order bessel of first kind
-                CohereFun = @(freq, dist, theta, vPSD) besselj(0, 2*pi * freq * dist / obj.SoundVelocity);
-            case 'spherical'
-                CohereFun = @(freq, dist, theta, vPSD) sinc(2 * freq * dist / obj.SoundVelocity);
-            case 'anisotropic'
-                CohereFun = @(freq, dist, theta, vPSD) anisotropicCoherence(obj, freq, dist, theta, vPSD);
-            case 'binaural2d'
-                CohereFun = @(freq, dist, theta, vPSD) binaural2d(obj, dist, freq);
-            case 'binaural3d'
-                CohereFun = @(freq, dist, theta, vPSD) binaural3d(obj, dist, freq);
-            otherwise
-                warning(sprintf('Coherence model not recognized. Switched to default (''%s'')...',...
-                    obj.ModelParameters.CohereModel)); %#ok<SPWRN>
-        end
     end
     
     function [nBands] = get.NumBands(obj)
@@ -255,10 +193,6 @@ methods
     
     function [nb] = get.NumBlocks(obj)
         nb = computeNumberOfBlocks(obj.StftParameters, obj.DesiredSignalLenSamples);
-    end
-    
-    function [ns] = get.NumStates(obj)
-        ns = size(obj.ModelParameters.MarkovStateBoundaries, 1);
     end
     
     function [nb] = get.LenLevelCurve(obj)
@@ -293,7 +227,7 @@ methods
     end
     
     function [] = set.SampleRate(obj, sampleRate)
-        if obj.DoNotChangeSampleRate
+        if ~obj.DoChangeSampleRate
             error(['At the moment, you cannot change the sampling rate ', ...
                 'when an analysis signal has been used!']);
         else
@@ -419,15 +353,7 @@ end
 
 end
 
-% Auxiliary functions to transform linear frequency scale to ERB scale and
-% vice versa
-function freq = erbscale2freq(erb)
-freq = 1000/4.37 * (10.^(erb/21.4) - 1);
-end
 
-function erb = freq2erbscale(freq)
-erb = 21.4 * log10(1 + freq/1000 * 4.37);
-end
 
 
 

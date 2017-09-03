@@ -1,4 +1,4 @@
-classdef ModelParametersSet < matlab.System
+classdef ModelProperties < matlab.System
 %MODELPARAMETERSSET Model parameter class for NoiseAnalysisSynthesis
 % -------------------------------------------------------------------------
 % This class holds the model parameters used by the synthesis of the
@@ -6,7 +6,7 @@ classdef ModelParametersSet < matlab.System
 % autocompletion for all string parameters and to check correctness of
 % passed parameters.
 %
-% Usage: obj = ModelParametersSet()
+% Usage: obj = ModelProperties()
 %
 %   Input:   -----------
 %           none
@@ -79,22 +79,24 @@ properties (Access = public)
         0,  0.00
         ];
     SourcePosition = [0.2, 1, 0]'; % Source position(s) in meters
-    
-    bApplyClicks = false; % Bool whether to apply clicks in the synthesis [default: false]
+end
+
+properties (Logical)
+    DoApplyClicks = false; % Bool whether to apply clicks in the synthesis [default: false]
 end
 
 properties (Dependent)
     ModulationWinLen; % Window length of the modulation processor in STFT domain
 end
 
-properties (Access = public, Hidden)
+properties (Hidden)
     NumGaussModels    = 4; % Number of Gaussian components when using GMM approach
     maxMarkovRMSlevel = 4; % Maximum Markov state boundary in dB
 end
 
 properties (Hidden, Logical)
-    bReducePSD       = true; % Should the FDLS approach be used?
-    bUseMarkovChains = true; % Should the modulation Markov chain approach be used?
+    DoReducePSD       = true; % Should the FDLS approach be used?
+    DoUseMarkovChains = true; % Should the modulation Markov chain approach be used?
 end
 
 
@@ -156,4 +158,4 @@ end
 end
 
 
-% End of file: ModelParametersSet.m
+% End of file: ModelProperties.m

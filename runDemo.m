@@ -7,20 +7,20 @@ clear;
 close all;
 
 
-szFilename = 'CHACE.Smpl.1_Noise.wav';
+filename = 'CHACE.Smpl.1_Noise.wav';
 
-[vSignal,fs] = audioread(szFilename);
+[signal, sampleRate] = audioread(filename);
 
 
 %% Full analysis and synthesis.
 
 % Create object and consider clicks.
-obj = NoiseSynthesis.NoiseAnalysisSynthesis(vSignal,fs);
+obj = NoiseSynthesis.NoiseAnalysisSynthesis(signal, sampleRate);
 
-obj.ModelParameters.bApplyClicks = true;
+obj.ModelParameters.DoApplyClicks = true;
 
 % Show infos during analysis and synthesis
-obj.bVerbose = true;
+obj.Verbose = true;
 
 
 % Call analysis and synthesize a two-channel signal.
@@ -34,7 +34,7 @@ obj.sound();
 obj.plot();
 
 % Retrieve the sensor signals.
-mSignalMatrix = obj.SensorSignals;
+signalMatrix = obj.SensorSignals;
 % or 
 % mSignalMatrix = obj.synthesize();
 
@@ -45,18 +45,18 @@ pause;
 clear;
 close all;
 
-fs = 44.1e3;
+sampleRate = 44.1e3;
 noiseType = 'optical';
 
 obj = NoiseSynthesis.NoiseAnalysisSynthesis();
-obj.Fs = fs;
+obj.SampleRate = sampleRate;
 
 obj.readParameters(fullfile('+NoiseSynthesis', noiseType));
 
-obj.DesiredSignalLenSamples = round(5 * fs);
+obj.DesiredSignalLenSamples = round(5 * sampleRate);
 obj.synthesize();
 
-mSignalMatrix = obj.SensorSignals;
+signalMatrix = obj.SensorSignals;
 
 obj.sound();
 

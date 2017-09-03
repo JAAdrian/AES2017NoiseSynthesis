@@ -1,4 +1,4 @@
-classdef ModelProperties < matlab.System
+classdef ModelParameters < matlab.System
 %MODELPARAMETERSSET Model parameter class for NoiseAnalysisSynthesis
 % -------------------------------------------------------------------------
 % This class holds the model parameters used by the synthesis of the
@@ -6,13 +6,13 @@ classdef ModelProperties < matlab.System
 % autocompletion for all string parameters and to check correctness of
 % passed parameters.
 %
-% Usage: obj = ModelProperties()
+% Usage: obj = ModelParameters()
 %
 %   Input:   -----------
 %           none
 %
 %   Output:  -----------
-%           obj: created ModelParametersSet object
+%           obj: created ModelParameters object
 %
 %
 % Author :  J.-A. Adrian (JA) <jens-alrik.adrian AT jade-hs.de>
@@ -158,4 +158,4 @@ end
 end
 
 
-% End of file: ModelProperties.m
+% End of file: ModelParameters.m

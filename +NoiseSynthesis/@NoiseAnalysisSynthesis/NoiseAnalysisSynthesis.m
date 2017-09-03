@@ -135,7 +135,7 @@ methods
             obj.DoChangeSampleRate = false;
         end
         
-        obj.ModelParameters = NoiseSynthesis.ModelProperties();
+        obj.ModelParameters = NoiseSynthesis.ModelParameters();
         obj.ErrorMeasures   = NoiseSynthesis.ErrorMeasures(obj);
         
         % Based on current parameters create the modulation parameter

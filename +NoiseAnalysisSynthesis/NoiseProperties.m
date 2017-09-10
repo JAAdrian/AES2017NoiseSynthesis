@@ -20,16 +20,13 @@ properties
     ModulationDepth; % Modulation depth for all freq. bands
     MarkovTransition; % Transition matrix for the modulation modeling
     MarkovStateBoundaries; % Markov state boundaries in dB
+    
     GammaBands; % Inter-band correlation matrix
     
-    MeanPSD; % PSD vector
+    MeanPsd; % PSD vector
     
     Quantiles; % Independent variable of ECDF or holds information for other models
-    CDF; % Dependent variable of ECDF or holds information for other models
-end
-
-
-methods
+    Cdf; % Dependent variable of ECDF or holds information for other models
 end
 
 end

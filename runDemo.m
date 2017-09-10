@@ -15,28 +15,22 @@ filename = 'CHACE.Smpl.1_Noise.wav';
 %% Full analysis and synthesis.
 
 % Create object and consider clicks.
-obj = NoiseSynthesis.NoiseAnalysisSynthesis(signal, sampleRate);
+control = NoiseAnalysisSynthesis.ControlCenter(signal, sampleRate);
 
-obj.ModelParameters.DoApplyClicks = true;
+control.ModelParameters.DoApplyClicks = true;
 
 % Show infos during analysis and synthesis
-obj.Verbose = true;
+control.Verbose = true;
 
 
-% Call analysis and synthesize a two-channel signal.
-obj.analyze();
-obj.synthesize();
+% Analysis and synthesize of a two-channel signal.
+control();
 
 % Listen to results.
-obj.sound();
+control.sound();
 
 % Plot results.
-obj.plot();
-
-% Retrieve the sensor signals.
-signalMatrix = obj.SensorSignals;
-% or 
-% mSignalMatrix = obj.synthesize();
+control.plot();
 
 pause;
 
@@ -48,19 +42,19 @@ close all;
 sampleRate = 44.1e3;
 noiseType = 'optical';
 
-obj = NoiseSynthesis.NoiseAnalysisSynthesis();
-obj.SampleRate = sampleRate;
+control = NoiseSynthesis.NoiseAnalysisSynthesis();
+control.SampleRate = sampleRate;
 
-obj.readParameters(fullfile('+NoiseSynthesis', noiseType));
+control.readParameters(fullfile('+NoiseSynthesis', noiseType));
 
-obj.DesiredSignalLenSamples = round(5 * sampleRate);
-obj.synthesize();
+control.DesiredSignalLenSamples = round(5 * sampleRate);
+control.synthesize();
 
-signalMatrix = obj.SensorSignals;
+signalMatrix = control.SensorSignals;
 
-obj.sound();
+control.sound();
 
-obj.plot();
+control.plot();
 
 
 % End of file: runDemo.m

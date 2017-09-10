@@ -1,8 +1,17 @@
 ## Needed Modules
 
-- Markov modulation generator
-- Amplitude distribution generator
-- Spatial coherence mixer
-- Interpolation
+#### How to Share Data?
+
+#### Analysis
+- [x] Amplitude distribution analyzer
+- [x] Spectrum analyzer
+- [ ] Modulation analyzer
+- [ ] Markov modulation analyzer
+
+#### Synthesis
+- [ ] Amplitude distribution synthesizer
+- [ ] Markov modulation synthesizer
+- [ ] Spatial coherence mixer
+- [ ] Interpolator
 
 ## What Should Be Saved In The Object?

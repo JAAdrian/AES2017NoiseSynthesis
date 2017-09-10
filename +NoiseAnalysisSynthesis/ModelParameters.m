@@ -31,47 +31,42 @@ end
 
 properties (Transient, Hidden)
     % Possible values for the desired amplitude modeling method
-    AmplitudeModelSet = matlab.system.StringSet({'full','percentile','pareto'});
+    AmplitudeModelSet = matlab.system.StringSet({...
+        'Full', ...
+        'Percentile', ...
+        'Pareto' ...
+        });
     
     % Possible values for the desired modulation speed and FB type
-    ModulationSpeedSet      = matlab.system.StringSet({'slow','fast'});
-    ModulationFilterbankSet = matlab.system.StringSet({'mel','gammatone'});
+    ModulationSpeedSet = matlab.system.StringSet({'Slow', 'Fast'});
     
     % Possible values for the desired spatial coherence model
     CohereModelSet = matlab.system.StringSet({...
-        'cylindrical', ...
-        'spherical', ...
-        'anisotropic', ...
-        'binaural2d', ...
-        'binaural3d' ...
+        'Cylindrical', ...
+        'Spherical', ...
+        'Anisotropic', ...
+        'Binaural2d', ...
+        'Binaural3d' ...
         });
 end
 
 properties (Access = public)
-    Model = 'manual'; % Noise type model of a preset if loaded
+    Model = 'Manual'; % Noise type model of a preset if loaded
     
-    ModulationFilterbank = 'mel'; % Modulation filterbank type
-    ModulationDepth = 0.2 * exp(-(0:15)/2).'; % Modulation depth for all freq. bands
-    ModulationSpeed = 'fast'; % Modulation speed. Use 'slow' for speech-like types
-    MarkovTransition; % Transition matrix for the modulation modeling
-    MarkovStateBoundaries; % Markov state boundaries in dB
-    
-    GammaBands; % Inter-band correlation matrix
+    ModulationFilterbank = 'Mel'; % Modulation filterbank type
+    ModulationSpeed = 'Fast'; % Modulation speed. Use 'slow' for speech-like types
     
     ClickTransition; % Transition matrix for the click model
     fLowerClick = 2000; % Lower cutoff freq. for HP filter
     fUpperClick = 6000; % upper cutoff freq. for HP filter
     SNRclick = inf; % SNR between base noise and click signal
     
-    MeanPSD; % PSD vector
     ColorNumOrd   = 8; % Number of b coefficients in the PSD modeling
     ColorDenumOrd = 8; % Number of a coefficients in the PSD modeling
     
-    AmplitudeModel = 'pareto'; % Method to model the amplitude distribution
-    Quantiles; % Independent variable of ECDF or holds information for other models
-    CDF; % Dependent variable of ECDF or holds information for other models
+    AmplitudeModel = 'Pareto'; % Method to model the amplitude distribution
     
-    CohereModel = 'cylindrical'; % Spatial coherence model
+    CohereModel = 'Cylindrical'; % Spatial coherence model
     % Sensor position(s) in meters
     SensorPositions = [
         0,  0.17
@@ -90,8 +85,7 @@ properties (Dependent)
 end
 
 properties (Hidden)
-    NumGaussModels    = 4; % Number of Gaussian components when using GMM approach
-    maxMarkovRMSlevel = 4; % Maximum Markov state boundary in dB
+    MaxMarkovRMSlevel = 4; % Maximum Markov state boundary in dB
 end
 
 properties (Hidden, Logical)

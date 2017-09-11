@@ -15,7 +15,7 @@ function [vDeCrackled] = DeCrackleNoise(vSignal,fs,ThreshDeCrackle)
 % Updated:  <>
 % 
 
-import NoiseSynthesis.external.*
+import NoiseAnalysisSynthesis.external.*
 
 
 if nargin < 3 || isempty(ThreshDeCrackle),

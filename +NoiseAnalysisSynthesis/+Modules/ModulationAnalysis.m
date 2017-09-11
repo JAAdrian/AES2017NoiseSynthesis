@@ -67,7 +67,7 @@ methods (Access = protected)
 	function [] = setupImpl(obj, stftSignal)
         import NoiseAnalysisSynthesis.external.*
         
-        [obj.NumBins, obj.LenLevelCurve] = size(stftSignal);
+        [obj.NumBins, obj.LenLevelCurves] = size(stftSignal);
         
         freq = linspace(0, obj.SampleRate/2, obj.NumBins);
         obj.MelMatrix = melfilter(obj.NumModulationBands, freq);
@@ -83,22 +83,22 @@ methods (Access = protected)
     
     
     function [] = transform2Mel(obj, stftSignal)
-        obj.MelBands = obj.MelMatrix .* stftSignal;
+        obj.MelBands = obj.MelMatrix * stftSignal;
     end
     
     function [] = computeLevelFluctuations(obj)
-        import NoiseSynthesis.external.*
+        import NoiseAnalysisSynthesis.external.*
         
         modulationFrameShift = obj.ModulationParameters.Frameshift;
         
         numBlocksPadded = obj.LenLevelCurves*modulationFrameShift + obj.ModulationParameters.Overlap;
         
-        remainingBlocks = numBlocksPadded - obj.numBlocks;
+        remainingBlocks = numBlocksPadded - obj.NumBlocks;
         
         idxNormalize = ...
-            round(0.05 * obj.numBlocks) : round(0.95 * obj.numBlocks);
+            round(0.05 * obj.NumBlocks) : round(0.95 * obj.NumBlocks);
         
-        obj.LevelFluctuationCurves = zeros(obj.lenLevelCurve, obj.numBands);
+        obj.LevelFluctuationCurves = zeros(obj.LenLevelCurves, obj.NumBands);
         for iBand = 1:obj.NumModulationBands
             currBandSignal = obj.MelBands(iBand,:).';
             currBandSignal = currBandSignal / rmsvec(currBandSignal(idxNormalize));

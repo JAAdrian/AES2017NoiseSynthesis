@@ -57,9 +57,9 @@ properties (Access = public)
     ModulationSpeed = 'Fast'; % Modulation speed. Use 'slow' for speech-like types
     
     ClickTransition; % Transition matrix for the click model
-    fLowerClick = 2000; % Lower cutoff freq. for HP filter
-    fUpperClick = 6000; % upper cutoff freq. for HP filter
-    SNRclick = inf; % SNR between base noise and click signal
+    LowerEdgeClick = 2e3; % Lower cutoff freq. for HP filter
+    UpperEdgeClick = 6e3; % upper cutoff freq. for HP filter
+    SnrClick = inf; % SNR between base noise and click signal
     
     ColorNumOrd   = 8; % Number of b coefficients in the PSD modeling
     ColorDenumOrd = 8; % Number of a coefficients in the PSD modeling

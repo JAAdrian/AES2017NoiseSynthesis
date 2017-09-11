@@ -57,7 +57,7 @@ methods (Access = protected)
     end
     
     function [meanPsd] = stepImpl(obj)
-        import NoiseSynthesis.external.*
+        import NoiseAnalysisSynthesis.external.*
         
         % compute the MS (mean square), i.e. the average power in the
         % current band
@@ -79,7 +79,7 @@ methods (Access = protected)
             
             freq = linspace(0, obj.SampleRate/2, params.Nfft/2+1);
             
-            powersSmooth = obj.smoothSpectrum(powers);
+            powersSmooth = obj.smoothSpectrum(powers, params.Nfft);
             
             weights = ones(length(powersSmooth), 1);
             
@@ -102,7 +102,7 @@ methods (Access = protected)
     end
     
     
-    function [powersSmooth] = smoothSpectrum(obj, powers)
+    function [powersSmooth] = smoothSpectrum(obj, powers, nfft)
         import NoiseAnalysisSynthesis.external.spectralsmoothing.*
         
         smoother.fs   = obj.SampleRate;       % sampling rate
@@ -114,7 +114,7 @@ methods (Access = protected)
         % . in octaves for 'fractional-octave'
         % . in Hz for 'fixed-bandwidth'
         
-        smoother.L_FFT = params.Nfft; % length of the DFT
+        smoother.L_FFT = nfft; % length of the DFT
         
         % initialize the smoothing algorithm
         smoother = spectralsmoothing_init(smoother);

@@ -55,8 +55,8 @@ end
 if nargin == 2 && isobject(vWindow),
     Window  = vWindow.Window;
     overlap = vWindow.Overlap;
-    nfft    = vWindow.NFFT;
-    fs      = vWindow.Fs;
+    nfft    = vWindow.Nfft;
+    fs      = vWindow.SampleRate;
     
     vWindow = Window;
 end

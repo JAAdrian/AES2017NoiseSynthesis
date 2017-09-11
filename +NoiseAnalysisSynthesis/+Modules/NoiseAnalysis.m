@@ -24,21 +24,23 @@ properties (Constant)
     MOD_NORM_FUN = @(x) mad(x, 1, 1);
 end
 
-properties (Nontunable)
-	RawSignal;
-    SampleRate;
-    
+properties (Access = public)
     Signal; % Analysis signal (HP filtered and zero-mean)
-
+    RawSignal;
+    
     ModelParameters;
     NoiseProperties;
     StftParameters;
-	
-	NumModulationBands; % Number of modulation bands [default: 16]
     
     SpectrumAnalyzer;
     AmplitudeAnalyzer;
     ModulationAnalyzer;
+end
+
+properties (Nontunable)
+    SampleRate;
+    
+	NumModulationBands; % Number of modulation bands [default: 16]
 end
 
 properties (Dependent)
@@ -111,15 +113,17 @@ methods (Access = protected)
         end
         
         %% Estimate Amplitude Distribution
-        NoiseAnalysisSynthesis.externalshowMsg(obj.Verbose, 'Analyzing Amplitude Distribution');
-        amplitudeParameters = obj.AmplitudeAnalyzer();
+        NoiseAnalysisSynthesis.external.showMsg(...
+            obj.Verbose, 'Analyzing Amplitude Distribution' ...
+            );
+        amplitudeParameters = obj.AmplitudeAnalyzer(obj.Signal);
         
         obj.NoiseProperties.Quantiles = amplitudeParameters.Quantiles;
         obj.NoiseProperties.Cdf       = amplitudeParameters.Cdf;
         
         %% DeCrackle
         if obj.DoDeCrackle
-            showMsg(obj, 'DeCrackling Analysis Signal')
+            NoiseAnalysisSynthesis.external.showMsg(obj.Verbose, 'DeCrackling Analysis Signal')
             obj.Signal = deCrackleAnalysisSignal(obj.Signal, obj.SampleRate);
         end
         
@@ -127,8 +131,8 @@ methods (Access = protected)
         obj.NoiseProperties.MeanPsd = obj.SpectrumAnalyzer();
         
         %% Estimate Modulations
-        showMsg(obj, 'Analyzing Modulations');
-        obj.ModulationAnalyzer();
+        NoiseAnalysisSynthesis.external.showMsg(obj.Verbose, 'Analyzing Modulations');
+        obj.ModulationAnalyzer(obj.SpectrumAnalyzer.FrequencyBands);
     end
     
     
@@ -142,7 +146,7 @@ methods (Access = protected)
     end
     
     function [] = deClickAnalysisSignal(obj)
-        import NoiseSynthesis.external.*
+        import NoiseAnalysisSynthesis.external.*
         
         threshDeClick = 0.15;
         
@@ -150,7 +154,7 @@ methods (Access = protected)
         % obj.AnalysisSignal
         obj.RawSignal = obj.Signal;
         [obj.Signal, clickPositions] = DeClickNoise(...
-            obj.AnalysisSignal, ...
+            obj.Signal, ...
             obj.SampleRate, ...
             threshDeClick ...
             );
@@ -163,11 +167,12 @@ methods (Access = protected)
         
         obj.ModelParameters.SnrClick = snr(obj.Signal, clicks);
         
-        obj.learnMarkovClickParams(clickPositions);
+        obj.ModelParameters.ClickTransition = ...
+            obj.learnMarkovClickParams(clickPositions);
         
         showMsg(obj.Verbose, ...
             sprintf('Error signal energy of (Clicked-DeClicked): %g\n', ...
-            norm(obj.vOriginalAnalysisSignal - obj.AnalysisSignal)^2) ...
+            norm(obj.RawSignal - obj.Signal)^2) ...
             );
     end
     
@@ -177,6 +182,38 @@ methods (Access = protected)
         
         snrValue = 20*log10(energySignal / energyNoise);
     end
+    
+    function [clickTransition] = learnMarkovClickParams(obj, clicks)
+        clicksTmp = zeros(size(obj.Signal));
+        clicksTmp(clicks) = 1;
+        clicks = clicksTmp;
+        
+        lenClicks = length(clicks);
+        
+        % 2 states: click or not
+        % 1...no click
+        % 2... a click
+        states = [0 1];
+        clickTransition = zeros(length(states));
+        for iState = 1:2
+            idxCurrEmission = find(clicks == states(iState));
+            idxNextEmission = idxCurrEmission + 1;
+            idxNextEmission(idxNextEmission > lenClicks) = [];
+            
+            numToNoClicks = sum(clicks(idxNextEmission) == states(1));
+            numToClicks   = sum(clicks(idxNextEmission) == states(2));
+            
+            clickTransition(iState, :) = ...
+                [numToNoClicks numToClicks] / length(idxNextEmission);
+        end
+        
+        % just to be sure that every row sums up to exactly one
+        clickTransition = bsxfun(...
+            @rdivide, ...
+            clickTransition, ...
+            sum(clickTransition, 2) ...
+            );
+    end
 end
 
 end
@@ -184,7 +221,7 @@ end
 
 
 function [signalDeCrackled] = deCrackleAnalysisSignal(signal, sampleRate)
-import NoiseSynthesis.external.*
+import NoiseAnalysisSynthesis.external.*
 
 rmsOriginal = std(signal);
 

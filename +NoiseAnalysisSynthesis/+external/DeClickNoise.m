@@ -21,7 +21,7 @@ function [vDeClicked,vPositions] = DeClickNoise(vSignal,fs,ThreshDeClick)
 % Date   :  19-Mar-2015 15:47:43
 %
 
-import NoiseSynthesis.external.*
+import NoiseAnalysisSynthesis.external.*
 
 if nargin < 3 || isempty(ThreshDeClick),
     ThreshDeClick = 0.3;

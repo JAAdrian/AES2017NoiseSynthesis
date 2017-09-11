@@ -121,6 +121,13 @@ methods
         end
     end
     
+    function [] = analyze(obj)
+        obj.AnalysisEngine.DoDeClick = obj.DoDeClick;
+        obj.AnalysisEngine.Verbose = obj.Verbose;
+        
+        obj.AnalysisEngine.step();
+    end
+    
     
 %     function [numSources] = get.NumSources(obj)
 %         numSources = size(obj.ModelParameters.SourcePosition, 2);
@@ -198,10 +205,7 @@ end
 methods (Access = protected)
     function [] = setupImpl(obj)
         if obj.DoAnalysis
-            obj.AnalysisEngine.DoDeClick = obj.DoDeClick;
-            obj.AnalysisEngine.Verbose = obj.Verbose;
-            
-            obj.AnalysisEngine.step();
+            obj.analyze();
         end
     end
     
@@ -216,6 +220,12 @@ methods (Access = protected)
             obj.synthesize();
         end
     end
+    
+    function [] = releaseImpl(obj)
+        obj.AnalysisEngine.release();
+        obj.SynthesisEngine.release();
+    end
+    
     
     
     function [stftParameters] = setupStftParameters(obj)

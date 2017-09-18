@@ -9,7 +9,7 @@ function [] = applyAmplitudeDistribution(obj)
 % Date   :  30-Nov-2015 20:09:01
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 if obj.bApplyAmplitudeDistr
     showMsg(obj, 'Applying desired Amplitude Distribution');

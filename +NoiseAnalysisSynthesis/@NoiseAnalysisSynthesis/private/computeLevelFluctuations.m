@@ -9,7 +9,7 @@ function [] = computeLevelFluctuations(obj)
 % Date   :  30-Nov-2015 20:02:30
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 modFrameShift = obj.ModulationParams.Frameshift;

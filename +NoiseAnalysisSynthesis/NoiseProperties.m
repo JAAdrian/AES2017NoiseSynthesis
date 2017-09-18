@@ -17,11 +17,11 @@ classdef NoiseProperties < matlab.System
 
 
 properties
-    ModulationDepth; % Modulation depth for all freq. bands
+    ModulationDepth;  % Modulation depth for all freq. bands
     MarkovTransition; % Transition matrix for the modulation modeling
     MarkovStateBoundaries; % Markov state boundaries in dB
     
-    GammaBands; % Inter-band correlation matrix
+    BandCorrelation; % Inter-band correlation matrix
     
     MeanPsd; % PSD vector
     

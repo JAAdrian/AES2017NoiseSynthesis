@@ -77,6 +77,8 @@ methods
     % CLASS CONSTRUCTOR
     function obj = ControlCenter(signal, sampleRate)
         obj.ModelParameters = NoiseAnalysisSynthesis.ModelParameters();
+        obj.NoiseProperties = NoiseAnalysisSynthesis.NoiseProperties();
+        
         obj.ErrorMeasures   = NoiseAnalysisSynthesis.ErrorMeasures();
         
         obj.AnalysisEngine  = NoiseAnalysisSynthesis.Modules.NoiseAnalysis(); 
@@ -125,7 +127,7 @@ methods
         obj.AnalysisEngine.DoDeClick = obj.DoDeClick;
         obj.AnalysisEngine.Verbose = obj.Verbose;
         
-        obj.AnalysisEngine.step();
+        obj.NoiseProperties = obj.AnalysisEngine.step();
     end
     
     

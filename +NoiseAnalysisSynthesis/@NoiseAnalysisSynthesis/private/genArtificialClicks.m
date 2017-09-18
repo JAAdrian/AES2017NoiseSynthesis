@@ -9,7 +9,7 @@ function [mClickSTFT] = genArtificialClicks(obj)
 % Date   :  30-Nov-2015 20:21:05
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 mClickSTFT = STFT(...
     genclickmarkov(obj),...

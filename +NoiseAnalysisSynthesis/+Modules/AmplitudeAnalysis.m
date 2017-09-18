@@ -80,7 +80,7 @@ classdef AmplitudeAnalysis < matlab.System
                     % source for piecewise Pareto:
                     % http://de.mathworks.com/help/stats/fit-a-nonparametric-distribution-with-pareto-tails.html
                     
-                    import NoiseAnalysisSynthesis.external.*
+                    import NoiseAnalysisSynthesis.External.*
                     
                     numPoints = 1000;
                     

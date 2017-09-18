@@ -21,7 +21,7 @@ function [SensorSignalsOut] = synthesize(obj)
 % Date   :  02-Dec-2015 16:22:42
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 if ...

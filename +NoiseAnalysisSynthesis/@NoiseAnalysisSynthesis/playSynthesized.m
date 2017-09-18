@@ -23,7 +23,7 @@ function [] = playSynthesized(obj, leveldB, isStereo)
 % Date   :  02-Dec-2015 16:27:12
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 if nargin < 3 || isempty(leveldB)

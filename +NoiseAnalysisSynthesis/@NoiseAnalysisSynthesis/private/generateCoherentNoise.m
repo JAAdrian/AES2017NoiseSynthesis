@@ -9,7 +9,7 @@ function [] = generateCoherentNoise(obj)
 % Date   :  30-Nov-2015 20:11:52
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 showMsg(obj,'Synthesizing Sensor Signals');

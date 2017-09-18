@@ -29,7 +29,7 @@ function [varargout] = ModulationSpectrogram(vSignal,vWin,overlap,nfft,fs,szPlot
 % Date   :  08-Oct-2014 12:04:46
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 if nargin < 6 || isempty(szPlotScaleMode),
     szPlotScaleMode = 'lin';

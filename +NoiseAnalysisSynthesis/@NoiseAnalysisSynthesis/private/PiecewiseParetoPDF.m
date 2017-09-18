@@ -9,7 +9,7 @@ function [vPDF, vQuantiles] = PiecewiseParetoPDF(obj,numPoints)
 % Date   :  30-Nov-2015 20:23:13
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 vQuantiles = linspace(...

@@ -65,7 +65,7 @@ end
 
 methods (Access = protected)
 	function [] = setupImpl(obj, stftSignal)
-        import NoiseAnalysisSynthesis.external.*
+        import NoiseAnalysisSynthesis.External.*
         
         [obj.NumBins, obj.LenLevelCurves] = size(stftSignal);
         
@@ -87,7 +87,7 @@ methods (Access = protected)
     end
     
     function [] = computeLevelFluctuations(obj)
-        import NoiseAnalysisSynthesis.external.*
+        import NoiseAnalysisSynthesis.External.*
         
         modulationFrameShift = obj.ModulationParameters.Frameshift;
         
@@ -124,7 +124,7 @@ methods (Access = protected)
     end
     
     function [] = analyzeCorrelationBands(obj)
-        import NoiseAnalysisSynthesis.external.*
+        import NoiseAnalysisSynthesis.External.*
         
         obj.GammaBands = computeBandCorrelation(obj.LevelFluctuationCurves);
     end

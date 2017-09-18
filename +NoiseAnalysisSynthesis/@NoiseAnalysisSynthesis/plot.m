@@ -18,7 +18,7 @@ function [] = plot(obj)
 % Date   :  02-Dec-2015 16:32:13
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 caNPoints   = {'npoints', 1e3};

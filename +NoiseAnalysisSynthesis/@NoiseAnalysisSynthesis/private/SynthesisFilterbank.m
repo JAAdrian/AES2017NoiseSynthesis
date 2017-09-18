@@ -9,7 +9,7 @@ function [timeSignal] = SynthesisFilterbank(obj)
 % Date   :  30-Nov-2015 19:55:38
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 timeSignal = ISTFT(...

@@ -19,7 +19,7 @@ function [] = analyze(obj)
 % Date   :  02-Dec-2015 16:22:02
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 % make sure to use the desired parameters for the modulations
 updateModulationParameters(obj);

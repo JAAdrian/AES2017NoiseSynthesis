@@ -9,7 +9,7 @@ function [] = mixNoiseAndClicks(obj)
 % Date   :  30-Nov-2015 20:10:16
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 if obj.ModelParameters.bApplyClicks,

@@ -9,7 +9,7 @@ function [] = applyModulations(obj)
 % Date   :  30-Nov-2015 20:07:21
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 for aaSignal = 1:obj.NumSensorSignals

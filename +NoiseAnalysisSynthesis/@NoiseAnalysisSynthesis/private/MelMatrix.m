@@ -11,7 +11,7 @@ function [mTransformation] = MelMatrix(obj)
 % Date   :  30-Nov-2015 19:59:34
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 freq = linspace(0, obj.SampleRate/2, obj.NumBins);

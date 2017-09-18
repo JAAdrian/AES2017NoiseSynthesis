@@ -18,7 +18,7 @@ function [] = playAnalyzed(obj, leveldB)
 % Date   :  02-Dec-2015 16:26:37
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 if nargin < 2 || isempty(leveldB)

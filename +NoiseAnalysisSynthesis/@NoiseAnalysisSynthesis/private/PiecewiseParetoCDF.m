@@ -9,7 +9,7 @@ function [cdf, quantiles] = PiecewiseParetoCDF(obj, numPoints)
 % Date   :  30-Nov-2015 20:22:39
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 quantiles = linspace(...

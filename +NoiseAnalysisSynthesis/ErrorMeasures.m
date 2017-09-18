@@ -272,7 +272,7 @@ classdef ErrorMeasures < handle
         end
         
         function [error] = computeModulationError(obj)
-            import NoiseSynthesis.external.*
+            import NoiseSynthesis.External.*
             
             obj.BlocklenSec  = 15e-3;
             obj.OverlapRatio = 0.8;

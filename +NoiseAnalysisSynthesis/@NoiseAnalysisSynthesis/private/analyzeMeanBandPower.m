@@ -9,7 +9,7 @@ function [] = analyzeMeanBandPower(obj)
 % Date   :  30-Nov-2015 20:04:56
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 % compute the MS (mean square), i.e. the average power in the

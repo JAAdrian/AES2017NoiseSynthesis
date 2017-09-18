@@ -9,7 +9,7 @@ function [] = DeClickAnalysisSignal(obj)
 % Date   :  30-Nov-2015 19:53:04
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 threshDeClick = 0.15;
 

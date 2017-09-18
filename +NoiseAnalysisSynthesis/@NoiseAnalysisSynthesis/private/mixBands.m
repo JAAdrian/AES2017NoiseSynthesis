@@ -9,7 +9,7 @@ function [] = mixBands(obj)
 % Date   :  30-Nov-2015 20:16:46
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 mMixingMatrixBands = computeBandMixingMatrix(obj.ModelParameters.GammaBands);
 

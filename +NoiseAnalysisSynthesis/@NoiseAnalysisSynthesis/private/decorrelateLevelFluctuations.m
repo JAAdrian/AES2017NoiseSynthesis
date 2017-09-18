@@ -9,7 +9,7 @@ function [] = decorrelateLevelFluctuations(obj)
 % Date   :  30-Nov-2015 20:06:18
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 % compute nonparametric location parameter -> median
 vMedians = median(obj.mLevelCurves, 1);

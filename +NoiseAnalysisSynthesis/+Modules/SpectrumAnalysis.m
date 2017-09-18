@@ -48,7 +48,7 @@ end
 
 methods (Access = protected)
     function [] = setupImpl(obj)
-        obj.FrequencyBands = NoiseAnalysisSynthesis.external.STFT(...
+        obj.FrequencyBands = NoiseAnalysisSynthesis.External.STFT(...
             obj.Signal,...
             obj.StftParameters...
             );
@@ -57,7 +57,7 @@ methods (Access = protected)
     end
     
     function [meanPsd] = stepImpl(obj)
-        import NoiseAnalysisSynthesis.external.*
+        import NoiseAnalysisSynthesis.External.*
         
         % compute the MS (mean square), i.e. the average power in the
         % current band
@@ -103,16 +103,16 @@ methods (Access = protected)
     
     
     function [powersSmooth] = smoothSpectrum(obj, powers, nfft)
-        import NoiseAnalysisSynthesis.external.spectralsmoothing.*
+        import NoiseAnalysisSynthesis.External.SpectralSmoothing.*
         
         smoother.fs   = obj.SampleRate;       % sampling rate
         smoother.type = 'fractional-octave';  % type of spectral smoothing
-        % . 'fractional-octave' or
-        % . 'fixed-bandwidth'
-        
+                                              % . 'fractional-octave' or
+                                              % . 'fixed-bandwidth'
+
         smoother.bandwidth = 1;  % bandwidth
-        % . in octaves for 'fractional-octave'
-        % . in Hz for 'fixed-bandwidth'
+                                 % . in octaves for 'fractional-octave'
+                                 % . in Hz for 'fixed-bandwidth'
         
         smoother.L_FFT = nfft; % length of the DFT
         

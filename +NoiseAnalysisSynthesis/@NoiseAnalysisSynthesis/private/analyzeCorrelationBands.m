@@ -9,7 +9,7 @@ function [] = analyzeCorrelationBands(obj)
 % Date   :  30-Nov-2015 20:05:47
 %
 
-import NoiseSynthesis.external.*
+import NoiseSynthesis.External.*
 
 
 obj.ModelParameters.GammaBands = computeBandCorrelation(obj.mLevelCurves);

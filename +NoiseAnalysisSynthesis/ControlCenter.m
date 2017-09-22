@@ -27,7 +27,7 @@ classdef ControlCenter < matlab.System
 properties (Access = public, Nontunable)
     SampleRate = 44.1e3; % Sampling rate in Hz [default: 44.1kHz]
     
-    DesiredSignalLenSamples = 44100; % Desired synthesis length in samples [default: 1sec -> 44100]
+    DesiredLengthSignalSamples = 44100; % Desired synthesis length in samples [default: 1sec -> 44100]
 end
 
 properties (Access = public, Logical, Nontunable)
@@ -109,7 +109,7 @@ methods
             signal = signal - mean(signal);
             obj.SampleRate = sampleRate;
             
-            obj.DesiredSignalLenSamples = length(signal);
+            obj.DesiredLengthSignalSamples = length(signal);
             
             % Check if FFT size is OK based on sample rate
             stftParameters = obj.setupStftParameters();
@@ -120,6 +120,7 @@ methods
             obj.AnalysisEngine.SampleRate      = sampleRate;
             obj.AnalysisEngine.StftParameters  = stftParameters;
             obj.AnalysisEngine.ModelParameters = obj.ModelParameters;
+            obj.AnalysisEngine.DesiredLengthSignalSamples = obj.DesiredLengthSignalSamples;
         end
     end
     
@@ -144,7 +145,7 @@ methods
 %     end
 %     
 %     function [nb] = get.NumBlocks(obj)
-%         nb = computeNumberOfBlocks(obj.StftParameters, obj.DesiredSignalLenSamples);
+%         nb = computeNumberOfBlocks(obj.StftParameters, obj.DesiredLengthSignalSamples);
 %     end
 %     
 %     function [nb] = get.LenLevelCurve(obj)
@@ -159,21 +160,21 @@ methods
 %     function [len] = get.LenSignalPlotAudio(obj)
 %         if ~isempty(obj.AnalysisSignal)
 %             len = min(...
-%                 obj.DesiredSignalLenSamples, ...
-%                 min(length(obj.AnalysisSignal), obj.DesiredSignalLenSamples) ...
+%                 obj.DesiredLengthSignalSamples, ...
+%                 min(length(obj.AnalysisSignal), obj.DesiredLengthSignalSamples) ...
 %                 );
 %         else
-%             len = obj.DesiredSignalLenSamples;
+%             len = obj.DesiredLengthSignalSamples;
 %         end
 %     end
 %     
-%     function [] = set.DesiredSignalLenSamples(obj, lenSamples)
+%     function [] = set.DesiredLengthSignalSamples(obj, lenSamples)
 %         validateattributes(...
 %             lenSamples, ...
 %             {'numeric'}, ...
 %             {'nonzero', 'nonnegative'});
 %         
-%         obj.DesiredSignalLenSamples = lenSamples;
+%         obj.DesiredLengthSignalSamples = lenSamples;
 %         
 %         obj.StftParameters.OriginalSignalLength = lenSamples;
 %     end
@@ -251,7 +252,7 @@ methods (Access = protected)
             obj.SampleRate, ...
             'synthesis' ...
             );
-        stftParameters.OriginalSignalLength = obj.DesiredSignalLenSamples;
+        stftParameters.OriginalSignalLength = obj.DesiredLengthSignalSamples;
     end
 end
 

@@ -19,9 +19,12 @@ classdef ModulationAnalysis < matlab.System
 %
 
 
+
 properties (Access = public)
 	Signal;
     SampleRate;
+    
+    NumBlocks;
     
     ModulationParameters;
     ModelParameters;
@@ -37,8 +40,6 @@ end
 
 properties (SetAccess = protected, GetAccess = public)
     NumBins;
-    LenLevelCurves;
-    NumBlocks;
     
     MelBands;
 	LevelFluctuationCurves;
@@ -48,6 +49,8 @@ end
 
 
 properties (Access = protected)
+    LenLevelCurves;
+    
     MarkovAnalyzer;
 	MelMatrix;
 end
@@ -100,7 +103,7 @@ methods (Access = protected)
         idxNormalize = ...
             round(0.05 * obj.NumBlocks) : round(0.95 * obj.NumBlocks);
         
-        obj.LevelFluctuationCurves = zeros(obj.LenLevelCurves, obj.NumBands);
+        obj.LevelFluctuationCurves = zeros(obj.LenLevelCurves, obj.NumModulationBands);
         for iBand = 1:obj.NumModulationBands
             currBandSignal = obj.MelBands(iBand,:).';
             currBandSignal = currBandSignal / rmsvec(currBandSignal(idxNormalize));
@@ -111,7 +114,7 @@ methods (Access = protected)
                 ]; %#ok<AGROW>
             
             idxBlock = 1:obj.ModulationParameters.Blocklen;
-            for jBlock = 1:obj.LenLevelCurve
+            for jBlock = 1:obj.LenLevelCurves
                 % get RMS
                 obj.LevelFluctuationCurves(jBlock,iBand) = rmsvec(currBandSignal(idxBlock));
                 
@@ -132,7 +135,8 @@ methods (Access = protected)
     end
     
     function [] = analyzeMarkovTransitions(obj)
-        obj.MarkovAnalyzer(obj.LevelFluctuationCurves);
+        obj.MarkovAnalyzer.LevelFluctuationCurves = obj.LevelFluctuationCurves;
+        obj.MarkovAnalyzer();
     end
 end
 

@@ -27,6 +27,8 @@ end
 properties (Access = public)
     Signal; % Analysis signal (HP filtered and zero-mean)
     
+    DesiredLengthSignalSamples;
+    
     ModelParameters;
     NoiseProperties;
     StftParameters;
@@ -47,12 +49,8 @@ properties (Nontunable)
 	NumModulationBands; % Number of modulation bands [default: 16]
 end
 
-properties (Dependent)
-end
-
 properties (Logical, Hidden, Nontunable)
 	DoHpFilterAnalysis = true;  % Bool whether to apply the HP filter before analysis
-    Verbose = false;
 end
 
 properties(Nontunable, Logical)
@@ -64,7 +62,7 @@ end
 properties (Access = protected)
     CutOffHP;
     
-    ModulationParamters;
+    ModulationParameters;
 end
 
 
@@ -73,6 +71,8 @@ methods
 	function [obj] = NoiseAnalysis(varargin)
         obj.NumModulationBands = 16;
         obj.CutOffHP = 100;
+        
+        obj.DesiredLengthSignalSamples = 44.1e3;
         
         obj.NoiseProperties = NoiseAnalysisSynthesis.NoiseProperties();
         
@@ -85,27 +85,31 @@ methods
         
 		obj.setProperties(nargin, varargin{:})
     end
-	
-% 	function [ns] = get.NumStates(obj)
-%         ns = size(obj.ModelParameters.MarkovStateBoundaries, 1);
-%     end
 end
 
 methods (Access = protected)
     function [] = setupImpl(obj)
+        obj.ModulationParameters = NoiseAnalysisSynthesis.STFTparams(...
+            obj.ModelParameters.ModulationWinLen,...
+            0,...
+            obj.StftParameters.FrameRate ...
+            );
+        
         obj.SpectrumAnalyzer.Signal          = obj.Signal;
         obj.SpectrumAnalyzer.SampleRate      = obj.SampleRate;
         obj.SpectrumAnalyzer.StftParameters  = obj.StftParameters;
         obj.SpectrumAnalyzer.ModelParameters = obj.ModelParameters;
-        
-        obj.updateModulationParameters();
+        obj.SpectrumAnalyzer.Verbose         = obj.Verbose;
         
         obj.ModulationAnalyzer.Signal               = obj.Signal;
         obj.ModulationAnalyzer.SampleRate           = obj.SampleRate;
         obj.ModulationAnalyzer.NumModulationBands   = obj.NumModulationBands;
-        obj.ModulationAnalyzer.ModulationParameters = obj.ModulationParamters;
+        obj.ModulationAnalyzer.ModulationParameters = obj.ModulationParameters;
         obj.ModulationAnalyzer.ModelParameters      = obj.ModelParameters;
         obj.ModulationAnalyzer.ModNormFun           = obj.MOD_NORM_FUN;
+        obj.ModulationAnalyzer.NumBlocks = ...
+            obj.StftParameters.computeNumberOfBlocks(obj.DesiredLengthSignalSamples);
+        obj.ModulationAnalyzer.Verbose              = obj.Verbose;
         
         obj.ClickAnalyzer.SampleRate = obj.SampleRate;
         obj.ClickAnalyzer.Signal     = obj.Signal;
@@ -157,16 +161,6 @@ methods (Access = protected)
         if nargout
             noiseProperties = obj.NoiseProperties;
         end
-    end
-    
-    
-    
-    function [] = updateModulationParameters(obj)
-        obj.ModulationParamters = NoiseAnalysisSynthesis.STFTparams(...
-            obj.ModelParameters.ModulationWinLen,...
-            0,...
-            obj.StftParameters.FrameRate ...
-            );
     end
 end
 

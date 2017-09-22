@@ -49,9 +49,6 @@ properties (Logical)
     DoEstimateClickSpec = true;
 end
 
-properties (Hidden, Logical, Nontunable)
-    Verbose;
-end
 
 
 

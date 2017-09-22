@@ -37,6 +37,10 @@ properties (Access = public)
     ClickAnalyzer;
 end
 
+properties (Logical, Nontunable)
+    Verbose;
+end
+
 properties (Nontunable)
     SampleRate;
     
@@ -76,6 +80,8 @@ methods
         obj.AmplitudeAnalyzer  = NoiseAnalysisSynthesis.Modules.AmplitudeAnalysis();
         obj.ModulationAnalyzer = NoiseAnalysisSynthesis.Modules.ModulationAnalysis();
         obj.ClickAnalyzer      = NoiseAnalysisSynthesis.Modules.ClickAnalysis();
+        
+        obj.Verbose = false;
         
 		obj.setProperties(nargin, varargin{:})
     end

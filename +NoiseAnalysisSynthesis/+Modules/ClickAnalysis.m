@@ -27,6 +27,10 @@ properties (Access = public)
     ThreshDeClick;
 end
 
+properties (Logical, Nontunable)
+    Verbose;
+end
+
 properties (SetAccess = protected)
     LowerEdgeClick;
     UpperEdgeClick;

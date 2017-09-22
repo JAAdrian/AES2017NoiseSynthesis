@@ -23,6 +23,10 @@ classdef AmplitudeAnalysis < matlab.System
         AmplitudeModel;
     end
     
+    properties (Logical, Nontunable)
+    Verbose;
+end
+    
     properties (SetAccess = protected)
         Parameters;
     end
@@ -44,6 +48,8 @@ classdef AmplitudeAnalysis < matlab.System
         function [obj] = AmplitudeAnalysis(varargin)
             obj.AmplitudeModel = 'Pareto';
             obj.Percentiles    = [0, 100];
+            
+            obj.Verbose = false;
             
             obj.setProperties(nargin, varargin{:})
         end

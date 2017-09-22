@@ -29,6 +29,9 @@ properties (Access = public)
     MaxMarkovRmsLevel;
 end
 
+properties (Logical, Nontunable)
+    Verbose;
+end
 
 properties (SetAccess = protected, GetAccess = public)
     MarkovTransition;
@@ -46,6 +49,8 @@ end
 
 methods
     function [obj] = MarkovAnalysis(varargin)
+        obj.Verbose = false;
+        
         obj.setProperties(nargin, varargin{:})
     end
 end

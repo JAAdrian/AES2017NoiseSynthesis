@@ -31,8 +31,8 @@ properties (Access = public)
     ModNormFun;
 end
 
-properties (Dependent)
-    
+properties (Logical, Nontunable)
+    Verbose;
 end
 
 properties (SetAccess = protected, GetAccess = public)
@@ -57,6 +57,8 @@ end
 methods
 	function [obj] = ModulationAnalysis(varargin)
         obj.MarkovAnalyzer = NoiseAnalysisSynthesis.Modules.MarkovAnalysis();
+        
+        obj.Verbose = false;
         
 		obj.setProperties(nargin, varargin{:})
 	end

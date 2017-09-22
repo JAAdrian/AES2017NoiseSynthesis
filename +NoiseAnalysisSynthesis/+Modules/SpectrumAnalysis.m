@@ -33,6 +33,10 @@ properties (Access = public)
     ModelParameters;
 end
 
+properties (Logical, Nontunable)
+    Verbose;
+end
+
 properties (SetAccess = protected)
     FrequencyBands;
 end
@@ -41,6 +45,8 @@ end
 
 methods
     function [obj] = SpectrumAnalysis(varargin)
+        obj.Verbose = false;
+        
         obj.setProperties(nargin, varargin{:})
     end
 end

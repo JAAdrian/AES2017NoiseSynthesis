@@ -18,12 +18,13 @@ classdef MarkovAnalysis < matlab.System
 % History:  v0.1.0   initial version, 09-Sep-2017 (JA)
 %
     
-    
+
+
 properties (Access = public)
     LevelFluctuationCurves;
     ModelParameters;
     
-    GammaBands;
+    BandCorrelationMatrix;
     
     StateBoundaries;
     MaxMarkovRmsLevel;
@@ -43,7 +44,9 @@ properties (Access = protected)
 end
 
 properties (Access = protected, Dependent)
+    NumBands;
     LenLevelCurve;
+    NumStates;
 end
 
 
@@ -53,10 +56,26 @@ methods
         
         obj.setProperties(nargin, varargin{:})
     end
+    
+    function [len] = get.LenLevelCurve(obj)
+        len = size(obj.LevelFluctuationCurves, 1);
+    end
+    
+    function [numBands] = get.NumBands(obj)
+        numBands = size(obj.LevelFluctuationCurves, 2);
+    end
+    
+    function [numStates] = get.NumStates(obj)
+        numStates = size(obj.StateBoundaries, 1);
+    end
 end
 
 
 methods (Access = protected)
+    function [] = setupImpl(obj)
+        obj.updateMarkovParameters(-12, 12);
+    end
+    
     function [] = stepImpl(obj)
         obj.decorrelateLevelFluctuations();
         
@@ -67,24 +86,24 @@ methods (Access = protected)
         
         idxDefaultState = find(obj.StateBoundaries >= 0, 1, 'first');
         
-        obj.MarkovTransition = cell(obj.NumBands,1);
+        obj.MarkovTransition = cell(obj.NumBands, 1);
         for iBand = 1:obj.NumBands
-            currLevels = 20*log10(obj.LevelFluctuationCurvesDecorr(:, iBand));
+            thisBand = 20*log10(obj.LevelFluctuationCurvesDecorr(:, iBand));
             
             % prevent dead paths and transients in the transition matrix
-            obj.MarkovTransition{iBand} = zeros(obj.numStates);
+            obj.MarkovTransition{iBand} = zeros(obj.NumStates);
             obj.MarkovTransition{iBand}(...
                 [1:idxDefaultState-1, idxDefaultState+1:end], idxDefaultState) = 1;
             obj.MarkovTransition{iBand}(idxDefaultState, idxDefaultState+1) = 1;
             for jState = 1:obj.NumStates
                 % index of samples in the current state
-                idxCurrState = find(...
-                    currLevels >= obj.StateBoundaries(jState, 1) & ...
-                    currLevels <  obj.StateBoundaries(jState, 2)...
+                idxThisState = find(...
+                    thisBand >= obj.StateBoundaries(jState, 1) & ...
+                    thisBand <  obj.StateBoundaries(jState, 2)...
                     );
                 
                 % index of the following samples
-                idxFollowingEmission = idxCurrState + 1;
+                idxFollowingEmission = idxThisState + 1;
                 % compensate for indices greater than the total length
                 % of the level curve
                 idxFollowingEmission(idxFollowingEmission > obj.LenLevelCurve) = [];
@@ -95,9 +114,9 @@ methods (Access = protected)
                 numSamplesToThisFollowing = zeros(obj.NumStates, 1);
                 for kFollowingState = 1:obj.NumStates
                     changedToThisFollowingState = ...
-                        currLevels(idxFollowingEmission)...
+                        thisBand(idxFollowingEmission)...
                         >= obj.StateBoundaries(kFollowingState,1) &...
-                        currLevels(idxFollowingEmission)...
+                        thisBand(idxFollowingEmission)...
                         < obj.StateBoundaries(kFollowingState,2);
                     % count the samples which changed to this next
                     % state
@@ -111,7 +130,7 @@ methods (Access = protected)
                 % -> because every row of the transition matrix sums to
                 %    one.
                 if ...
-                        ~isempty(idxCurrState) && ...
+                        ~isempty(idxThisState) && ...
                         ~isempty(idxFollowingEmission) && ...
                         sum(numSamplesToThisFollowing) > 0
                     
@@ -140,14 +159,14 @@ methods (Access = protected)
     
     
     function [] = decorrelateLevelFluctuations(obj)
-        import NoiseSynthesis.External.*
+        import NoiseAnalysisSynthesis.External.*
         
         % compute nonparametric location parameter -> median
         medianValues = median(obj.LevelFluctuationCurves, 1);
         
         % get the mixing matrix based on the inter-band correlation
         mixingMatrix = computeBandMixingMatrix(...
-            obj.GammaBands ...
+            obj.BandCorrelationMatrix ...
             );
         
         % initialize the decorrelated bands
@@ -188,12 +207,12 @@ methods (Access = protected)
         obj.LevelFluctuationCurvesDecorr(idxOutOfRange) = abs(obj.LevelFluctuationCurvesDecorr(idxOutOfRange)) + 1;
     end
     
-    function [] = updateMarkovParameters(obj)
-        obj.MaxMarkovRmsLevel = maxVal;
+    function [] = updateMarkovParameters(obj, minValDb, maxValDb)
+        obj.MaxMarkovRmsLevel = maxValDb;
         
         centralPart = -3:3;
-        lowerPart   = [minVal, (minVal + centralPart(1))/2];
-        upperPart   = [(maxVal + centralPart(end))/2, maxVal];
+        lowerPart   = [minValDb, (minValDb + centralPart(1))/2];
+        upperPart   = [(maxValDb + centralPart(end))/2, maxValDb];
         
         obj.StateBoundaries = [lowerPart, centralPart, upperPart].';
         

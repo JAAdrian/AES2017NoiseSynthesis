@@ -1,4 +1,4 @@
-function [mMixingMatrix] = computeBandMixingMatrix(mGamma)
+function [mixingMatrix] = computeBandMixingMatrix(correlationMatrix)
 %COMPUTEBANDMIXINGMATRIX Compute mixing matrix for freq. bands
 % -------------------------------------------------------------------------
 % Computes the mixing matrix to introduce comodulation using eigenvalues
@@ -18,8 +18,8 @@ function [mMixingMatrix] = computeBandMixingMatrix(mGamma)
 %
 
 
-[mEigVecs,mEigVals] = eig(mGamma);
-mMixingMatrix       = (sign(mEigVals) .* sqrt(abs(mEigVals))) * mEigVecs';
+[eigenVectors, eigenvalues] = eig(correlationMatrix);
+mixingMatrix = (sign(eigenvalues) .* sqrt(abs(eigenvalues))) * eigenVectors';
 
 
 

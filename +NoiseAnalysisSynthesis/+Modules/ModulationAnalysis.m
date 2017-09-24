@@ -44,7 +44,10 @@ properties (SetAccess = protected, GetAccess = public)
     MelBands;
 	LevelFluctuationCurves;
     ModulationDepth;
-    GammaBands;
+    BandCorrelationMatrix;
+    
+    StateBoundaries;
+    MarkovTransition;
 end
 
 
@@ -131,12 +134,18 @@ methods (Access = protected)
     function [] = analyzeCorrelationBands(obj)
         import NoiseAnalysisSynthesis.External.*
         
-        obj.GammaBands = computeBandCorrelation(obj.LevelFluctuationCurves);
+        obj.BandCorrelationMatrix = computeBandCorrelation(obj.LevelFluctuationCurves);
     end
     
     function [] = analyzeMarkovTransitions(obj)
         obj.MarkovAnalyzer.LevelFluctuationCurves = obj.LevelFluctuationCurves;
+        obj.MarkovAnalyzer.BandCorrelationMatrix  = obj.BandCorrelationMatrix;
+        obj.MarkovAnalyzer.ModelParameters        = obj.ModelParameters;
+        
         obj.MarkovAnalyzer();
+        
+        obj.StateBoundaries  = obj.MarkovAnalyzer.StateBoundaries;
+        obj.MarkovTransition = obj.MarkovAnalyzer.MarkovTransition;
     end
 end
 

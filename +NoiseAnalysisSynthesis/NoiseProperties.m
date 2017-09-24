@@ -21,7 +21,7 @@ properties
     MarkovTransition; % Transition matrix for the modulation modeling
     MarkovStateBoundaries; % Markov state boundaries in dB
     
-    BandCorrelation; % Inter-band correlation matrix
+    BandCorrelationMatrix; % Inter-band correlation matrix
     
     MeanPsd; % PSD vector
     

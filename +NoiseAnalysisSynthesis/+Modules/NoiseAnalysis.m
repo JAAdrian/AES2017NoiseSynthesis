@@ -153,9 +153,9 @@ methods (Access = protected)
         NoiseAnalysisSynthesis.External.showMsg(obj.Verbose, 'Analyzing Modulations');
         obj.ModulationAnalyzer(obj.SpectrumAnalyzer.FrequencyBands);
         
-        obj.NoiseProperties.BandCorrelation       = obj.ModulationAnalyzer.BandCorrelation;
+        obj.NoiseProperties.BandCorrelationMatrix = obj.ModulationAnalyzer.BandCorrelationMatrix;
         obj.NoiseProperties.ModulationDepth       = obj.ModulationAnalyzer.ModulationDepth;
-        obj.NoiseProperties.MarkovStateBoundaries = obj.ModulationAnalyzer.MarkoveStateBoundaries;
+        obj.NoiseProperties.MarkovStateBoundaries = obj.ModulationAnalyzer.StateBoundaries;
         obj.NoiseProperties.MarkovTransition      = obj.ModulationAnalyzer.MarkovTransition;
         
         if nargout

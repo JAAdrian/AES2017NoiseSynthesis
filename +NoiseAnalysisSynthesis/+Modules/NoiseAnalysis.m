@@ -75,6 +75,7 @@ methods
         obj.DesiredLengthSignalSamples = 44.1e3;
         
         obj.NoiseProperties = NoiseAnalysisSynthesis.NoiseProperties();
+        obj.ModelParameters = NoiseAnalysisSynthesis.ModelParameters();
         
         obj.SpectrumAnalyzer   = NoiseAnalysisSynthesis.Modules.SpectrumAnalysis();
         obj.AmplitudeAnalyzer  = NoiseAnalysisSynthesis.Modules.AmplitudeAnalysis();

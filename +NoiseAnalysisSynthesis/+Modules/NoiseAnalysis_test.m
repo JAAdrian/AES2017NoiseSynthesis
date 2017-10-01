@@ -31,7 +31,6 @@ data = load('handel');
 module = NoiseAnalysisSynthesis.Modules.NoiseAnalysis();
 module.SampleRate = data.Fs;
 module.Signal = data.y;
-module.ModelParameters = NoiseAnalysisSynthesis.ModelParameters();
 module.StftParameters = NoiseAnalysisSynthesis.STFTparams(256/data.Fs, 0.5, data.Fs, 'synthesis');
 module.DesiredLengthSignalSamples = length(data.y);
 

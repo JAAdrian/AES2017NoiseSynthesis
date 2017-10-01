@@ -41,7 +41,7 @@ properties (Transient, Hidden)
     ModulationSpeedSet = matlab.system.StringSet({'Slow', 'Fast'});
     
     % Possible values for the desired spatial coherence model
-    CohereModelSet = matlab.system.StringSet({...
+    CoherenceModelSet = matlab.system.StringSet({...
         'Cylindrical', ...
         'Spherical', ...
         'Anisotropic', ...
@@ -66,7 +66,7 @@ properties (Access = public)
     
     AmplitudeModel = 'Pareto'; % Method to model the amplitude distribution
     
-    CohereModel = 'Cylindrical'; % Spatial coherence model
+    CoherenceModel = 'Cylindrical'; % Spatial coherence model
     % Sensor position(s) in meters
     SensorPositions = [
         0,  0.17

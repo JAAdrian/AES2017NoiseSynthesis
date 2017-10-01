@@ -70,22 +70,27 @@ methods
         end
     end
 	
-	function CohereFun = get.CohereFun(obj)
-        switch lower(obj.ModelParameters.CohereModel)
+	function [CohereFun] = get.CohereFun(obj)
+        switch lower(obj.ModelParameters.CoherenceModel)
             case 'cylindrical'
                 % zeroth order bessel of first kind
                 CohereFun = @(freq, dist, theta, vPSD) besselj(0, 2*pi * freq * dist / obj.SoundVelocity);
+                
             case 'spherical'
                 CohereFun = @(freq, dist, theta, vPSD) sinc(2 * freq * dist / obj.SoundVelocity);
+                
             case 'anisotropic'
                 CohereFun = @(freq, dist, theta, vPSD) anisotropicCoherence(obj, freq, dist, theta, vPSD);
+                
             case 'binaural2d'
                 CohereFun = @(freq, dist, theta, vPSD) binaural2d(obj, dist, freq);
+                
             case 'binaural3d'
                 CohereFun = @(freq, dist, theta, vPSD) binaural3d(obj, dist, freq);
+                
             otherwise
                 warning(sprintf('Coherence model not recognized. Switched to default (''%s'')...',...
-                    obj.ModelParameters.CohereModel)); %#ok<SPWRN>
+                    obj.ModelParameters.CoherenceModel)); %#ok<SPWRN>
         end
     end
 end

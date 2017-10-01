@@ -29,7 +29,7 @@ properties (Access = public)
     ModulationParameters;
     ModelParameters;
     
-    NumModulationBands;
+    NumFrequencyBands;
     
     ModNormFun;
 end
@@ -78,7 +78,7 @@ methods (Access = protected)
         [obj.NumBins, obj.LenLevelCurves] = size(stftSignal);
         
         freq = linspace(0, obj.SampleRate/2, obj.NumBins);
-        obj.MelMatrix = melfilter(obj.NumModulationBands, freq);
+        obj.MelMatrix = melfilter(obj.NumFrequencyBands, freq);
     end
 
 	function [] = stepImpl(obj, stftSignal)
@@ -106,8 +106,8 @@ methods (Access = protected)
         idxNormalize = ...
             round(0.05 * obj.NumBlocks) : round(0.95 * obj.NumBlocks);
         
-        obj.LevelFluctuationCurves = zeros(obj.LenLevelCurves, obj.NumModulationBands);
-        for iBand = 1:obj.NumModulationBands
+        obj.LevelFluctuationCurves = zeros(obj.LenLevelCurves, obj.NumFrequencyBands);
+        for iBand = 1:obj.NumFrequencyBands
             currBandSignal = obj.MelBands(iBand,:).';
             currBandSignal = currBandSignal / rmsvec(currBandSignal(idxNormalize));
             

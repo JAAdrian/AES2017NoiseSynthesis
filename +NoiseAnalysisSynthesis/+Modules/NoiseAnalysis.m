@@ -46,7 +46,7 @@ end
 properties (Nontunable)
     SampleRate;
     
-	NumModulationBands; % Number of modulation bands [default: 16]
+	NumFrequencyBands; % Number of modulation bands [default: 16]
 end
 
 properties (Logical, Hidden, Nontunable)
@@ -69,7 +69,7 @@ end
 
 methods
 	function [obj] = NoiseAnalysis(varargin)
-        obj.NumModulationBands = 16;
+        obj.NumFrequencyBands = 16;
         obj.CutOffHP = 100;
         
         obj.DesiredLengthSignalSamples = 44.1e3;
@@ -103,7 +103,7 @@ methods (Access = protected)
         
         obj.ModulationAnalyzer.Signal               = obj.Signal;
         obj.ModulationAnalyzer.SampleRate           = obj.SampleRate;
-        obj.ModulationAnalyzer.NumModulationBands   = obj.NumModulationBands;
+        obj.ModulationAnalyzer.NumFrequencyBands    = obj.NumFrequencyBands;
         obj.ModulationAnalyzer.ModulationParameters = obj.ModulationParameters;
         obj.ModulationAnalyzer.ModelParameters      = obj.ModelParameters;
         obj.ModulationAnalyzer.ModNormFun           = obj.MOD_NORM_FUN;

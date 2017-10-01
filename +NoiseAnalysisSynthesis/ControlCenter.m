@@ -131,6 +131,10 @@ methods
         obj.NoiseProperties = obj.AnalysisEngine.step();
     end
     
+    function [noiseBlock] = synthesize(obj)
+        noiseBlock = obj.SynthesisEngine();
+    end
+    
     
 %     function [numSources] = get.NumSources(obj)
 %         numSources = size(obj.ModelParameters.SourcePosition, 2);
@@ -212,13 +216,9 @@ methods (Access = protected)
         end
     end
     
-    function [] = resetImpl(obj)
-        obj.flushParameters();
-    end
-    
-    function [sensorSignalsOut] = stepImpl(obj)
+    function [noiseBlock] = stepImpl(obj)
         if nargout
-            sensorSignalsOut = obj.synthesize();
+            noiseBlock = obj.synthesize();
         else
             obj.synthesize();
         end

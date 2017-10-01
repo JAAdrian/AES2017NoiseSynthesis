@@ -21,17 +21,24 @@ classdef NoiseSynthesis < matlab.System
 
 
 properties (Access = public)
-	ArtificialLevelCurves; % Generated level curves for all bands
+    ModelParameters;
+    NoiseProperties;
 	
 	Theta; % Angles between sources and sensors
-    CohereFun; % Function handle to the desired coherence model
+end
+
+properties (Logical)
+    DoApplySpatialCoherence;
 end
 
 properties (Dependent)
     NumSources; % Number of acoustic sources in the noise field (dependent on size of the sources position matrix)
 end
 
-properties (SetAccess = protected, GetAccess = public)
+properties (SetAccess = protected)
+    ArtificialLevelCurves; % Generated level curves for all bands
+    CohereFun; % Function handle to the desired coherence model
+    
 	SensorSignals = []; % Final sensor signals after synthesis
 	ClickTracks   = {}; % Click track if desired (which is also already added to SensorSignals)
 end
@@ -46,8 +53,8 @@ properties (Access = protected)
 end
 
 properties (SetAccess = protected, Dependent)
-	NumSensorSignals; % Number of desired sensor signals (dependent on size of the sensor position matrix)
-    NumBands; % Number of frequency bands
+	NumSensorSignals;  % Number of desired sensor signals (dependent on size of the sensor position matrix)
+    NumFrequencyBands; % Number of frequency bands
 end
 
 properties (Access = protected, Transient)
@@ -58,6 +65,11 @@ end
 
 methods
 	function [obj] = NoiseSynthesis(varargin)
+        obj.DoApplySpatialCoherence = false;
+        
+        obj.ModelParameters = NoiseAnalysisSynthesis.ModelParameters();
+        obj.NoiseProperties = NoiseAnalysisSynthesis.NoiseProperties();
+        
 		obj.setProperties(nargin, varargin{:})
 	end
 	
@@ -99,6 +111,10 @@ methods (Access = protected)
     function [] = setupImpl(obj)
         % Initialize angles between source(s) and sensor(s)
         obj.Theta = pi/2 * ones(obj.NumSensorSignals);
+    end
+    
+    function [noiseBlock] = stepImpl(obj)
+        
     end
 end
 

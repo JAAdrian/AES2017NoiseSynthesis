@@ -26,13 +26,20 @@ rng(testCase.TestData.seed);
 end
 
 function setup(testCase)
-data = load('handel');
+[signal, sampleRate] = audioread('CHACE.Smpl.1_Noise.wav');
+
+signal = signal(1 : round(2*sampleRate));
 
 module = NoiseAnalysisSynthesis.Modules.NoiseAnalysis();
-module.SampleRate = data.Fs;
-module.Signal = data.y;
-module.StftParameters = NoiseAnalysisSynthesis.STFTparams(256/data.Fs, 0.5, data.Fs, 'synthesis');
-module.DesiredLengthSignalSamples = length(data.y);
+module.SampleRate = sampleRate;
+module.Signal = signal;
+module.StftParameters = NoiseAnalysisSynthesis.STFTparams(...
+    1024 / sampleRate, ...
+    0.5, ...
+    sampleRate, ...
+    'synthesis' ...
+    );
+module.DesiredLengthSignalSamples = round(2 * sampleRate);
 
 testCase.TestData.module = module;
 end

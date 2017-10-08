@@ -94,7 +94,7 @@ methods (Access = protected)
     
     
     function [] = transform2Mel(obj, stftSignal)
-        obj.MelBands = obj.MelMatrix * stftSignal;
+        obj.MelBands = obj.MelMatrix * stftSignal.^2;
     end
     
     function [] = computeLevelFluctuations(obj)

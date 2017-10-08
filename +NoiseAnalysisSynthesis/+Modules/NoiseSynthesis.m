@@ -25,7 +25,13 @@ properties (Access = public)
     NoiseProperties;
     StftParameters;
     
+    DesiredLengthSignalSamples;
+    
     Source2SensorAngle; % Angles between sources and sensors
+end
+
+properties (Nontunable)
+    SampleRate;
 end
 
 properties (Logical, Nontunable)
@@ -73,6 +79,10 @@ methods
     function [obj] = NoiseSynthesis(varargin)
         obj.DoApplySpatialCoherence = false;
         obj.DoApplyModulations      = true;
+        
+        obj.SampleRate = 44.1e3;
+        
+        obj.DesiredLengthSignalSamples = obj.SampleRate;
         
         obj.ModelParameters = NoiseAnalysisSynthesis.ModelParameters();
         obj.NoiseProperties = NoiseAnalysisSynthesis.NoiseProperties();
@@ -126,11 +136,11 @@ end
 methods (Access = protected)
     function [] = setupImpl(obj)
         if ...
-                isempty(obj.ModelParameters.MarkovTransition) && ...
-                isempty(obj.ModelParameters.MarkovStateBoundaries) && ...
-                isempty(obj.ModelParameters.MeanPSD) && ...
-                isempty(obj.ModelParameters.Quantiles) && ...
-                isempty(obj.ModelParameters.CDF)
+                isempty(obj.NoiseProperties.MarkovTransition) && ...
+                isempty(obj.NoiseProperties.MarkovStateBoundaries) && ...
+                isempty(obj.NoiseProperties.MeanPSD) && ...
+                isempty(obj.NoiseProperties.Quantiles) && ...
+                isempty(obj.NoiseProperties.CDF)
             
             error(['The model parameters seem to be unset (flushed?)! ',...
                 'Make sure to provide parameters either by analyzing, ',...
@@ -154,7 +164,6 @@ methods (Access = protected)
         else
             rng('shuffle');
         end
-        
     end
     
     function [noiseBlock] = stepImpl(obj)
@@ -165,6 +174,7 @@ methods (Access = protected)
             if obj.ModelParameters.DoApplyClicks
             end
         else
+            noiseBlock = obj.generateIncoherentNoise();
             
             if obj.ModelParameters.DoApplyClicks
             end
@@ -211,6 +221,8 @@ methods (Access = protected)
             noise = exp(1j * uniformPhaseNoise);
         end
     end
+    
+    
     
 end
 end

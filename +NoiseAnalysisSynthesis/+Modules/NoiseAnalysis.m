@@ -108,8 +108,6 @@ methods (Access = protected)
         obj.ModulationAnalyzer.ModulationParameters = obj.ModulationParameters;
         obj.ModulationAnalyzer.ModelParameters      = obj.ModelParameters;
         obj.ModulationAnalyzer.ModNormFun           = obj.MOD_NORM_FUN;
-        obj.ModulationAnalyzer.NumBlocks = ...
-            obj.StftParameters.computeNumberOfBlocks(obj.DesiredLengthSignalSamples);
         obj.ModulationAnalyzer.Verbose              = obj.Verbose;
         
         obj.ClickAnalyzer.SampleRate = obj.SampleRate;

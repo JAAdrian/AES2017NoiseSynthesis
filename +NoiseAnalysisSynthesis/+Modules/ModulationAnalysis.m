@@ -24,8 +24,6 @@ properties (Access = public)
 	Signal;
     SampleRate;
     
-    NumBlocks;
-    
     ModulationParameters;
     ModelParameters;
     
@@ -38,8 +36,9 @@ properties (Logical, Nontunable)
     Verbose;
 end
 
-properties (SetAccess = protected, GetAccess = public)
+properties (SetAccess = protected)
     NumBins;
+    NumBlocks;
     
     MelBands;
 	LevelFluctuationCurves;
@@ -52,7 +51,7 @@ end
 
 
 properties (Access = protected)
-    LenLevelCurves;
+    LengthLevelCurves;
     
     MarkovAnalyzer;
 	MelMatrix;
@@ -75,7 +74,11 @@ methods (Access = protected)
 	function [] = setupImpl(obj, stftSignal)
         import NoiseAnalysisSynthesis.External.*
         
-        [obj.NumBins, obj.LenLevelCurves] = size(stftSignal);
+        [obj.NumBins, obj.NumBlocks] = size(stftSignal);
+        
+        obj.LengthLevelCurves = ...
+            ceil((obj.NumBlocks - obj.ModulationParameters.Overlap) / ...
+            obj.ModulationParameters.Frameshift);
         
         freq = linspace(0, obj.SampleRate/2, obj.NumBins);
         obj.MelMatrix = melfilter(obj.NumFrequencyBands, freq);
@@ -99,27 +102,18 @@ methods (Access = protected)
         
         modulationFrameShift = obj.ModulationParameters.Frameshift;
         
-        numBlocksPadded = obj.LenLevelCurves*modulationFrameShift + obj.ModulationParameters.Overlap;
+        % don't consider first and last blocks
+        idxNormalize = round(0.05 * obj.NumBlocks) : round(0.95 * obj.NumBlocks);
         
-        remainingBlocks = numBlocksPadded - obj.NumBlocks;
-        
-        idxNormalize = ...
-            round(0.05 * obj.NumBlocks) : round(0.95 * obj.NumBlocks);
-        
-        obj.LevelFluctuationCurves = zeros(obj.LenLevelCurves, obj.NumFrequencyBands);
+        obj.LevelFluctuationCurves = zeros(obj.LengthLevelCurves, obj.NumFrequencyBands);
         for iBand = 1:obj.NumFrequencyBands
             currBandSignal = obj.MelBands(iBand,:).';
             currBandSignal = currBandSignal / rmsvec(currBandSignal(idxNormalize));
             
-            currBandSignal = [...
-                currBandSignal; ...
-                currBandSignal(end-remainingBlocks+1:end)...
-                ]; %#ok<AGROW>
-            
             idxBlock = 1:obj.ModulationParameters.Blocklen;
-            for jBlock = 1:obj.LenLevelCurves
+            for jBlock = 1:obj.LengthLevelCurves
                 % get RMS
-                obj.LevelFluctuationCurves(jBlock,iBand) = rmsvec(currBandSignal(idxBlock));
+                obj.LevelFluctuationCurves(jBlock, iBand) = rmsvec(currBandSignal(idxBlock));
                 
                 % update block index
                 idxBlock = idxBlock + modulationFrameShift;

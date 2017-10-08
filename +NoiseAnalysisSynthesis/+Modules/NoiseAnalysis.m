@@ -69,6 +69,8 @@ end
 
 methods
 	function [obj] = NoiseAnalysis(varargin)
+        obj.SampleRate = 44.1e3;
+        
         obj.NumFrequencyBands = 16;
         obj.CutOffHP = 100;
         
@@ -76,6 +78,7 @@ methods
         
         obj.NoiseProperties = NoiseAnalysisSynthesis.NoiseProperties();
         obj.ModelParameters = NoiseAnalysisSynthesis.ModelParameters();
+        obj.StftParameters  = NoiseAnalysisSynthesis.STFTparams();
         
         obj.SpectrumAnalyzer   = NoiseAnalysisSynthesis.Modules.SpectrumAnalysis();
         obj.AmplitudeAnalyzer  = NoiseAnalysisSynthesis.Modules.AmplitudeAnalysis();

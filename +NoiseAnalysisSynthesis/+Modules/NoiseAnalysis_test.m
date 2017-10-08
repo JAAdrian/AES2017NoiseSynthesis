@@ -47,7 +47,7 @@ end
 
 
 
-function testSomething(testCase)
+function testAnalysis(testCase)
 testCase.TestData.module();
 end
 

@@ -20,16 +20,8 @@ seed = rng();
 testCase.TestData.seed = seed;
 rng(123);
 
-data = load('handel');
-analysisModule = NoiseAnalysisSynthesis.Modules.NoiseAnalysis();
-analysisModule.SampleRate = data.Fs;
-analysisModule.Signal = data.y;
-analysisModule.StftParameters = NoiseAnalysisSynthesis.STFTparams(256/data.Fs, 0.5, data.Fs, 'synthesis');
-analysisModule.DesiredLengthSignalSamples = length(data.y);
+noiseProperties = load('noiseprops.mat');
 
-testCase.TestData.analysisModule = analysisModule;
-
-noiseProperties = analysisModule();
 testCase.TestData.noiseProperties = noiseProperties;
 end
 
@@ -38,10 +30,28 @@ rng(testCase.TestData.seed);
 end
 
 function setup(testCase)
-noiseProperties = testCase.TestData.noiseProperties;
+noiseProperties = testCase.TestData.noiseProperties.noiseProperties;
 
-module = NoiseAnalysisSynthesis.Modules.NoiseSynthesis();
-module.NoiseProperties = noiseProperties;
+synthesis = NoiseAnalysisSynthesis.Modules.NoiseSynthesis();
+synthesis.NoiseProperties = noiseProperties;
+
+
+blocklenSamples = 1024;
+sampleRate = 44.1e3;
+synthesis.StftParameters = NoiseAnalysisSynthesis.STFTparams(...
+    blocklenSamples / sampleRate, ...
+    0.5, ...
+    sampleRate, ...
+    'synthesis' ...
+    );
+
+synthesis.DesiredLengthSignalSamples = synthesis.SampleRate;
+
+numBlocks = 1;
+blockedSignal = zeros(synthesis.StftParameters.Blocklen, numBlocks);
+for iBlock = 1:numBlocks
+    blockedSignal(:, iBlock) = synthesis();
+end
 end
 
 

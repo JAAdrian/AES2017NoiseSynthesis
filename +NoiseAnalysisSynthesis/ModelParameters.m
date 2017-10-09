@@ -53,13 +53,7 @@ end
 properties (Access = public)
     Model = 'Manual'; % Noise type model of a preset if loaded
     
-    ModulationFilterbank = 'Mel'; % Modulation filterbank type
     ModulationSpeed = 'Fast'; % Modulation speed. Use 'slow' for speech-like types
-    
-    ClickTransition; % Transition matrix for the click model
-    LowerEdgeClick = 2e3; % Lower cutoff freq. for HP filter
-    UpperEdgeClick = 6e3; % upper cutoff freq. for HP filter
-    SnrClick = inf; % SNR between base noise and click signal
     
     ColorNumOrd   = 8; % Number of b coefficients in the PSD modeling
     ColorDenumOrd = 8; % Number of a coefficients in the PSD modeling
@@ -95,43 +89,14 @@ end
 
 
 
-methods
-    function [] = set.ModulationSpeed(obj,szVal)
-        assert(...
-            isa(szVal,'char'), ...
-            'Value must be a string containing one of {''slow'', ''fast''}' ...
-            );
-        
-        obj.ModulationSpeed = szVal;
-    end
-    
-    function [] = set.ModulationFilterbank(obj,szFilterBank)
-        assert(...
-            isa(szFilterBank,'char'), ...
-            'Pass a string containing either ''gammatone'' or ''mel''' ...
-            );
-        
-        obj.ModulationFilterbank = lower(szFilterBank);
-    end
-    
-    function [] = set.AmplitudeModel(obj,szMode)
-        assert(...
-            isa(szMode,'char'), ...
-            ['Pass a string containing one of the ',...
-            'supported amplitude models: ''full'', ''alpha'', ''gmm'', ',...
-            '''percentile'' or ''pareto'''] ...
-            );
-        
-        obj.AmplitudeModel = lower(szMode);
-    end
-    
-    function [] = set.SensorPositions(obj,val)
+methods    
+    function [] = set.SensorPositions(obj, val)
         validateattributes(val, {'numeric'}, {'2d', 'nrows', 3});
         
         obj.SensorPositions = val;
     end
     
-    function [] = set.SourcePosition(obj,val)
+    function [] = set.SourcePosition(obj, val)
         validateattributes(val, {'numeric'}, {'2d', 'nrows', 3});
         
         obj.SourcePosition = val;
@@ -142,6 +107,7 @@ methods
         switch lower(obj.ModulationSpeed)
             case 'slow'
                 winLen = 50e-3;
+                
             case 'fast'
                 winLen = 25e-3;
         end

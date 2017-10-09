@@ -27,6 +27,11 @@ properties
     
     Quantiles; % Independent variable of ECDF or holds information for other models
     Cdf; % Dependent variable of ECDF or holds information for other models
+    
+    ClickTransition;
+    LowerEdgeClick = 2e3; % Lower cutoff freq. for HP filter
+    UpperEdgeClick = 6e3; % upper cutoff freq. for HP filter
+    SnrClick = inf; % SNR between base noise and click signal
 end
 
 end

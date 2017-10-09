@@ -124,6 +124,11 @@ methods (Access = protected)
         if obj.DoDeClick
             NoiseAnalysisSynthesis.External.showMsg(obj.Verbose, 'DeClicking Analysis Signal');
             obj.Signal = obj.ClickAnalyzer();
+            
+            obj.NoiseProperties.ClickTransition = obj.ClickAnalyzer.ClickTransition;
+            obj.NoiseProperties.SnrClick        = obj.ClickAnalyzer.SnrClick;
+            obj.NoiseProperties.LowerEdgeClick  = obj.ClickAnalyzer.LowerEdgeClick;
+            obj.NoiseProperties.UpperEdgeClick  = obj.ClickAnalyzer.UpperEdgeClick;
         end
         
         % HP filter if desired (true by default)

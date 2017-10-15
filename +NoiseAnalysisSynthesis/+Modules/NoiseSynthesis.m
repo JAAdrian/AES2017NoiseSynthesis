@@ -32,10 +32,12 @@ end
 
 properties (Nontunable)
     SampleRate;
+    NumBins;
 end
 
 properties (Logical, Nontunable)
     DoApplySpatialCoherence;
+    DoApplyColoration;
     DoApplyModulations;
     
     Verbose;
@@ -78,6 +80,7 @@ end
 methods
     function [obj] = NoiseSynthesis(varargin)
         obj.DoApplySpatialCoherence = false;
+        obj.DoApplyColoration       = true;
         obj.DoApplyModulations      = true;
         
         obj.SampleRate = 44.1e3;
@@ -153,6 +156,7 @@ methods (Access = protected)
             obj.StftParameters.FrameRate ...
             );
         
+        obj.NumBins = obj.StftParameters.Nfft/2+1;
         
         % Initialize angles between source(s) and sensor(s)
         obj.Source2SensorAngle = pi/2 * ones(obj.NumSensorSignals);
@@ -172,16 +176,28 @@ methods (Access = protected)
             
             
             if obj.ModelParameters.DoApplyClicks
+                noiseBlock = obj.ClickSynthesizer(noiseBlock);
             end
         else
             noiseBlock = obj.generateIncoherentNoise();
             
             if obj.ModelParameters.DoApplyClicks
+                noiseBlock = obj.ClickSynthesizer(noiseBlock);
             end
         end
     end
     
     
+    
+    function [noiseBlock] = generateIncoherentNoise(obj)
+        noiseBlock{1} = obj.generateBaseNoise();
+        
+        noiseBlock{1} = obj.ModulationSynthesizer();
+        
+        if obj.DoApplyModulations
+            noiseBlock = obj.applyModulations();
+        end
+    end
     
     function [noiseBlock] = generateCoherentNoise(obj)
         noiseBlock = cellfun(...
@@ -196,26 +212,26 @@ methods (Access = protected)
     end
     
     function [noise] = generateBaseNoise(obj)
-        uniformPhaseNoise = 2*pi * rand(obj.numBins, 1) - pi;
+        uniformPhaseNoise = 2*pi * rand(obj.NumBins, 1) - pi;
         uniformPhaseNoise([1,end],:) = 0;
         
         if obj.DoApplyColoration
-            if iscell(obj.NoiseProperties.MeanPSD)
-                meanPSD = freqz(...
-                    obj.ModelParameters.MeanPSD{1}, ...
-                    obj.ModelParameters.MeanPSD{2}, ...
+            if iscell(obj.NoiseProperties.MeanPsd)
+                meanPsd = freqz(...
+                    obj.NoiseProperties.MeanPsd{1}, ...
+                    obj.NoiseProperties.MeanPsd{2}, ...
                     obj.StftParameters.Nfft/2+1, ...
                     obj.SampleRate ...
                     );
                 
-                meanPSD = abs(meanPSD);
+                meanPsd = abs(meanPsd);
                 
             else
-                meanPSD = obj.ModelParameters.MeanPSD;
+                meanPsd = obj.ModelParameters.MeanPsd;
                 
             end
             
-            noise = sqrt(meanPSD) * exp(1j * uniformPhaseNoise);
+            noise = sqrt(meanPsd) .* exp(1j * uniformPhaseNoise);
             
         else
             noise = exp(1j * uniformPhaseNoise);

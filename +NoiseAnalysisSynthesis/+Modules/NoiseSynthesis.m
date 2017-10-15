@@ -60,7 +60,7 @@ properties (Access = protected)
     FrequencyBands; % Frequency bands
     ModulationParameters;
     
-    % SpectrumSynthesizer??
+    SpectrumSynthesizer;
     ModulationSynthesizer;
     AmplitudeSynthesizer;
     ClickSynthesizer;
@@ -91,6 +91,7 @@ methods
         obj.NoiseProperties = NoiseAnalysisSynthesis.NoiseProperties();
         obj.StftParameters  = NoiseAnalysisSynthesis.STFTparams();
         
+        obj.SpectrumSynthesizer   = NoiseAnalysisSynthesis.Modules.SpectrumSynthesis();
         obj.ModulationSynthesizer = NoiseAnalysisSynthesis.Modules.ModulationSynthesis();
         obj.AmplitudeSynthesizer  = NoiseAnalysisSynthesis.Modules.AmplitudeSynthesis();
         obj.ClickSynthesizer      = NoiseAnalysisSynthesis.Modules.ClickSynthesis();
@@ -161,6 +162,11 @@ methods (Access = protected)
         % Initialize angles between source(s) and sensor(s)
         obj.Source2SensorAngle = pi/2 * ones(obj.NumSensorSignals);
         
+        obj.SpectrumSynthesizer.SampleRate        = obj.SampleRate;
+        obj.SpectrumSynthesizer.Nfft              = obj.StftParameters.Nfft;
+        obj.SpectrumSynthesizer.MeanPsd           = obj.NoiseProperties.MeanPsd;
+        obj.SpectrumSynthesizer.DoApplyColoration = obj.DoApplyColoration;
+        
         % shuffle the random generator by default. If in verbose mode reset the
         % generator
         if obj.Verbose
@@ -190,9 +196,8 @@ methods (Access = protected)
     
     
     function [noiseBlock] = generateIncoherentNoise(obj)
-        noiseBlock{1} = obj.generateBaseNoise();
-        
-        noiseBlock{1} = obj.ModulationSynthesizer();
+        noiseBlock{1} = obj.SpectrumSynthesizer();
+        noiseBlock    = obj.ModulationSynthesizer(noiseBlock);
         
         if obj.DoApplyModulations
             noiseBlock = obj.applyModulations();
@@ -201,7 +206,7 @@ methods (Access = protected)
     
     function [noiseBlock] = generateCoherentNoise(obj)
         noiseBlock = cellfun(...
-            obj.generateBaseNoise(), ...
+            obj.SpectrumSynthesizer(), ...
             cell(obj.NumSensorSignals, 1), ...
             'uni', false ...
             );
@@ -210,36 +215,6 @@ methods (Access = protected)
             
         end
     end
-    
-    function [noise] = generateBaseNoise(obj)
-        uniformPhaseNoise = 2*pi * rand(obj.NumBins, 1) - pi;
-        uniformPhaseNoise([1,end],:) = 0;
-        
-        if obj.DoApplyColoration
-            if iscell(obj.NoiseProperties.MeanPsd)
-                meanPsd = freqz(...
-                    obj.NoiseProperties.MeanPsd{1}, ...
-                    obj.NoiseProperties.MeanPsd{2}, ...
-                    obj.StftParameters.Nfft/2+1, ...
-                    obj.SampleRate ...
-                    );
-                
-                meanPsd = abs(meanPsd);
-                
-            else
-                meanPsd = obj.ModelParameters.MeanPsd;
-                
-            end
-            
-            noise = sqrt(meanPsd) .* exp(1j * uniformPhaseNoise);
-            
-        else
-            noise = exp(1j * uniformPhaseNoise);
-        end
-    end
-    
-    
-    
 end
 end
 

@@ -20,7 +20,9 @@ classdef ModulationSynthesis < matlab.System
 
 
 properties (Access = public)
-	
+    SampleRate;
+    
+	MarkovSynthesizer;
 end
 
 
@@ -37,6 +39,10 @@ end
 
 methods
 	function [obj] = ModulationSynthesis(varargin)
+        obj.SampleRate = 44.1e3;
+        
+        obj.MarkovSynthesizer = NoiseAnalysisSynthesis.Modules.MarkovSynthesis();
+        
 		obj.setProperties(nargin, varargin{:})
 	end
 end
@@ -44,7 +50,7 @@ end
 
 methods (Access = protected)
 	function [] = setupImpl(obj)
-		
+		obj.MarkovSynthesizer.SampleRate = obj.SampleRate;
 	end
 
 	function [] = resetImpl(obj)

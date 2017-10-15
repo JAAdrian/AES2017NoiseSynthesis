@@ -28,11 +28,15 @@ properties (Access = public)
     DesiredLengthSignalSamples;
     
     Source2SensorAngle; % Angles between sources and sensors
+    
+    SpectrumSynthesizer;
+    ModulationSynthesizer;
+    AmplitudeSynthesizer;
+    ClickSynthesizer;
 end
 
 properties (Nontunable)
     SampleRate;
-    NumBins;
 end
 
 properties (Logical, Nontunable)
@@ -57,18 +61,11 @@ properties (Access = protected, Constant)
 end
 
 properties (Access = protected)
-    FrequencyBands; % Frequency bands
     ModulationParameters;
-    
-    SpectrumSynthesizer;
-    ModulationSynthesizer;
-    AmplitudeSynthesizer;
-    ClickSynthesizer;
 end
 
 properties (SetAccess = protected, Dependent)
     NumSensorSignals;  % Number of desired sensor signals (dependent on size of the sensor position matrix)
-    NumFrequencyBands; % Number of frequency bands
 end
 
 properties (Access = protected, Transient)
@@ -157,8 +154,6 @@ methods (Access = protected)
             obj.StftParameters.FrameRate ...
             );
         
-        obj.NumBins = obj.StftParameters.Nfft/2+1;
-        
         % Initialize angles between source(s) and sensor(s)
         obj.Source2SensorAngle = pi/2 * ones(obj.NumSensorSignals);
         
@@ -166,6 +161,10 @@ methods (Access = protected)
         obj.SpectrumSynthesizer.Nfft              = obj.StftParameters.Nfft;
         obj.SpectrumSynthesizer.MeanPsd           = obj.NoiseProperties.MeanPsd;
         obj.SpectrumSynthesizer.DoApplyColoration = obj.DoApplyColoration;
+        
+        obj.ModulationSynthesizer.SampleRate = obj.SampleRate;
+%         obj.ModulationSynthesizer.
+%         obj.ModulationSynthesizer.
         
         % shuffle the random generator by default. If in verbose mode reset the
         % generator
@@ -212,6 +211,10 @@ methods (Access = protected)
             );
         
         if obj.DoApplyModulations
+            
+        end
+        
+        if obj.DoApplySpatialCoherence
             
         end
     end

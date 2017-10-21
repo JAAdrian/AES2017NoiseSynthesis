@@ -61,9 +61,18 @@ end
 
 methods
 	function [obj] = ModulationAnalysis(varargin)
-        obj.MarkovAnalyzer = NoiseAnalysisSynthesis.Modules.MarkovAnalysis();
+        obj.SampleRate = 44.1e3;
+        
+        obj.ModulationParameters = NoiseAnalysisSynthesis.STFTparams();
+        obj.ModelParameters      = NoiseAnalysisSynthesis.ModelParameters();
+        
+        obj.NumFrequencyBands = 16;
+        
+        obj.ModNormFun = @(x) mad(x, 1, 1);
         
         obj.Verbose = false;
+        
+        obj.MarkovAnalyzer = NoiseAnalysisSynthesis.Modules.MarkovAnalysis();
         
 		obj.setProperties(nargin, varargin{:})
 	end
@@ -80,7 +89,7 @@ methods (Access = protected)
             ceil((obj.NumBlocks - obj.ModulationParameters.Overlap) / ...
             obj.ModulationParameters.Frameshift);
         
-        freq = linspace(0, obj.SampleRate/2, obj.NumBins);
+        freq = linspace(0, obj.SampleRate/2, obj.NumBins);        
         obj.MelMatrix = melfilter(obj.NumFrequencyBands, freq);
     end
 

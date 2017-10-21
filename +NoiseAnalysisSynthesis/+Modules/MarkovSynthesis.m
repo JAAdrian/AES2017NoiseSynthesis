@@ -22,12 +22,12 @@ classdef MarkovSynthesis < matlab.System
 properties (Nontunable)
 	TransitionMatrix;
     StateBoundaries;
-    NeutralState;
 end
 
 
 properties (SetAccess = protected)
 	State;
+    NeutralState;
 end
 
 
@@ -39,7 +39,7 @@ end
 
 methods
 	function [obj] = MarkovSynthesis(varargin)
-        obj.TransitionMatrix = cell(16, 1);
+        obj.TransitionMatrix = zeros(10);
         obj.State            = 6;
         obj.StateBoundaries  = zeros(10, 2);
         
@@ -50,16 +50,11 @@ end
 
 methods (Access = protected)
 	function [] = setupImpl(obj)
-		obj.CumulativeTransitionMatrix = cellfun(...
-            @(x) full(cumsum(x, 2)), ...
-            obj.TransitionMatrix, ...
-            'uni', false ...
-            );
-        
-        obj.CumulativeTransitionMatrix = cellfun(...
-            @(x) bsxfun(@rdivide, x, x(:, end)), ...
+        obj.CumulativeTransitionMatrix = cumsum(obj.TransitionMatrix, 2);
+        obj.CumulativeTransitionMatrix = bsxfun(...
+            @rdivide, ...
             obj.CumulativeTransitionMatrix, ...
-            'uni', false ...
+            obj.CumulativeTransitionMatrix(:, end) ...
             );
         
         obj.NeutralState = find(obj.StateBoundaries >= 0, 1, 'first');
@@ -69,12 +64,10 @@ methods (Access = protected)
 		obj.State = obj.NeutralState;
 	end
 
-	function [modulation] = stepImpl(obj, idxFrequencyBand)
-        thisCumTransitionMatrix = obj.CumulativeTransitionMatrix{idxFrequencyBand};
-		
-        dice = rand();
+	function [modulation] = stepImpl(obj)
+        die = rand();
         
-        nextStateCandidates = find(thisCumTransitionMatrix(obj.State, :) >= dice);
+        nextStateCandidates = find(obj.CumulativeTransitionMatrix(obj.State, :) >= die);
         if nextStateCandidates
             nextState = nextStateCandidates(1);
         else

@@ -23,6 +23,7 @@ properties (Nontunable)
     SampleRate;
 	Nfft;
     MeanPsd;
+    NumSignalBlocks;
 end
 
 properties (Logical, Nontunable)
@@ -40,6 +41,7 @@ methods
         obj.SampleRate = 44.1e3;
         obj.Nfft = 1024;
         obj.DoApplyColoration = true;
+        obj.NumSignalBlocks = 1;
         
 		obj.setProperties(nargin, varargin{:})
     end
@@ -53,7 +55,7 @@ end
 
 methods (Access = protected)
 	function [noise] = stepImpl(obj)
-		uniformPhaseNoise = 2*pi * rand(obj.NumBins, 1) - pi;
+		uniformPhaseNoise = 2*pi * rand(obj.NumBins, obj.NumSignalBlocks) - pi;
         uniformPhaseNoise([1,end],:) = 0;
         
         if obj.DoApplyColoration
@@ -72,8 +74,7 @@ methods (Access = protected)
                 
             end
             
-            noise = sqrt(meanPsd) .* exp(1j * uniformPhaseNoise);
-            
+            noise = bsxfun(@times, sqrt(meanPsd), exp(1j * uniformPhaseNoise));
         else
             noise = exp(1j * uniformPhaseNoise);
         end

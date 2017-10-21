@@ -66,6 +66,7 @@ end
 
 properties (SetAccess = protected, Dependent)
     NumSensorSignals;  % Number of desired sensor signals (dependent on size of the sensor position matrix)
+    NumSynthesisBlocks;
 end
 
 properties (Access = protected, Transient)
@@ -132,6 +133,10 @@ methods
                     obj.ModelParameters.CoherenceModel)); %#ok<SPWRN>
         end
     end
+    
+    function [numSynthesisBlocks] = get.NumSynthesisBlocks(obj)
+        numSynthesisBlocks = obj.ModulationParameters.Blocklen;
+    end
 end
 
 methods (Access = protected)
@@ -161,10 +166,13 @@ methods (Access = protected)
         obj.SpectrumSynthesizer.Nfft              = obj.StftParameters.Nfft;
         obj.SpectrumSynthesizer.MeanPsd           = obj.NoiseProperties.MeanPsd;
         obj.SpectrumSynthesizer.DoApplyColoration = obj.DoApplyColoration;
+        obj.SpectrumSynthesizer.NumSignalBlocks   = obj.NumSynthesisBlocks;
         
-        obj.ModulationSynthesizer.SampleRate = obj.SampleRate;
-%         obj.ModulationSynthesizer.
-%         obj.ModulationSynthesizer.
+        obj.ModulationSynthesizer.SampleRate           = obj.SampleRate;
+        obj.ModulationSynthesizer.NoiseProperties      = obj.NoiseProperties;
+        obj.ModulationSynthesizer.ModulationParameters = obj.ModulationParameters;
+        obj.ModulationSynthesizer.NumFrequencyBands    = size(obj.NoiseProperties.MarkovTransition, 1);
+        obj.ModulationSynthesizer.NumSynthesisBlocks   = obj.NumSynthesisBlocks;
         
         % shuffle the random generator by default. If in verbose mode reset the
         % generator
@@ -195,11 +203,16 @@ methods (Access = protected)
     
     
     function [noiseBlock] = generateIncoherentNoise(obj)
-        noiseBlock{1} = obj.SpectrumSynthesizer();
-        noiseBlock    = obj.ModulationSynthesizer(noiseBlock);
+        noiseBlock = obj.SpectrumSynthesizer();
         
         if obj.DoApplyModulations
-            noiseBlock = obj.applyModulations();
+            modulations = obj.ModulationSynthesizer();
+            
+            noiseBlock = obj.applyModulations(noiseBlock, modulations);
+        end
+        
+        if obj.DoApplySpatialCoherence
+            
         end
     end
     
@@ -218,10 +231,51 @@ methods (Access = protected)
             
         end
     end
+    
+    
+    function [noiseOut] = applyModulations(obj, noiseIn, modulations)
+        numBands = size(obj.NoiseProperties.MarkovTransition, 1);
+        
+        frequencies = linspace(0, obj.SampleRate/2, obj.StftParameters.Nfft/2+1);
+        
+        frequenciesSubSamples = getMelCenterFreqs(frequencies, numBands);
+        
+        interpolatedModulations = interp1(...
+            frequenciesSubSamples, modulations, ...
+            frequencies, ...
+            'nearest', ...
+            'extrap' ...
+            );
+        
+        idxNan = isnan(interpolatedModulations);
+        interpolatedModulations(idxNan) = 1;
+        
+        phase = angle(noiseIn);
+        
+        noiseOut = interpolatedModulations .* abs(noiseIn);
+        
+        noiseOut = noiseOut .* exp(1j * phase);
+    end
 end
 end
 
 
+function [centerFreqs] = getMelCenterFreqs(frequency, numBands)
+% Mel and inverse transform from:
+% https://en.wikipedia.org/wiki/Mel_scale
+
+% Mel transform
+melScale = 2595*log10(1+frequency/700);
+
+minFreq = min(melScale);
+maxFreq = max(melScale);
+melResolution = (maxFreq - minFreq) / (numBands + 1);
+
+melCenterFreqs = (0 : numBands-1) * melResolution + melResolution/2;
+
+% inverse transform
+centerFreqs = 700 * (exp(melCenterFreqs / 1127) - 1);
+end
 
 
 

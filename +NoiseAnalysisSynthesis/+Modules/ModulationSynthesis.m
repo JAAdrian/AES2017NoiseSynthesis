@@ -22,17 +22,13 @@ classdef ModulationSynthesis < matlab.System
 properties (Access = public)
     SampleRate;
     
+    NoiseProperties;
+    ModulationParameters;
+    
 	MarkovSynthesizer;
-end
-
-
-properties (SetAccess = protected, GetAccess = public)
-	
-end
-
-
-properties (Access = protected)
-	
+    
+    NumFrequencyBands;
+    NumSynthesisBlocks;
 end
 
 
@@ -41,29 +37,43 @@ methods
 	function [obj] = ModulationSynthesis(varargin)
         obj.SampleRate = 44.1e3;
         
-        obj.MarkovSynthesizer = NoiseAnalysisSynthesis.Modules.MarkovSynthesis();
+        obj.NumFrequencyBands  = 16;
+        obj.NumSynthesisBlocks = 2;
+        
+        obj.MarkovSynthesizer = cell(obj.NumFrequencyBands, 1);
+        obj.MarkovSynthesizer = cellfun(...
+            @(x) NoiseAnalysisSynthesis.Modules.MarkovSynthesis(), ...
+            obj.MarkovSynthesizer, ...
+            'uni', false ...
+            );
+        obj.NoiseProperties   = NoiseAnalysisSynthesis.NoiseProperties();
         
 		obj.setProperties(nargin, varargin{:})
-	end
+    end
 end
 
 
 methods (Access = protected)
 	function [] = setupImpl(obj)
-		obj.MarkovSynthesizer.SampleRate = obj.SampleRate;
+        for iBand = 1:obj.NumFrequencyBands
+            obj.MarkovSynthesizer{iBand}.TransitionMatrix = ...
+                obj.NoiseProperties.MarkovTransition{iBand};
+            
+            obj.MarkovSynthesizer{iBand}.StateBoundaries = ...
+                obj.NoiseProperties.MarkovStateBoundaries;
+        end
 	end
 
 	function [] = resetImpl(obj)
-		
+		cellfun(@(x) x.reset(), obj.MarkovSynthesizer);
 	end
 
-	function [] = stepImpl(obj)
-		
-	end
-
-	function [] = releaseImpl(obj)
-		
-	end
+	function [modulations] = stepImpl(obj)
+        modulations = zeros(obj.NumFrequencyBands, obj.NumSynthesisBlocks);
+        for iBand = 1:obj.NumFrequencyBands
+            modulations(iBand, :) = obj.MarkovSynthesizer{iBand}();
+        end
+    end
 end
 
 end

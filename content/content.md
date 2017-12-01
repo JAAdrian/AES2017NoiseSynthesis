@@ -22,7 +22,19 @@ or download the latest version from the `master` branch as a [zip file](https://
 
 When you use the provided code in your own research, please be sure to cite the following publication linked with the tools:
 
-    To be announced after final acceptance
+    @article{adrian2017synthesis,
+        author = {Adrian, Jens-Alrik and Gerkmann, Timo and van de Par, Steven
+        and Bitzer, Joerg},
+        title = {Synthesis of Perceptually Plausible Multichannel Noise Signals
+        Controlled by Real World Statistical Noise Properties},
+        year = {2017},
+        pages = {914–928},
+        volume = {65},
+        journal = {J. Audio Eng. Soc},
+        number = {11},
+        url = {http://www.aes.org/e-lib/browse.cfm?elib=19360},
+    }
+
 
 ## Audio Examples
 

@@ -185,6 +185,7 @@ methods (Access = protected)
     
     function [noiseBlock] = stepImpl(obj)
         if obj.DoApplySpatialCoherence
+            %TODO: implement coherence path
             noiseBlock = obj.generateCoherentNoise();
             
             
@@ -209,10 +210,6 @@ methods (Access = protected)
             modulations = obj.ModulationSynthesizer();
             
             noiseBlock = obj.applyModulations(noiseBlock, modulations);
-        end
-        
-        if obj.DoApplySpatialCoherence
-            
         end
     end
     

@@ -49,7 +49,7 @@ methods (Access = protected)
 		
 	end
 
-	function [] = stepImpl(obj)
+	function [noiseBlock] = stepImpl(obj, noiseBlock)
 		
 	end
 

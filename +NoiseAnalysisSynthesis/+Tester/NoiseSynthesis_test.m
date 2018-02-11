@@ -42,20 +42,21 @@ methods (TestMethodSetup)
         synthesis.DesiredLengthSignalSamples = synthesis.SampleRate;
         
         testCase.Unit = synthesis;
-        
-%         numBlocks = 1;
-%         blockedSignal = zeros(synthesis.StftParameters.Blocklen, numBlocks);
-%         for iBlock = 1:numBlocks
-%             blockedSignal(:, iBlock) = synthesis();
-%         end
     end
 end
 
 
 
 methods (Test)
-    function runSynthesis(testCase)
-        testCase.Unit();
+    function runSynthesis_FewBlocks(testCase)
+        noiseBlock = [];
+        for iBlocks = 1:10
+            noiseBlock = [noiseBlock, testCase.Unit()]; %#ok<AGROW>
+        end
+        
+        testCase.verifySize(noiseBlock, [513, 20]);
+        testCase.verifyClass(noiseBlock, 'double');
+        testCase.verifyFalse(isreal(noiseBlock));
     end
 end
 

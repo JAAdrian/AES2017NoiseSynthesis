@@ -121,6 +121,8 @@ methods
             obj.AnalysisEngine.StftParameters  = stftParameters;
             obj.AnalysisEngine.ModelParameters = obj.ModelParameters;
             obj.AnalysisEngine.DesiredLengthSignalSamples = obj.DesiredLengthSignalSamples;
+            
+            obj.SynthesisEngine.StftParameters = stftParameters;
         end
     end
     
@@ -217,11 +219,7 @@ methods (Access = protected)
     end
     
     function [noiseBlock] = stepImpl(obj)
-        if nargout
-            noiseBlock = obj.synthesize();
-        else
-            obj.synthesize();
-        end
+        noiseBlock = obj.synthesize();
     end
     
     function [] = releaseImpl(obj)

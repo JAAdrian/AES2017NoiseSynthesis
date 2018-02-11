@@ -5,13 +5,17 @@
 #### Analysis
 - [x] Amplitude distribution analyzer
 - [x] Spectrum analyzer
-- [ ] Modulation analyzer
-- [ ] Markov modulation analyzer
+- [x] Modulation analyzer
+- [x] Markov modulation analyzer
+- [x] Click Analyzer
 
 #### Synthesis
-- [ ] Amplitude distribution synthesizer
-- [ ] Markov modulation synthesizer
+- [x] Markov modulation synthesizer
+- [x] Spectral Synthesizer
+- [ ] Click Synthesizer
 - [ ] Spatial coherence mixer
 - [ ] Interpolator
+- [ ] Amplitude distribution synthesizer
+- [ ] WOLA
 
 ## What Should Be Saved In The Object?

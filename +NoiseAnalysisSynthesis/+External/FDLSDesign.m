@@ -16,9 +16,9 @@ function [b,a,Phase] = FDLSDesign(N_Order, D_Order, Freq_Vec, Magnitude, fs_Hz, 
 % Updated: 2015-01-30   (JA): Tidied up some code
 %          2015-08-07   (JA): Included freq. weighting
 
-import NoiseSynthesis.External.*
+import NoiseAnalysisSynthesis.External.*
 
-if nargin < 6 || isempty(vWeights),
+if nargin < 6 || isempty(vWeights)
     vWeights = ones(length(Magnitude),1);
 end
 

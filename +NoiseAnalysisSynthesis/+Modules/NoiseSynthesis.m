@@ -135,7 +135,7 @@ methods
     end
     
     function [numSynthesisBlocks] = get.NumSynthesisBlocks(obj)
-        numSynthesisBlocks = []
+        numSynthesisBlocks = [];
         if ~isempty(obj.ModulationParameters)
             numSynthesisBlocks = obj.ModulationParameters.Blocklen;
         end

@@ -1,41 +1,54 @@
-NoiseSynthesis
-=======================
+# Synthesis of Perceptually Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties
 
-Content
-------------------------------------
+This Github repository provides code and basic information about the studies
+which were performed for the publication of the [respective AES journal paper](https://jaadrian.github.io/AES2017NoiseSynthesis/#citation).
 
+Head for the [accompanying web site](https://jaadrian.github.io/AES2017NoiseSynthesis/#citation) for more basic information about the study.
+
+## Content
+
+- [Content](#content)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Example](#examples)
+- [Examples](#examples)
 - [License](#license)
 
+This MATLAB class provides means to analyze audio noise disturbances and
+synthesize artificial noise processes of arbitrary length with similar
+perceptive features.
 
-This MATLAB class provides means to analyze audio noise disturbances and synthesize artificial noise processes of arbitrary length with similar perceptive features.
+The goal is to provide a tool for researchers and developers to generate
+artificial noise disturbances for evaluating algorithms in single and
+multi-channel applications.
 
-The goal is to provide a tool for researchers and developers to generate artificial noise disturbances for evaluating algorithms in single and multi-channel applications.
+## Installation
 
-Installation
-------------------------------------
-
-The package has been tested under Windows and Linux with MATLAB versions >= 2014b 64bit. To use the class, make sure the folder **containing the package folder** `+NoiseSynthesis` with all the class files is part of the MATLAB path. Various methods to add a folder to MATLAB's path exist. To ensure the latter for the current session, use
+The package has been tested under Windows and Linux with MATLAB versions >=
+2014b 64bit. To use the class, make sure the folder **containing the package
+folder** `+NoiseSynthesis` with all the class files is part of the MATLAB path.
+Various methods to add a folder to MATLAB's path exist. To ensure the latter
+for the current session, use
 
 ```matlab
 addpath(path_to_package);
 ```
-To make use of the mexfile `rmsvec` in the *external* folder of the package (ie. +NoiseSynthesis/+external) it has to be compiled by calling
+To make use of the mexfile `rmsvec` in the *external* folder of the package
+(ie. +NoiseSynthesis/+external) it has to be compiled by calling
 
 ```matlab
 mex rmsvec.cpp
 ```
 
-The package has dependencies to the MATLAB *Statistics and Machine Learning* and *Signal Processing* toolbox.
+The package has dependencies to the MATLAB *Statistics and Machine Learning*
+and *Signal Processing* toolbox.
 
-Usage
-------------------------------------
+## Usage
 
-In this part the basic and the more advanced functionalities of the class are described. This README provides practical examples. For class documentation refer to `doc NoiseSynthesis.NoiseAnalysisSynthesis`.
+In this part the basic and the more advanced functionalities of the class are
+described. This README provides practical examples. For class documentation
+refer to `doc NoiseSynthesis.NoiseAnalysisSynthesis`.
 
-#### Instantiate an Object
+### Instantiate an Object
 
 To instantiate a noise-synthesis object, simply call one of
 
@@ -43,14 +56,22 @@ To instantiate a noise-synthesis object, simply call one of
 obj = NoiseSynthesis.NoiseAnalysisSynthesis();
 obj = NoiseSynthesis.NoiseAnalysisSynthesis(vSignal,fs);
 ```
-where `vSignal` is a signal vector of a noise process to be analyzed and `fs` is the corresponding sampling rate in Hertz.
+where `vSignal` is a signal vector of a noise process to be analyzed and `fs`
+is the corresponding sampling rate in Hertz.
 
-If the constructor is called without arguments the analysis method will fail. In this state the class can only synthesize a noise process based on one of the presets.
+If the constructor is called without arguments the analysis method will fail.
+In this state the class can only synthesize a noise process based on one of the
+presets.
 
 
-#### Properties
+### Properties
 
-After creating a `NoiseAnalysisSynthesis` object as shown above the object shows the following properties. The first properties describe the considered signals like the analysis and synthesis (and optional click) signal. For model parameters and error measures see below. The remaining properties describe some general processing parameters as well as several Booleans steering which parts of the process chain are desired.
+After creating a `NoiseAnalysisSynthesis` object as shown above the object
+shows the following properties. The first properties describe the considered
+signals like the analysis and synthesis (and optional click) signal. For model
+parameters and error measures see below. The remaining properties describe some
+general processing parameters as well as several Booleans steering which parts
+of the process chain are desired.
 
 ```matlab
 >> obj
@@ -81,7 +102,9 @@ obj =
                    bDeClick: 1
 ```
 
-The default, ie. empty, model parameters subobject looks like the following (before the analysis step). Parameters which are not signal dependent are initialized with default values, the rest is empty.
+The default, ie. empty, model parameters sub-object looks like the following
+(before the analysis step). Parameters which are not signal dependent are
+initialized with default values, the rest is empty.
 
 ```matlab
 >> obj.ModelParameters
@@ -112,7 +135,8 @@ The default, ie. empty, model parameters subobject looks like the following (bef
          ModulationWinLen: 0.0250
 ```
 
-There is also the possibility to view simple error measures between the analysis and synthesis signals if available.
+There is also the possibility to view simple error measures between the
+analysis and synthesis signals if available.
 
 ```matlab
 >> obj.ErrorMeasures
@@ -131,7 +155,7 @@ There is also the possibility to view simple error measures between the analysis
 ```
 
 
-#### Class Methods
+### Class Methods
 
 The following public methods are implemented (in alphabetical order):
 
@@ -154,40 +178,40 @@ soundsc
 synthesize
 ```
 
+### Analyze the Noise Process
 
-
-#### Analyze the Noise Process
-
-To start the analysis if a desired signal has been passed in the constructor call the `analyze` method by
+To start the analysis if a desired signal has been passed in the constructor
+call the `analyze` method by
 
 ```matlab
 analyze(obj); % or equivalently
 obj.analyze();
 ```
 
-#### Synthesize an Artificial Noise Process
+### Synthesize an Artificial Noise Process
 
-When a complete model parameter set is present, ie. obj.ModelParameters has all information, the `synthesis` method can be called by
+When a complete model parameter set is present, ie. obj.ModelParameters has all
+information, the `synthesis` method can be called by
 
 ```matlab
 synthesize(obj); % or equivalently
 obj.synthesize();
 ```
 
-Now, the synthesized signal is available in `obj.SensorSignals` or it can be directly retrieved by calling
+Now, the synthesized signal is available in `obj.SensorSignals` or it can be
+directly retrieved by calling
 
 ```matlab
 SynthSignal = synthesize(obj); % or equivalently
 SynthSignal = obj.synthesize();
 ```
 
+## Examples
 
-Examples
-------------------------------------
+### Analysis and Synthesis of a Monaural Noise Signal
 
-#### Analysis and Synthesis of a Monaural Noise Signal
-
-A complete example of the easiest way to use the analysis and synthesis methods is shown below.
+A complete example of the easiest way to use the analysis and synthesis methods
+is shown below.
 
 ```matlab
 % signal to be analyzed
@@ -207,9 +231,10 @@ sound(obj);
 plot(obj);
 ```
 
-#### Synthesis using a Parameter Preset
+### Synthesis using a Parameter Preset
 
-It is possible to choose from a small set of presets for a synthesis. Supported presets for now are
+It is possible to choose from a small set of presets for a synthesis. Supported
+presets for now are
 
 - optical
 - tape
@@ -217,8 +242,8 @@ It is possible to choose from a small set of presets for a synthesis. Supported 
 - rain
 - applause
 
-and are saved as mat-Files in the package folder `+NoiseSynthesis`.
-The following example shows the synthesis with presets.
+and are saved as mat-Files in the package folder `+NoiseSynthesis`. The
+following example shows the synthesis with presets.
 
 ```matlab
 % create the object without parameters
@@ -237,10 +262,11 @@ sound(obj);
 plot(obj)
 ```
 
-#### Saving New Presets
+### Saving New Presets
 
-It is of course possible to save own presets when there is access to an isolated noise files.
-To do so, follow the example by using the `saveParameters` method.
+It is of course possible to save own presets when there is access to an
+isolated noise files. To do so, follow the example by using the
+`saveParameters` method.
 
 ```matlab
 % signal to be analyzed
@@ -259,8 +285,7 @@ obj.saveParameters(fullfile('+NoiseSynthesis', 'myNoiseParameters'))
 Use the presets as shown in the previous example.
 
 
-License
-------------------------------------------
+## License
 
 The software is published under BSD 3-Clause license.
 

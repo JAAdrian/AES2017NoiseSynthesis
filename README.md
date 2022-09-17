@@ -7,12 +7,12 @@ The page is optimized to be viewed with modern web browsers such as *Mozilla Fir
 
 ## MATLAB Code
 
-Obtain the code by cloning the [Git repository](https://tgm-git.jade-hs.de/pub/AES2017NoiseSynthesis.git) by calling
+Obtain the code by cloning the [Git repository](https://github.com/JAAdrian/AES2017NoiseSynthesis) by calling
 
 ```
-git clone https://tgm-git.jade-hs.de/pub/AES2017NoiseSynthesis.git
+git clone git@github.com:JAAdrian/AES2017NoiseSynthesis.git
 ```
-or download the latest version from the `master` branch as a [zip file](https://tgm-git.jade-hs.de/pub/AES2017NoiseSynthesis/repository/archive.zip?ref=master) and refer to the `README.md` document for further information on usage. The code is licensed under BSD 3-Clause and, thus, be freely altered and used as stated in detail in the license text.
+or download the latest version from the `master` branch as a [zip file](https://github.com/JAAdrian/AES2017NoiseSynthesis/archive/refs/heads/master.zip) and refer to the `README.md` document for further information on usage. The code is licensed under BSD 3-Clause and, thus, be freely altered and used as stated in detail in the license text.
 
 ## Citation
 
@@ -58,7 +58,7 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
             <td>Cinema Optical Noise</td>
             <td class="tdaudio">
                 <audio controls>
-                    <source src="audio/CHACE.Smpl.1_Noise.wav" type="audio/wav">
+                    <source src="static/audio/CHACE.Smpl.1_Noise.wav" type="audio/wav">
                         Your browser does not support the audio element.
                 </audio>
             </td>

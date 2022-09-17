@@ -1,7 +1,5 @@
 # Build Settings
-theme: jekyll-theme-minimal
+theme: jekyll-theme-minima
 
 title: Synthesis of Perceptually Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties
 # description: [A short description of your site's purpose]
-
-show_downloads: false

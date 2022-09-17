@@ -63,19 +63,19 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="./audio/CHACE.Smpl.1_Noise.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/CHACE.Smpl.1_Noise.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
             <td class="tdaudio">
                 <audio controls>
-                    <source src="audio/CHACE.Smpl.1_Noise_synth.wav" type="audio/wav">
+                    <source src="static/audio/CHACE.Smpl.1_Noise_synth.wav" type="audio/wav">
                         Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="./audio/CHACE.Smpl.1_Noise_synth.wav">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/CHACE.Smpl.1_Noise_synth.wav">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
         </tr>
@@ -85,24 +85,24 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
             <td>Vinyl / Shellac</td>
             <td class="tdaudio">
                 <audio controls>
-                    <source src="audio/68400__danielsoniii__vinyl-hiss.wav" type="audio/wav">
+                    <source src="static/audio/68400__danielsoniii__vinyl-hiss.wav" type="audio/wav">
                         Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/68400__danielsoniii__vinyl-hiss.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/68400__danielsoniii__vinyl-hiss.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
             <td class="tdaudio">
                 <audio controls>
-                    <source src="audio/68400__danielsoniii__vinyl-hiss_synth.wav" type="audio/wav">
+                    <source src="static/audio/68400__danielsoniii__vinyl-hiss_synth.wav" type="audio/wav">
                         Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/68400__danielsoniii__vinyl-hiss_synth.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/68400__danielsoniii__vinyl-hiss_synth.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
         </tr>
@@ -112,24 +112,24 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
             <td>Cassette / Tape</td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/Cassette2(OH828_018_02_S2_M).wav" type="audio/wav">
+                <source src="static/audio/Cassette2(OH828_018_02_S2_M).wav" type="audio/wav">
                     Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/Cassette2(OH828_018_02_S2_M).wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/Cassette2(OH828_018_02_S2_M).wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/Cassette2(OH828_018_02_S2_M)synth.wav" type="audio/wav">
+                <source src="static/audio/Cassette2(OH828_018_02_S2_M)synth.wav" type="audio/wav">
                     Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/Cassette2(OH828_018_02_S2_M)synth.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/Cassette2(OH828_018_02_S2_M)synth.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
         </tr>
@@ -139,24 +139,24 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
             <td>Rain</td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/rain_03_13of34.wav" type="audio/wav">
+                <source src="static/audio/rain_03_13of34.wav" type="audio/wav">
                     Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/rain_03_13of34.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/rain_03_13of34.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/rain_03_13of34_synth.wav" type="audio/wav">
+                <source src="static/audio/rain_03_13of34_synth.wav" type="audio/wav">
                     Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/rain_03_13of34_synth.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/rain_03_13of34_synth.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
         </tr>
@@ -166,24 +166,24 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
             <td>Applause</td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/238784__staikov__cathedral-applauses-stereo.wav" type="audio/wav">
+                <source src="static/audio/238784__staikov__cathedral-applauses-stereo.wav" type="audio/wav">
                     Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/238784__staikov__cathedral-applauses-stereo.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/238784__staikov__cathedral-applauses-stereo.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/238784__staikov__cathedral-applauses-stereo_synth.wav" type="audio/wav">
+                <source src="static/audio/238784__staikov__cathedral-applauses-stereo_synth.wav" type="audio/wav">
                     Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/238784__staikov__cathedral-applauses-stereo_synth.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/238784__staikov__cathedral-applauses-stereo_synth.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
         </tr>
@@ -193,24 +193,24 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
             <td>Babble / Cafeteria Noise</td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/babble_short.wav" type="audio/wav">
+                <source src="static/audio/babble_short.wav" type="audio/wav">
                     Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/babble_short.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/babble_short.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
             <td class="tdaudio">
                 <audio controls>
-                <source src="audio/babble_short_synth.wav" type="audio/wav">
+                <source src="static/audio/babble_short_synth.wav" type="audio/wav">
                     Your browser does not support the audio element.
                 </audio>
             </td>
             <td class="tddownload">
-                <a href="audio/babble_short_synth.wav" class="downloadlink">
-                    <img src="download-arrow.svg" class="download" alt="Download">
+                <a href="static/audio/babble_short_synth.wav" class="downloadlink">
+                    <img src="static/download-arrow.svg" class="download" alt="Download">
                 </a>
             </td>
         </tr>

@@ -56,19 +56,17 @@ parameter set was used as proposed in the paper.
 
 
 <table class="audiotable">
-    <colgroup>
+    <!-- <colgroup>
         <col span="2">
         <col span="1" class="narrow">
         <col span="1">
         <col span="1" class="narrow">
-    </colgroup>
+    </colgroup> -->
 
     <thead>
         <th>Noise Type</th>
         <th>Original</th>
-        <th></th>
         <th>Synthesis</th>
-        <th></th>
     </thead>
 
     <tbody>

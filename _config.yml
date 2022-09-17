@@ -1,5 +1,5 @@
 # Build Settings
-theme: minima
+theme: jekyll-theme-minimal
 
 title: Synthesis of Perceptually Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties
 description: An accompanying website to the stated AES journal paper.

@@ -220,7 +220,7 @@ In the following table, exemplary audio samples of analyzed and synthesized nois
 
 ## Figure Generation
 
-The MATLAB and data files which were used to create the more important figures in the paper are packed in this [zip file](data_and_scripts.zip). The file contains two folders. The folder `ListeningTest` contains subject data and evaluation scripts. The folder `PlotScripts` contains the scripts which produce the following plots:
+The MATLAB and data files which were used to create the more important figures in the paper are packed in this [zip file](static/data_and_scripts.zip). The file contains two folders. The folder `ListeningTest` contains subject data and evaluation scripts. The folder `PlotScripts` contains the scripts which produce the following plots:
 
 <table class="scripttable">
     <thead>
@@ -271,7 +271,7 @@ The MATLAB and data files which were used to create the more important figures i
 ## Listening Test Results
 
 <figure>
-    <img src="figs/ListeningResults.png" style="width:100%" alt="Results of the listening test">
+    <img src="static/figs/ListeningResults.png" style="width:100%" alt="Results of the listening test">
     <figcaption>Opinion scores obtained for five noise types with five conditions each. 12 subjects participated in this test, rating six signals for each condition (box). Pairs for which the null hypothesis of equal medians could not be rejected are marked with brackets. For multiple mutual equality the brackets span multiple groups.</figcaption>
 </figure>
 

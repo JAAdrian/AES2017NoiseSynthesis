@@ -1,3 +1,5 @@
+# Synthesis of Perceptually Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties
+
 ## Introduction
 
 This website accompanies the JAES paper titled *Synthesis of Perceptually Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties* and provides supplemental material such as audio examples of analyzed and synthesized signals. Also, the MATLAB code which was used to generate the signals and the paper's figures is provided.

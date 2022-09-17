@@ -1,7 +1,7 @@
 # Synthesis of Perceptually Plausible Multichannel Noise Signals Controlled by Real World Statistical Noise Properties
 
 This Github repository provides code and basic information about the studies
-which were performed for the publication of the [respective AES journal paper](https://jaadrian.github.io/AES2017NoiseSynthesis/#citation).
+which were performed for the publication of the [respective AES journal paper](https://doi.org/10.17743/jaes.2017.0035).
 
 Head for the [accompanying web site](https://jaadrian.github.io/AES2017NoiseSynthesis/#citation) for more basic information about the study.
 
